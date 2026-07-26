@@ -4,7 +4,8 @@ import * as React from 'react'
 import { Select as SelectPrimitive } from '@base-ui/react/select'
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
+import { Spinner } from './spinner'
+import { cn } from '@/shared/lib/utils'
 
 const Select = SelectPrimitive.Root
 
@@ -32,9 +33,11 @@ function SelectTrigger({
 	className,
 	size = 'default',
 	children,
+	isLoading = false,
 	...props
 }: SelectPrimitive.Trigger.Props & {
 	size?: 'sm' | 'default'
+	isLoading?: boolean
 }) {
 	return (
 		<SelectPrimitive.Trigger
@@ -46,10 +49,18 @@ function SelectTrigger({
 			)}
 			{...props}
 		>
-			{children}
+			{isLoading ? (
+				<span className="text-muted-foreground">Carregando...</span>
+			) : (
+				children
+			)}
 			<SelectPrimitive.Icon
 				render={
-					<ChevronDownIcon className="text-muted-foreground pointer-events-none size-4" />
+					isLoading ? (
+						<Spinner />
+					) : (
+						<ChevronDownIcon className="text-muted-foreground pointer-events-none size-4" />
+					)
 				}
 			/>
 		</SelectPrimitive.Trigger>
@@ -152,6 +163,31 @@ function SelectSeparator({
 	)
 }
 
+function SelectEmpty({ className, ...props }: React.ComponentProps<'div'>) {
+	return (
+		<div
+			data-slot="select-empty"
+			className={cn(
+				'text-muted-foreground flex w-full items-center justify-center py-1 text-center text-sm',
+				className,
+			)}
+			{...props}
+		/>
+	)
+}
+
+function SelectLoading({ className, ...props }: React.ComponentProps<'div'>) {
+	return (
+		<div
+			data-slot="select-loading"
+			className={cn('flex w-full items-center justify-center py-1', className)}
+			{...props}
+		>
+			<Spinner />
+		</div>
+	)
+}
+
 function SelectScrollUpButton({
 	className,
 	...props
@@ -196,6 +232,8 @@ export {
 	SelectLabel,
 	SelectScrollDownButton,
 	SelectScrollUpButton,
+	SelectEmpty,
+	SelectLoading,
 	SelectSeparator,
 	SelectTrigger,
 	SelectValue,
