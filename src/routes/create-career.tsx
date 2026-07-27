@@ -1,6 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import z from 'zod'
+import type { CountryCode } from '@/shared/catalog/countries'
+import type { Gender } from '@/shared/catalog/genders'
+import type { PlayerPosition } from '@/domains/player/catalog/positions'
 import { Button } from '@/shared/components/ui/button'
 import {
 	Field,
@@ -26,10 +29,17 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/shared/components/ui/card'
+import { PLAYER_POSITION_SELECT_OPTIONS } from '@/domains/player/catalog/positions'
+import { makeCreatePlayerUseCase } from '@/domains/player/use-cases/create-player-use-case'
+import { makePlayerLocalStorageRepository } from '@/domains/player/repositories/local-storage/player-local-storage-repository'
 
 export const Route = createFileRoute('/create-career')({
 	component: RouteComponent,
 })
+
+const createPlayerUseCase = makeCreatePlayerUseCase(
+	makePlayerLocalStorageRepository(),
+)
 
 function RouteComponent() {
 	const form = useForm({
@@ -38,11 +48,19 @@ function RouteComponent() {
 			firstName: '',
 			lastName: '',
 			country: EMPTY_SEARCHABLE_SELECT_OPTION,
+			position: '',
 		},
 		validators: {
 			onSubmit: schema,
 		},
-		onSubmit: ({ value }) => console.log(value),
+		onSubmit: ({ value }) =>
+			createPlayerUseCase.execute({
+				gender: value.gender as Gender,
+				firstName: value.firstName,
+				lastName: value.lastName,
+				country: value.country.value as CountryCode,
+				position: value.position as PlayerPosition,
+			}),
 	})
 
 	return (
@@ -160,6 +178,30 @@ function RouteComponent() {
 									)
 								}}
 							/>
+							<form.Field
+								name="position"
+								children={(field) => {
+									const isInvalid =
+										field.state.meta.isTouched && !field.state.meta.isValid
+									return (
+										<Field data-invalid={isInvalid}>
+											<FieldLabel htmlFor={field.name}>Posição</FieldLabel>
+											<CommonSelect
+												id={field.name}
+												name={field.name}
+												aria-invalid={isInvalid}
+												value={field.state.value}
+												options={PLAYER_POSITION_SELECT_OPTIONS}
+												onValueChange={field.handleChange}
+												onBlur={field.handleBlur}
+											/>
+											{isInvalid && (
+												<FieldError errors={field.state.meta.errors} />
+											)}
+										</Field>
+									)
+								}}
+							/>
 						</FieldGroup>
 						<form.Subscribe
 							selector={(state) => [state.isSubmitting]}
@@ -192,4 +234,5 @@ const schema = z.object({
 		({ value }) => !isEmptyString(value),
 		'Obrigatório',
 	),
+	position: z.string().trim().nonempty('Obrigatório'),
 })
