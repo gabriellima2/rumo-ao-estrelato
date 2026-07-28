@@ -48,3 +48,6 @@ export const PLAYER_POSITION_LABELS: Record<PlayerPosition, string> = {
 	[PlayerPositions.CF]: 'Centroavante',
 	[PlayerPositions.ST]: 'Segundo Atacante',
 } as const
+
+export const getPlayerPositionLabel = (playerPosition: PlayerPosition) =>
+	PLAYER_POSITION_LABELS[playerPosition]

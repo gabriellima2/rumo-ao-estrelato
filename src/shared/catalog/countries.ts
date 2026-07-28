@@ -483,3 +483,5 @@ export const COUNTRIES = {
 	[CountryCodes.ZM]: { name: 'Zâmbia' },
 	[CountryCodes.ZW]: { name: 'Zimbábue' },
 } as const
+
+export const getCountryByCode = (code: CountryCode) => COUNTRIES[code]

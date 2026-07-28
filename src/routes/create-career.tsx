@@ -1,7 +1,8 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import z from 'zod'
 import { useMutation } from '@tanstack/react-query'
+import { ChevronLeft } from 'lucide-react'
 import type { CountryCode } from '@/shared/catalog/countries'
 import type { Gender } from '@/shared/catalog/genders'
 import type { PlayerPosition } from '@/domains/player/catalog/positions'
@@ -74,7 +75,19 @@ function RouteComponent() {
 	return (
 		<main className="flex h-full flex-col items-center px-4 py-8">
 			<div className="w-full max-w-2xl space-y-4">
-				<h1 className="text-base font-medium">Criar carreira</h1>
+				<header className="flex flex-row items-center gap-2">
+					<Button
+						variant="ghost"
+						title="Voltar"
+						render={
+							<Link to="/careers">
+								<ChevronLeft />
+							</Link>
+						}
+					/>
+
+					<h1 className="text-lg font-medium">Criar carreira</h1>
+				</header>
 				<form
 					onSubmit={(e) => {
 						e.preventDefault()
