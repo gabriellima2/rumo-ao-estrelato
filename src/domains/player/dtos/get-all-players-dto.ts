@@ -3,6 +3,7 @@ import type { PlayerPosition } from '../catalog/positions'
 import type { Gender } from '@/shared/catalog/genders'
 
 export type GetAllPlayersDTOOutput = Array<{
+	id: string
 	firstName: string
 	lastName: string
 	gender: Gender

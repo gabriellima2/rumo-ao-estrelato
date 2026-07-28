@@ -7,7 +7,14 @@ export class PlayerLocalStorageRepository implements PlayerRepository {
 
 	async create(input: CreatePlayerDTOInput): Promise<void> {
 		const players = (await this.getAll()) || []
-		players.push(input)
+		players.push({
+			id: Math.random().toString(),
+			gender: input.gender,
+			firstName: input.firstName,
+			lastName: input.lastName,
+			country: input.country,
+			position: input.position,
+		})
 		localStorage.setItem(this.storageKey, JSON.stringify(players))
 	}
 
