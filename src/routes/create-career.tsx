@@ -22,13 +22,6 @@ import {
 	searchableSelectSchema,
 } from '@/shared/catalog/select'
 import { isEmptyString } from '@/shared/utils/validators'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/shared/components/ui/card'
 import { PLAYER_POSITION_SELECT_OPTIONS } from '@/domains/player/catalog/positions'
 import { makeCreatePlayerUseCase } from '@/domains/player/use-cases/create-player-use-case'
 import { makePlayerLocalStorageRepository } from '@/domains/player/repositories/local-storage/player-local-storage-repository'
@@ -64,156 +57,149 @@ function RouteComponent() {
 	})
 
 	return (
-		<main className="flex h-full flex-col items-center justify-center">
-			<Card className="w-full max-w-xl">
-				<CardHeader>
-					<CardTitle>Criar carreira</CardTitle>
-					<CardDescription>
-						Preencha os dados abaixo para criar sua carreira jogador
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<form
-						onSubmit={(e) => {
-							e.preventDefault()
-							e.stopPropagation()
-							form.handleSubmit()
-						}}
-						className="flex flex-col items-end gap-(--card-spacing)"
-					>
-						<FieldGroup>
-							<form.Field
-								name="gender"
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>Gênero</FieldLabel>
-											<CommonSelect
-												id={field.name}
-												name={field.name}
-												aria-invalid={isInvalid}
-												value={field.state.value}
-												options={GENDER_SELECT_OPTIONS}
-												onValueChange={field.handleChange}
-												onBlur={field.handleBlur}
-											/>
-											{isInvalid && (
-												<FieldError errors={field.state.meta.errors} />
-											)}
-										</Field>
-									)
-								}}
-							/>
-							<form.Field
-								name="firstName"
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>Nome</FieldLabel>
-											<TextInput
-												id={field.name}
-												name={field.name}
-												isInvalid={isInvalid}
-												value={field.state.value}
-												onBlur={field.handleBlur}
-												onValueChange={field.handleChange}
-												placeholder="Ex: João"
-											/>
-											{isInvalid && (
-												<FieldError errors={field.state.meta.errors} />
-											)}
-										</Field>
-									)
-								}}
-							/>
-							<form.Field
-								name="lastName"
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>Sobrenome</FieldLabel>
-											<TextInput
-												id={field.name}
-												name={field.name}
-												isInvalid={isInvalid}
-												value={field.state.value}
-												onBlur={field.handleBlur}
-												onValueChange={field.handleChange}
-												placeholder="Ex: Silva"
-											/>
-											{isInvalid && (
-												<FieldError errors={field.state.meta.errors} />
-											)}
-										</Field>
-									)
-								}}
-							/>
-							<form.Field
-								name="country"
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>País</FieldLabel>
-											<SearchableSelect
-												id={field.name}
-												name={field.name}
-												aria-invalid={isInvalid}
-												value={field.state.value}
-												options={COUNTRIES_SELECT_OPTIONS}
-												onValueChange={field.handleChange}
-												onBlur={field.handleBlur}
-											/>
-											{isInvalid && (
-												<FieldError errors={field.state.meta.errors} />
-											)}
-										</Field>
-									)
-								}}
-							/>
-							<form.Field
-								name="position"
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>Posição</FieldLabel>
-											<CommonSelect
-												id={field.name}
-												name={field.name}
-												aria-invalid={isInvalid}
-												value={field.state.value}
-												options={PLAYER_POSITION_SELECT_OPTIONS}
-												onValueChange={field.handleChange}
-												onBlur={field.handleBlur}
-											/>
-											{isInvalid && (
-												<FieldError errors={field.state.meta.errors} />
-											)}
-										</Field>
-									)
-								}}
-							/>
-						</FieldGroup>
-						<form.Subscribe
-							selector={(state) => [state.isSubmitting]}
-							children={([isSubmitting]) => (
-								<Button type="submit" disabled={isSubmitting}>
-									{isSubmitting ? <Spinner /> : 'Criar carreira'}
-								</Button>
-							)}
+		<main className="flex h-full flex-col items-center px-4 py-8">
+			<div className="w-full max-w-2xl space-y-4">
+				<h1 className="text-base font-medium">Criar carreira</h1>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault()
+						e.stopPropagation()
+						form.handleSubmit()
+					}}
+					className="flex flex-col items-end gap-4"
+				>
+					<FieldGroup>
+						<form.Field
+							name="gender"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Gênero</FieldLabel>
+										<CommonSelect
+											id={field.name}
+											name={field.name}
+											aria-invalid={isInvalid}
+											value={field.state.value}
+											options={GENDER_SELECT_OPTIONS}
+											onValueChange={field.handleChange}
+											onBlur={field.handleBlur}
+										/>
+										{isInvalid && (
+											<FieldError errors={field.state.meta.errors} />
+										)}
+									</Field>
+								)
+							}}
 						/>
-					</form>
-				</CardContent>
-			</Card>
+						<form.Field
+							name="firstName"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Nome</FieldLabel>
+										<TextInput
+											id={field.name}
+											name={field.name}
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={field.handleChange}
+											placeholder="Ex: João"
+										/>
+										{isInvalid && (
+											<FieldError errors={field.state.meta.errors} />
+										)}
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="lastName"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Sobrenome</FieldLabel>
+										<TextInput
+											id={field.name}
+											name={field.name}
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={field.handleChange}
+											placeholder="Ex: Silva"
+										/>
+										{isInvalid && (
+											<FieldError errors={field.state.meta.errors} />
+										)}
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="country"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>País</FieldLabel>
+										<SearchableSelect
+											id={field.name}
+											name={field.name}
+											aria-invalid={isInvalid}
+											value={field.state.value}
+											options={COUNTRIES_SELECT_OPTIONS}
+											onValueChange={field.handleChange}
+											onBlur={field.handleBlur}
+										/>
+										{isInvalid && (
+											<FieldError errors={field.state.meta.errors} />
+										)}
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="position"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Posição</FieldLabel>
+										<CommonSelect
+											id={field.name}
+											name={field.name}
+											aria-invalid={isInvalid}
+											value={field.state.value}
+											options={PLAYER_POSITION_SELECT_OPTIONS}
+											onValueChange={field.handleChange}
+											onBlur={field.handleBlur}
+										/>
+										{isInvalid && (
+											<FieldError errors={field.state.meta.errors} />
+										)}
+									</Field>
+								)
+							}}
+						/>
+					</FieldGroup>
+					<form.Subscribe
+						selector={(state) => [state.isSubmitting]}
+						children={([isSubmitting]) => (
+							<Button type="submit" disabled={isSubmitting}>
+								{isSubmitting ? <Spinner /> : 'Criar carreira'}
+							</Button>
+						)}
+					/>
+				</form>
+			</div>
 		</main>
 	)
 }
