@@ -5,17 +5,13 @@ export class CreatePlayerUseCase {
 	constructor(private readonly playerRepository: PlayerRepository) {}
 
 	async execute(input: CreatePlayerDTOInput): Promise<void> {
-		try {
-			await this.playerRepository.create({
-				country: input.country,
-				firstName: input.firstName,
-				lastName: input.lastName,
-				gender: input.gender,
-				position: input.position,
-			})
-		} catch (error) {
-			console.error('Error creating player:', error)
-		}
+		await this.playerRepository.create({
+			country: input.country,
+			firstName: input.firstName,
+			lastName: input.lastName,
+			gender: input.gender,
+			position: input.position,
+		})
 	}
 }
 

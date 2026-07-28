@@ -1,6 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import z from 'zod'
+import { useMutation } from '@tanstack/react-query'
 import type { CountryCode } from '@/shared/catalog/countries'
 import type { Gender } from '@/shared/catalog/genders'
 import type { PlayerPosition } from '@/domains/player/catalog/positions'
@@ -25,16 +26,36 @@ import { isEmptyString } from '@/shared/utils/validators'
 import { PLAYER_POSITION_SELECT_OPTIONS } from '@/domains/player/catalog/positions'
 import { makeCreatePlayerUseCase } from '@/domains/player/use-cases/create-player-use-case'
 import { makePlayerLocalStorageRepository } from '@/domains/player/repositories/local-storage/player-local-storage-repository'
+import { toast } from '@/shared/components/ui/toast'
 
 export const Route = createFileRoute('/create-career')({
 	component: RouteComponent,
 })
 
-const createPlayerUseCase = makeCreatePlayerUseCase(
-	makePlayerLocalStorageRepository(),
-)
-
 function RouteComponent() {
+	const { navigate } = useRouter()
+
+	const createPlayerUseCase = makeCreatePlayerUseCase(
+		makePlayerLocalStorageRepository(),
+	)
+
+	const { mutateAsync: createPlayer } = useMutation({
+		mutationFn: createPlayerUseCase.execute,
+		onSuccess: () => {
+			toast.add({
+				type: 'success',
+				title: 'Carreira adicionada com sucesso!',
+			})
+			navigate({ to: '/careers' })
+		},
+		onError: () => {
+			toast.add({
+				type: 'error',
+				title: 'Erro ao adicionar carreira',
+			})
+		},
+	})
+
 	const form = useForm({
 		defaultValues: {
 			gender: '',
@@ -47,7 +68,7 @@ function RouteComponent() {
 			onSubmit: schema,
 		},
 		onSubmit: ({ value }) =>
-			createPlayerUseCase.execute({
+			createPlayer({
 				gender: value.gender as Gender,
 				firstName: value.firstName,
 				lastName: value.lastName,
