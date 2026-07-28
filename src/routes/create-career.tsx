@@ -14,19 +14,17 @@ import {
 } from '@/shared/components/ui/field'
 import { Spinner } from '@/shared/components/ui/spinner'
 import { TextInput } from '@/shared/components/inputs/text-input'
-import { COUNTRIES_SELECT_OPTIONS } from '@/shared/catalog/countries'
-import { CommonSelect } from '@/shared/components/selects/common-select'
-import { GENDER_SELECT_OPTIONS } from '@/shared/catalog/genders'
-import { SearchableSelect } from '@/shared/components/selects/searchable-select'
 import {
 	EMPTY_SEARCHABLE_SELECT_OPTION,
 	searchableSelectSchema,
 } from '@/shared/catalog/select'
 import { isEmptyString } from '@/shared/utils/validators'
-import { PLAYER_POSITION_SELECT_OPTIONS } from '@/domains/player/catalog/positions'
 import { makeCreatePlayerUseCase } from '@/domains/player/use-cases/create-player-use-case'
 import { makePlayerLocalStorageRepository } from '@/domains/player/repositories/local-storage/player-local-storage-repository'
 import { toast } from '@/shared/components/ui/toast'
+import { CountrySelect } from '@/shared/components/selects/country-select'
+import { GenderSelect } from '@/shared/components/selects/gender-select'
+import { PlayerPositionSelect } from '@/domains/player/components/player-position-select'
 
 export const Route = createFileRoute('/create-career')({
 	component: RouteComponent,
@@ -98,12 +96,11 @@ function RouteComponent() {
 								return (
 									<Field data-invalid={isInvalid}>
 										<FieldLabel htmlFor={field.name}>Gênero</FieldLabel>
-										<CommonSelect
+										<GenderSelect
 											id={field.name}
 											name={field.name}
 											aria-invalid={isInvalid}
 											value={field.state.value}
-											options={GENDER_SELECT_OPTIONS}
 											onValueChange={field.handleChange}
 											onBlur={field.handleBlur}
 										/>
@@ -170,12 +167,11 @@ function RouteComponent() {
 								return (
 									<Field data-invalid={isInvalid}>
 										<FieldLabel htmlFor={field.name}>País</FieldLabel>
-										<SearchableSelect
+										<CountrySelect
 											id={field.name}
 											name={field.name}
 											aria-invalid={isInvalid}
 											value={field.state.value}
-											options={COUNTRIES_SELECT_OPTIONS}
 											onValueChange={field.handleChange}
 											onBlur={field.handleBlur}
 										/>
@@ -194,12 +190,11 @@ function RouteComponent() {
 								return (
 									<Field data-invalid={isInvalid}>
 										<FieldLabel htmlFor={field.name}>Posição</FieldLabel>
-										<CommonSelect
+										<PlayerPositionSelect
 											id={field.name}
 											name={field.name}
 											aria-invalid={isInvalid}
 											value={field.state.value}
-											options={PLAYER_POSITION_SELECT_OPTIONS}
 											onValueChange={field.handleChange}
 											onBlur={field.handleBlur}
 										/>

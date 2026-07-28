@@ -1,5 +1,3 @@
-import type { SelectOption } from './select'
-
 export const CountryCodes = {
 	AF: 'AF',
 	AL: 'AL',
@@ -485,10 +483,3 @@ export const COUNTRIES = {
 	[CountryCodes.ZM]: { name: 'Zâmbia' },
 	[CountryCodes.ZW]: { name: 'Zimbábue' },
 } as const
-
-export const COUNTRIES_SELECT_OPTIONS = Object.entries(
-	COUNTRIES,
-).map<SelectOption>(([value, { name }]) => ({
-	value,
-	label: name,
-}))

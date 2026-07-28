@@ -41,7 +41,11 @@ export function SearchableSelect({
 			}
 			isItemEqualToValue={(item, selected) => item.value === selected.value}
 		>
-			<ComboboxInput {...inputProps} placeholder={placeholder} />
+			<ComboboxInput
+				{...inputProps}
+				placeholder={placeholder}
+				autoComplete="off"
+			/>
 			<ComboboxContent>
 				{isLoading ? (
 					<ComboboxLoading />

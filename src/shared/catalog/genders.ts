@@ -1,5 +1,3 @@
-import type { SelectOption } from './select'
-
 export const Genders = {
 	Male: 'male',
 	Female: 'female',
@@ -11,10 +9,3 @@ export const GENDER_LABELS: Record<Gender, string> = {
 	[Genders.Male]: 'Masculino',
 	[Genders.Female]: 'Feminino',
 } as const
-
-export const GENDER_SELECT_OPTIONS = Object.entries(
-	GENDER_LABELS,
-).map<SelectOption>(([value, label]) => ({
-	value,
-	label,
-}))

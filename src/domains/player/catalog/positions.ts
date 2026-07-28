@@ -1,5 +1,3 @@
-import type { SelectOption } from '@/shared/catalog/select'
-
 export const PlayerPositions = {
 	GK: 'GK',
 
@@ -50,10 +48,3 @@ export const PLAYER_POSITION_LABELS: Record<PlayerPosition, string> = {
 	[PlayerPositions.CF]: 'Centroavante',
 	[PlayerPositions.ST]: 'Segundo Atacante',
 } as const
-
-export const PLAYER_POSITION_SELECT_OPTIONS = Object.entries(
-	PLAYER_POSITION_LABELS,
-).map<SelectOption>(([value, label]) => ({
-	value,
-	label,
-}))
