@@ -19,12 +19,11 @@ import {
 	searchableSelectSchema,
 } from '@/shared/catalog/select'
 import { isEmptyString } from '@/shared/utils/validators'
-import { makeCreatePlayerUseCase } from '@/domains/player/use-cases/create-player-use-case'
-import { makePlayerLocalStorageRepository } from '@/domains/player/repositories/local-storage/player-local-storage-repository'
 import { toast } from '@/shared/components/ui/toast'
 import { CountrySelect } from '@/shared/components/selects/country-select'
 import { GenderSelect } from '@/shared/components/selects/gender-select'
 import { PlayerPositionSelect } from '@/domains/player/components/player-position-select'
+import { usePlayerUseCases } from '@/domains/player/contexts/player-use-cases-context'
 
 export const Route = createFileRoute('/create-career')({
 	component: RouteComponent,
@@ -32,13 +31,10 @@ export const Route = createFileRoute('/create-career')({
 
 function RouteComponent() {
 	const { navigate } = useRouter()
-
-	const createPlayerUseCase = makeCreatePlayerUseCase(
-		makePlayerLocalStorageRepository(),
-	)
+	const { createPlayer: createPlayerUseCase } = usePlayerUseCases()
 
 	const { mutateAsync: createPlayer } = useMutation({
-		mutationFn: createPlayerUseCase.execute,
+		mutationFn: createPlayerUseCase,
 		onSuccess: () => {
 			toast.add({
 				type: 'success',
