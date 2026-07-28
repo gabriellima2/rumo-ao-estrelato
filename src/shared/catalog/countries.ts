@@ -1,9 +1,7 @@
-import z from 'zod'
 import type { SelectOption } from './select'
 
 export const CountryCodes = {
 	AF: 'AF',
-	AX: 'AX',
 	AL: 'AL',
 	DZ: 'DZ',
 	AS: 'AS',
@@ -21,6 +19,8 @@ export const CountryCodes = {
 	BS: 'BS',
 	BH: 'BH',
 	BD: 'BD',
+	BB: 'BB',
+	BY: 'BY',
 	BE: 'BE',
 	BZ: 'BZ',
 	BJ: 'BJ',
@@ -89,7 +89,6 @@ export const CountryCodes = {
 	GP: 'GP',
 	GU: 'GU',
 	GT: 'GT',
-	GG: 'GG',
 	GN: 'GN',
 	GW: 'GW',
 	GY: 'GY',
@@ -105,12 +104,10 @@ export const CountryCodes = {
 	IR: 'IR',
 	IQ: 'IQ',
 	IE: 'IE',
-	IM: 'IM',
 	IL: 'IL',
 	IT: 'IT',
 	JM: 'JM',
 	JP: 'JP',
-	JE: 'JE',
 	JO: 'JO',
 	KZ: 'KZ',
 	KE: 'KE',
@@ -247,861 +244,246 @@ export const CountryCodes = {
 
 export type CountryCode = (typeof CountryCodes)[keyof typeof CountryCodes]
 
-export const CountryCodeSchema = z.enum(Object.values(CountryCodes))
-
 export const COUNTRIES = {
-	[CountryCodes.AF]: {
-		name: 'Afeganistão',
-		flag: '🇦🇫',
-	},
-	[CountryCodes.AL]: {
-		name: 'Albânia',
-		flag: '🇦🇱',
-	},
-	[CountryCodes.DE]: {
-		name: 'Alemanha',
-		flag: '🇩🇪',
-	},
-	[CountryCodes.AD]: {
-		name: 'Andorra',
-		flag: '🇦🇩',
-	},
-	[CountryCodes.AO]: {
-		name: 'Angola',
-		flag: '🇦🇴',
-	},
-	[CountryCodes.AI]: {
-		name: 'Anguilla',
-		flag: '🇦🇮',
-	},
-	[CountryCodes.AG]: {
-		name: 'Antígua e Barbuda',
-		flag: '🇦🇬',
-	},
-	[CountryCodes.SA]: {
-		name: 'Arábia Saudita',
-		flag: '🇸🇦',
-	},
-	[CountryCodes.DZ]: {
-		name: 'Argélia',
-		flag: '🇩🇿',
-	},
-	[CountryCodes.AR]: {
-		name: 'Argentina',
-		flag: '🇦🇷',
-	},
-	[CountryCodes.AM]: {
-		name: 'Armênia',
-		flag: '🇦🇲',
-	},
-	[CountryCodes.AW]: {
-		name: 'Aruba',
-		flag: '🇦🇼',
-	},
-	[CountryCodes.AU]: {
-		name: 'Austrália',
-		flag: '🇦🇺',
-	},
-	[CountryCodes.AT]: {
-		name: 'Áustria',
-		flag: '🇦🇹',
-	},
-	[CountryCodes.AZ]: {
-		name: 'Azerbaijão',
-		flag: '🇦🇿',
-	},
-	[CountryCodes.BS]: {
-		name: 'Bahamas',
-		flag: '🇧🇸',
-	},
-	[CountryCodes.BH]: {
-		name: 'Bahrein',
-		flag: '🇧🇭',
-	},
-	[CountryCodes.BD]: {
-		name: 'Bangladesh',
-		flag: '🇧🇩',
-	},
-	[CountryCodes.BB]: {
-		name: 'Barbados',
-		flag: '🇧🇧',
-	},
-	[CountryCodes.BE]: {
-		name: 'Bélgica',
-		flag: '🇧🇪',
-	},
-	[CountryCodes.BZ]: {
-		name: 'Belize',
-		flag: '🇧🇿',
-	},
-	[CountryCodes.BJ]: {
-		name: 'Benim',
-		flag: '🇧🇯',
-	},
-	[CountryCodes.BM]: {
-		name: 'Bermudas',
-		flag: '🇧🇲',
-	},
-	[CountryCodes.BY]: {
-		name: 'Bielorrússia',
-		flag: '🇧🇾',
-	},
-	[CountryCodes.BO]: {
-		name: 'Bolívia',
-		flag: '🇧🇴',
-	},
-	[CountryCodes.BA]: {
-		name: 'Bósnia e Herzegovina',
-		flag: '🇧🇦',
-	},
-	[CountryCodes.BW]: {
-		name: 'Botsuana',
-		flag: '🇧🇼',
-	},
-	[CountryCodes.BR]: {
-		name: 'Brasil',
-		flag: '🇧🇷',
-	},
-	[CountryCodes.BN]: {
-		name: 'Brunei',
-		flag: '🇧🇳',
-	},
-	[CountryCodes.BG]: {
-		name: 'Bulgária',
-		flag: '🇧🇬',
-	},
-	[CountryCodes.BF]: {
-		name: 'Burquina Faso',
-		flag: '🇧🇫',
-	},
-	[CountryCodes.BI]: {
-		name: 'Burundi',
-		flag: '🇧🇮',
-	},
-	[CountryCodes.BT]: {
-		name: 'Butão',
-		flag: '🇧🇹',
-	},
-	[CountryCodes.CV]: {
-		name: 'Cabo Verde',
-		flag: '🇨🇻',
-	},
-	[CountryCodes.KH]: {
-		name: 'Camboja',
-		flag: '🇰🇭',
-	},
-	[CountryCodes.CM]: {
-		name: 'Camarões',
-		flag: '🇨🇲',
-	},
-	[CountryCodes.CA]: {
-		name: 'Canadá',
-		flag: '🇨🇦',
-	},
-	[CountryCodes.QA]: {
-		name: 'Catar',
-		flag: '🇶🇦',
-	},
-	[CountryCodes.KZ]: {
-		name: 'Cazaquistão',
-		flag: '🇰🇿',
-	},
-	[CountryCodes.TD]: {
-		name: 'Chade',
-		flag: '🇹🇩',
-	},
-	[CountryCodes.CZ]: {
-		name: 'Chéquia',
-		flag: '🇨🇿',
-	},
-	[CountryCodes.CL]: {
-		name: 'Chile',
-		flag: '🇨🇱',
-	},
-	[CountryCodes.CN]: {
-		name: 'China',
-		flag: '🇨🇳',
-	},
-	[CountryCodes.CY]: {
-		name: 'Chipre',
-		flag: '🇨🇾',
-	},
-	[CountryCodes.SG]: {
-		name: 'Cingapura',
-		flag: '🇸🇬',
-	},
-	[CountryCodes.CO]: {
-		name: 'Colômbia',
-		flag: '🇨🇴',
-	},
-	[CountryCodes.KM]: {
-		name: 'Comores',
-		flag: '🇰🇲',
-	},
-	[CountryCodes.CG]: {
-		name: 'Congo',
-		flag: '🇨🇬',
-	},
-	[CountryCodes.CD]: {
-		name: 'República Democrática do Congo',
-		flag: '🇨🇩',
-	},
-	[CountryCodes.KP]: {
-		name: 'Coreia do Norte',
-		flag: '🇰🇵',
-	},
-	[CountryCodes.KR]: {
-		name: 'Coreia do Sul',
-		flag: '🇰🇷',
-	},
-	[CountryCodes.CI]: {
-		name: 'Costa do Marfim',
-		flag: '🇨🇮',
-	},
-	[CountryCodes.CR]: {
-		name: 'Costa Rica',
-		flag: '🇨🇷',
-	},
-	[CountryCodes.HR]: {
-		name: 'Croácia',
-		flag: '🇭🇷',
-	},
-	[CountryCodes.CU]: {
-		name: 'Cuba',
-		flag: '🇨🇺',
-	},
-	[CountryCodes.CW]: {
-		name: 'Curaçau',
-		flag: '🇨🇼',
-	},
-	[CountryCodes.DK]: {
-		name: 'Dinamarca',
-		flag: '🇩🇰',
-	},
-	[CountryCodes.DJ]: {
-		name: 'Djibuti',
-		flag: '🇩🇯',
-	},
-	[CountryCodes.DM]: {
-		name: 'Dominica',
-		flag: '🇩🇲',
-	},
-	[CountryCodes.EG]: {
-		name: 'Egito',
-		flag: '🇪🇬',
-	},
-	[CountryCodes.SV]: {
-		name: 'El Salvador',
-		flag: '🇸🇻',
-	},
-	[CountryCodes.AE]: {
-		name: 'Emirados Árabes Unidos',
-		flag: '🇦🇪',
-	},
-	[CountryCodes.EC]: {
-		name: 'Equador',
-		flag: '🇪🇨',
-	},
-	[CountryCodes.ER]: {
-		name: 'Eritreia',
-		flag: '🇪🇷',
-	},
-	[CountryCodes.SCO]: {
-		name: 'Escócia',
-		flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
-	},
-	[CountryCodes.SK]: {
-		name: 'Eslováquia',
-		flag: '🇸🇰',
-	},
-	[CountryCodes.SI]: {
-		name: 'Eslovênia',
-		flag: '🇸🇮',
-	},
-	[CountryCodes.ES]: {
-		name: 'Espanha',
-		flag: '🇪🇸',
-	},
-	[CountryCodes.US]: {
-		name: 'Estados Unidos',
-		flag: '🇺🇸',
-	},
-	[CountryCodes.EE]: {
-		name: 'Estônia',
-		flag: '🇪🇪',
-	},
-	[CountryCodes.SZ]: {
-		name: 'Eswatini',
-		flag: '🇸🇿',
-	},
-	[CountryCodes.ET]: {
-		name: 'Etiópia',
-		flag: '🇪🇹',
-	},
-	[CountryCodes.FJ]: {
-		name: 'Fiji',
-		flag: '🇫🇯',
-	},
-	[CountryCodes.PH]: {
-		name: 'Filipinas',
-		flag: '🇵🇭',
-	},
-	[CountryCodes.FI]: {
-		name: 'Finlândia',
-		flag: '🇫🇮',
-	},
-	[CountryCodes.FR]: {
-		name: 'França',
-		flag: '🇫🇷',
-	},
-	[CountryCodes.GA]: {
-		name: 'Gabão',
-		flag: '🇬🇦',
-	},
-	[CountryCodes.GM]: {
-		name: 'Gâmbia',
-		flag: '🇬🇲',
-	},
-	[CountryCodes.GH]: {
-		name: 'Gana',
-		flag: '🇬🇭',
-	},
-	[CountryCodes.GE]: {
-		name: 'Geórgia',
-		flag: '🇬🇪',
-	},
-	[CountryCodes.GI]: {
-		name: 'Gibraltar',
-		flag: '🇬🇮',
-	},
-	[CountryCodes.GD]: {
-		name: 'Granada',
-		flag: '🇬🇩',
-	},
-	[CountryCodes.GR]: {
-		name: 'Grécia',
-		flag: '🇬🇷',
-	},
-	[CountryCodes.GL]: {
-		name: 'Groenlândia',
-		flag: '🇬🇱',
-	},
-	[CountryCodes.GP]: {
-		name: 'Guadalupe',
-		flag: '🇬🇵',
-	},
-	[CountryCodes.GU]: {
-		name: 'Guam',
-		flag: '🇬🇺',
-	},
-	[CountryCodes.GT]: {
-		name: 'Guatemala',
-		flag: '🇬🇹',
-	},
-	[CountryCodes.GY]: {
-		name: 'Guiana',
-		flag: '🇬🇾',
-	},
-	[CountryCodes.GF]: {
-		name: 'Guiana Francesa',
-		flag: '🇬🇫',
-	},
-	[CountryCodes.GN]: {
-		name: 'Guiné',
-		flag: '🇬🇳',
-	},
-	[CountryCodes.GW]: {
-		name: 'Guiné-Bissau',
-		flag: '🇬🇼',
-	},
-	[CountryCodes.GQ]: {
-		name: 'Guiné Equatorial',
-		flag: '🇬🇶',
-	},
-	[CountryCodes.HT]: {
-		name: 'Haiti',
-		flag: '🇭🇹',
-	},
-	[CountryCodes.HN]: {
-		name: 'Honduras',
-		flag: '🇭🇳',
-	},
-	[CountryCodes.HK]: {
-		name: 'Hong Kong',
-		flag: '🇭🇰',
-	},
-	[CountryCodes.HU]: {
-		name: 'Hungria',
-		flag: '🇭🇺',
-	},
-	[CountryCodes.YE]: {
-		name: 'Iêmen',
-		flag: '🇾🇪',
-	},
-	[CountryCodes.AS]: {
-		name: 'Samoa Americana',
-		flag: '🇦🇸',
-	},
-	[CountryCodes.VG]: {
-		name: 'Ilhas Virgens Britânicas',
-		flag: '🇻🇬',
-	},
-	[CountryCodes.KY]: {
-		name: 'Ilhas Cayman',
-		flag: '🇰🇾',
-	},
-	[CountryCodes.CK]: {
-		name: 'Ilhas Cook',
-		flag: '🇨🇰',
-	},
-	[CountryCodes.FO]: {
-		name: 'Ilhas Faroé',
-		flag: '🇫🇴',
-	},
-	[CountryCodes.VIR]: {
-		name: 'Ilhas Virgens Americanas',
-		flag: '🇻🇮',
-	},
-	[CountryCodes.IN]: {
-		name: 'Índia',
-		flag: '🇮🇳',
-	},
-	[CountryCodes.ID]: {
-		name: 'Indonésia',
-		flag: '🇮🇩',
-	},
-	[CountryCodes.ENG]: {
-		name: 'Inglaterra',
-		flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
-	},
-	[CountryCodes.IR]: {
-		name: 'Irã',
-		flag: '🇮🇷',
-	},
-	[CountryCodes.IQ]: {
-		name: 'Iraque',
-		flag: '🇮🇶',
-	},
-	[CountryCodes.IE]: {
-		name: 'Irlanda',
-		flag: '🇮🇪',
-	},
-	[CountryCodes.NIR]: {
-		name: 'Irlanda do Norte',
-		flag: '🇬🇧',
-	},
-	[CountryCodes.IS]: {
-		name: 'Islândia',
-		flag: '🇮🇸',
-	},
-	[CountryCodes.IL]: {
-		name: 'Israel',
-		flag: '🇮🇱',
-	},
-	[CountryCodes.IT]: {
-		name: 'Itália',
-		flag: '🇮🇹',
-	},
-	[CountryCodes.JM]: {
-		name: 'Jamaica',
-		flag: '🇯🇲',
-	},
-	[CountryCodes.JP]: {
-		name: 'Japão',
-		flag: '🇯🇵',
-	},
-	[CountryCodes.JO]: {
-		name: 'Jordânia',
-		flag: '🇯🇴',
-	},
-	[CountryCodes.XK]: {
-		name: 'Kosovo',
-		flag: '🇽🇰',
-	},
-	[CountryCodes.KW]: {
-		name: 'Kuwait',
-		flag: '🇰🇼',
-	},
-	[CountryCodes.LA]: {
-		name: 'Laos',
-		flag: '🇱🇦',
-	},
-	[CountryCodes.LS]: {
-		name: 'Lesoto',
-		flag: '🇱🇸',
-	},
-	[CountryCodes.LV]: {
-		name: 'Letônia',
-		flag: '🇱🇻',
-	},
-	[CountryCodes.LB]: {
-		name: 'Líbano',
-		flag: '🇱🇧',
-	},
-	[CountryCodes.LR]: {
-		name: 'Libéria',
-		flag: '🇱🇷',
-	},
-	[CountryCodes.LY]: {
-		name: 'Líbia',
-		flag: '🇱🇾',
-	},
-	[CountryCodes.LI]: {
-		name: 'Liechtenstein',
-		flag: '🇱🇮',
-	},
-	[CountryCodes.LT]: {
-		name: 'Lituânia',
-		flag: '🇱🇹',
-	},
-	[CountryCodes.LU]: {
-		name: 'Luxemburgo',
-		flag: '🇱🇺',
-	},
-	[CountryCodes.MO]: {
-		name: 'Macau',
-		flag: '🇲🇴',
-	},
-	[CountryCodes.MK]: {
-		name: 'Macedônia do Norte',
-		flag: '🇲🇰',
-	},
-	[CountryCodes.MG]: {
-		name: 'Madagascar',
-		flag: '🇲🇬',
-	},
-	[CountryCodes.MY]: {
-		name: 'Malásia',
-		flag: '🇲🇾',
-	},
-	[CountryCodes.MW]: {
-		name: 'Malawi',
-		flag: '🇲🇼',
-	},
-	[CountryCodes.MV]: {
-		name: 'Maldivas',
-		flag: '🇲🇻',
-	},
-	[CountryCodes.ML]: {
-		name: 'Mali',
-		flag: '🇲🇱',
-	},
-	[CountryCodes.MT]: {
-		name: 'Malta',
-		flag: '🇲🇹',
-	},
-	[CountryCodes.MA]: {
-		name: 'Marrocos',
-		flag: '🇲🇦',
-	},
-	[CountryCodes.MQ]: {
-		name: 'Martinica',
-		flag: '🇲🇶',
-	},
-	[CountryCodes.MU]: {
-		name: 'Maurício',
-		flag: '🇲🇺',
-	},
-	[CountryCodes.MR]: {
-		name: 'Mauritânia',
-		flag: '🇲🇷',
-	},
-	[CountryCodes.MX]: {
-		name: 'México',
-		flag: '🇲🇽',
-	},
-	[CountryCodes.FM]: {
-		name: 'Micronésia',
-		flag: '🇫🇲',
-	},
-	[CountryCodes.MZ]: {
-		name: 'Moçambique',
-		flag: '🇲🇿',
-	},
-	[CountryCodes.MD]: {
-		name: 'Moldávia',
-		flag: '🇲🇩',
-	},
-	[CountryCodes.MC]: {
-		name: 'Mônaco',
-		flag: '🇲🇨',
-	},
-	[CountryCodes.MN]: {
-		name: 'Mongólia',
-		flag: '🇲🇳',
-	},
-	[CountryCodes.ME]: {
-		name: 'Montenegro',
-		flag: '🇲🇪',
-	},
-	[CountryCodes.MS]: {
-		name: 'Montserrat',
-		flag: '🇲🇸',
-	},
-	[CountryCodes.NA]: {
-		name: 'Namíbia',
-		flag: '🇳🇦',
-	},
-	[CountryCodes.NP]: {
-		name: 'Nepal',
-		flag: '🇳🇵',
-	},
-	[CountryCodes.NI]: {
-		name: 'Nicarágua',
-		flag: '🇳🇮',
-	},
-	[CountryCodes.NE]: {
-		name: 'Níger',
-		flag: '🇳🇪',
-	},
-	[CountryCodes.NG]: {
-		name: 'Nigéria',
-		flag: '🇳🇬',
-	},
-	[CountryCodes.NCL]: {
-		name: 'Nova Caledônia',
-		flag: '🇳🇨',
-	},
-	[CountryCodes.NO]: {
-		name: 'Noruega',
-		flag: '🇳🇴',
-	},
-	[CountryCodes.NZ]: {
-		name: 'Nova Zelândia',
-		flag: '🇳🇿',
-	},
-	[CountryCodes.OM]: {
-		name: 'Omã',
-		flag: '🇴🇲',
-	},
-	[CountryCodes.NL]: {
-		name: 'Países Baixos',
-		flag: '🇳🇱',
-	},
-	[CountryCodes.WAL]: {
-		name: 'País de Gales',
-		flag: '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
-	},
-	[CountryCodes.PS]: {
-		name: 'Palestina',
-		flag: '🇵🇸',
-	},
-	[CountryCodes.PA]: {
-		name: 'Panamá',
-		flag: '🇵🇦',
-	},
-	[CountryCodes.PK]: {
-		name: 'Paquistão',
-		flag: '🇵🇰',
-	},
-	[CountryCodes.PG]: {
-		name: 'Papua-Nova Guiné',
-		flag: '🇵🇬',
-	},
-	[CountryCodes.PY]: {
-		name: 'Paraguai',
-		flag: '🇵🇾',
-	},
-	[CountryCodes.PE]: {
-		name: 'Peru',
-		flag: '🇵🇪',
-	},
-	[CountryCodes.PL]: {
-		name: 'Polônia',
-		flag: '🇵🇱',
-	},
-	[CountryCodes.PR]: {
-		name: 'Porto Rico',
-		flag: '🇵🇷',
-	},
-	[CountryCodes.PT]: {
-		name: 'Portugal',
-		flag: '🇵🇹',
-	},
-	[CountryCodes.KE]: {
-		name: 'Quênia',
-		flag: '🇰🇪',
-	},
-	[CountryCodes.KG]: {
-		name: 'Quirguistão',
-		flag: '🇰🇬',
-	},
-	[CountryCodes.CF]: {
-		name: 'República Centro-Africana',
-		flag: '🇨🇫',
-	},
-	[CountryCodes.RE]: {
-		name: 'Reunião',
-		flag: '🇷🇪',
-	},
-	[CountryCodes.RO]: {
-		name: 'Romênia',
-		flag: '🇷🇴',
-	},
-	[CountryCodes.RW]: {
-		name: 'Ruanda',
-		flag: '🇷🇼',
-	},
-	[CountryCodes.RU]: {
-		name: 'Rússia',
-		flag: '🇷🇺',
-	},
-	[CountryCodes.WS]: {
-		name: 'Samoa',
-		flag: '🇼🇸',
-	},
-	[CountryCodes.SM]: {
-		name: 'San Marino',
-		flag: '🇸🇲',
-	},
-	[CountryCodes.LC]: {
-		name: 'Santa Lúcia',
-		flag: '🇱🇨',
-	},
-	[CountryCodes.ST]: {
-		name: 'São Tomé e Príncipe',
-		flag: '🇸🇹',
-	},
-	[CountryCodes.VC]: {
-		name: 'São Vicente e Granadinhas',
-		flag: '🇻🇨',
-	},
-	[CountryCodes.KN]: {
-		name: 'São Cristóvão e Neves',
-		flag: '🇰🇳',
-	},
-	[CountryCodes.SN]: {
-		name: 'Senegal',
-		flag: '🇸🇳',
-	},
-	[CountryCodes.SL]: {
-		name: 'Serra Leoa',
-		flag: '🇸🇱',
-	},
-	[CountryCodes.RS]: {
-		name: 'Sérvia',
-		flag: '🇷🇸',
-	},
-	[CountryCodes.SY]: {
-		name: 'Síria',
-		flag: '🇸🇾',
-	},
-	[CountryCodes.SO]: {
-		name: 'Somália',
-		flag: '🇸🇴',
-	},
-	[CountryCodes.LK]: {
-		name: 'Sri Lanka',
-		flag: '🇱🇰',
-	},
-	[CountryCodes.SD]: {
-		name: 'Sudão',
-		flag: '🇸🇩',
-	},
-	[CountryCodes.SS]: {
-		name: 'Sudão do Sul',
-		flag: '🇸🇸',
-	},
-	[CountryCodes.SE]: {
-		name: 'Suécia',
-		flag: '🇸🇪',
-	},
-	[CountryCodes.CH]: {
-		name: 'Suíça',
-		flag: '🇨🇭',
-	},
-	[CountryCodes.SR]: {
-		name: 'Suriname',
-		flag: '🇸🇷',
-	},
-	[CountryCodes.TAH]: {
-		name: 'Taiti',
-		flag: '🇵🇫',
-	},
-	[CountryCodes.TH]: {
-		name: 'Tailândia',
-		flag: '🇹🇭',
-	},
-	[CountryCodes.TW]: {
-		name: 'Taiwan',
-		flag: '🇹🇼',
-	},
-	[CountryCodes.TZ]: {
-		name: 'Tanzânia',
-		flag: '🇹🇿',
-	},
-	[CountryCodes.TJ]: {
-		name: 'Tajiquistão',
-		flag: '🇹🇯',
-	},
-	[CountryCodes.TL]: {
-		name: 'Timor-Leste',
-		flag: '🇹🇱',
-	},
-	[CountryCodes.TG]: {
-		name: 'Togo',
-		flag: '🇹🇬',
-	},
-	[CountryCodes.TO]: {
-		name: 'Tonga',
-		flag: '🇹🇴',
-	},
-	[CountryCodes.TT]: {
-		name: 'Trinidad e Tobago',
-		flag: '🇹🇹',
-	},
-	[CountryCodes.TCA]: {
-		name: 'Turcas e Caicos',
-		flag: '🇹🇨',
-	},
-	[CountryCodes.TN]: {
-		name: 'Tunísia',
-		flag: '🇹🇳',
-	},
-	[CountryCodes.TR]: {
-		name: 'Turquia',
-		flag: '🇹🇷',
-	},
-	[CountryCodes.TM]: {
-		name: 'Turcomenistão',
-		flag: '🇹🇲',
-	},
-	[CountryCodes.UA]: {
-		name: 'Ucrânia',
-		flag: '🇺🇦',
-	},
-	[CountryCodes.UG]: {
-		name: 'Uganda',
-		flag: '🇺🇬',
-	},
-	[CountryCodes.UY]: {
-		name: 'Uruguai',
-		flag: '🇺🇾',
-	},
-	[CountryCodes.UZ]: {
-		name: 'Uzbequistão',
-		flag: '🇺🇿',
-	},
-	[CountryCodes.VU]: {
-		name: 'Vanuatu',
-		flag: '🇻🇺',
-	},
-	[CountryCodes.VE]: {
-		name: 'Venezuela',
-		flag: '🇻🇪',
-	},
-	[CountryCodes.VN]: {
-		name: 'Vietnã',
-		flag: '🇻🇳',
-	},
-	[CountryCodes.ZM]: {
-		name: 'Zâmbia',
-		flag: '🇿🇲',
-	},
-	[CountryCodes.ZW]: {
-		name: 'Zimbábue',
-		flag: '🇿🇼',
-	},
+	[CountryCodes.AF]: { name: 'Afeganistão' },
+	[CountryCodes.ZA]: { name: 'África do Sul' },
+	[CountryCodes.AL]: { name: 'Albânia' },
+	[CountryCodes.DE]: { name: 'Alemanha' },
+	[CountryCodes.DZ]: { name: 'Algéria' },
+	[CountryCodes.AD]: { name: 'Andorra' },
+	[CountryCodes.AO]: { name: 'Angola' },
+	[CountryCodes.AI]: { name: 'Anguilla' },
+	[CountryCodes.AQ]: { name: 'Antártida' },
+	[CountryCodes.AG]: { name: 'Antigua e Barbuda' },
+	[CountryCodes.AN]: { name: 'Antilhas Holandesas' },
+	[CountryCodes.SA]: { name: 'Arábia Saudita' },
+	[CountryCodes.AR]: { name: 'Argentina' },
+	[CountryCodes.AM]: { name: 'Armênia' },
+	[CountryCodes.AW]: { name: 'Aruba' },
+	[CountryCodes.AU]: { name: 'Austrália' },
+	[CountryCodes.AT]: { name: 'Áustria' },
+	[CountryCodes.AZ]: { name: 'Azerbaijão' },
+	[CountryCodes.BS]: { name: 'Bahamas' },
+	[CountryCodes.BH]: { name: 'Bahrein' },
+	[CountryCodes.BD]: { name: 'Bangladesh' },
+	[CountryCodes.BB]: { name: 'Barbados' },
+	[CountryCodes.BE]: { name: 'Bélgica' },
+	[CountryCodes.BZ]: { name: 'Belize' },
+	[CountryCodes.BJ]: { name: 'Benin' },
+	[CountryCodes.BM]: { name: 'Bermuda' },
+	[CountryCodes.BY]: { name: 'Bielorrússia' },
+	[CountryCodes.MM]: { name: 'Birmânia' },
+	[CountryCodes.BO]: { name: 'Bolívia' },
+	[CountryCodes.BA]: { name: 'Bósnia e Herzegovina' },
+	[CountryCodes.BW]: { name: 'Botswana' },
+	[CountryCodes.BR]: { name: 'Brasil' },
+	[CountryCodes.BN]: { name: 'Brunei' },
+	[CountryCodes.BG]: { name: 'Bulgária' },
+	[CountryCodes.BF]: { name: 'Burkina Faso' },
+	[CountryCodes.BI]: { name: 'Burundi' },
+	[CountryCodes.BT]: { name: 'Butão' },
+	[CountryCodes.CV]: { name: 'Cabo Verde' },
+	[CountryCodes.CM]: { name: 'Camarões' },
+	[CountryCodes.KH]: { name: 'Camboja' },
+	[CountryCodes.CA]: { name: 'Canadá' },
+	[CountryCodes.QA]: { name: 'Catar' },
+	[CountryCodes.KZ]: { name: 'Cazaquistão' },
+	[CountryCodes.TD]: { name: 'Chade' },
+	[CountryCodes.CL]: { name: 'Chile' },
+	[CountryCodes.CN]: { name: 'China' },
+	[CountryCodes.CY]: { name: 'Chipre' },
+	[CountryCodes.CO]: { name: 'Colômbia' },
+	[CountryCodes.KM]: { name: 'Comores' },
+	[CountryCodes.CG]: { name: 'Congo' },
+	[CountryCodes.CD]: { name: 'Congo (DR)' },
+	[CountryCodes.KP]: { name: 'Coreia do Norte' },
+	[CountryCodes.KR]: { name: 'Coreia do Sul' },
+	[CountryCodes.CI]: { name: 'Costa do Marfim' },
+	[CountryCodes.CR]: { name: 'Costa Rica' },
+	[CountryCodes.HR]: { name: 'Croácia' },
+	[CountryCodes.CU]: { name: 'Cuba' },
+	[CountryCodes.DK]: { name: 'Dinamarca' },
+	[CountryCodes.DJ]: { name: 'Djibuti' },
+	[CountryCodes.DM]: { name: 'Dominica' },
+	[CountryCodes.EG]: { name: 'Egito' },
+	[CountryCodes.SV]: { name: 'El Salvador' },
+	[CountryCodes.AE]: { name: 'Emirados Árabes' },
+	[CountryCodes.EC]: { name: 'Equador' },
+	[CountryCodes.ER]: { name: 'Eritreia' },
+	[CountryCodes.SK]: { name: 'Eslováquia' },
+	[CountryCodes.SI]: { name: 'Eslovênia' },
+	[CountryCodes.ES]: { name: 'Espanha' },
+	[CountryCodes.US]: { name: 'Estados Unidos' },
+	[CountryCodes.EE]: { name: 'Estônia' },
+	[CountryCodes.SJ]: { name: 'Esvalbarde' },
+	[CountryCodes.ET]: { name: 'Etiópia' },
+	[CountryCodes.FJ]: { name: 'Fiji' },
+	[CountryCodes.PH]: { name: 'Filipinas' },
+	[CountryCodes.FI]: { name: 'Finlândia' },
+	[CountryCodes.FR]: { name: 'França' },
+	[CountryCodes.GA]: { name: 'Gabão' },
+	[CountryCodes.GM]: { name: 'Gâmbia' },
+	[CountryCodes.GH]: { name: 'Gana' },
+	[CountryCodes.GE]: { name: 'Geórgia' },
+	[CountryCodes.GI]: { name: 'Gibraltar' },
+	[CountryCodes.GD]: { name: 'Granada' },
+	[CountryCodes.GR]: { name: 'Grécia' },
+	[CountryCodes.GL]: { name: 'Groelândia' },
+	[CountryCodes.GP]: { name: 'Guadalupe' },
+	[CountryCodes.GU]: { name: 'Guão' },
+	[CountryCodes.GT]: { name: 'Guatemala' },
+	[CountryCodes.GY]: { name: 'Guiana' },
+	[CountryCodes.GF]: { name: 'Guiana Francesa' },
+	[CountryCodes.GN]: { name: 'Guiné' },
+	[CountryCodes.GQ]: { name: 'Guiné Equatorial' },
+	[CountryCodes.GW]: { name: 'Guiné-Bissau' },
+	[CountryCodes.HT]: { name: 'Haiti' },
+	[CountryCodes.NL]: { name: 'Holanda' },
+	[CountryCodes.HN]: { name: 'Honduras' },
+	[CountryCodes.HK]: { name: 'Hong Kong' },
+	[CountryCodes.HU]: { name: 'Hungria' },
+	[CountryCodes.YE]: { name: 'Iêmen' },
+	[CountryCodes.BV]: { name: 'Ilha Bouvet' },
+	[CountryCodes.CX]: { name: 'Ilha Christmas' },
+	[CountryCodes.NF]: { name: 'Ilha Norfolk' },
+	[CountryCodes.KY]: { name: 'Ilhas Cayman' },
+	[CountryCodes.CC]: { name: 'Ilhas Cocos (Keeling)' },
+	[CountryCodes.CK]: { name: 'Ilhas Cook' },
+	[CountryCodes.FO]: { name: 'Ilhas Faroe' },
+	[CountryCodes.GS]: { name: 'Ilhas Geórgia do Sul e Sandwich do Sul' },
+	[CountryCodes.HM]: { name: 'Ilhas Heard e McDonald' },
+	[CountryCodes.FK]: { name: 'Ilhas Malvinas' },
+	[CountryCodes.MP]: { name: 'Ilhas Marianas do Norte' },
+	[CountryCodes.MH]: { name: 'Ilhas Marshall' },
+	[CountryCodes.UM]: { name: 'Ilhas Menores Distantes dos Estados Unidos' },
+	[CountryCodes.PN]: { name: 'Ilhas Picárnia' },
+	[CountryCodes.SB]: { name: 'Ilhas Salomão' },
+	[CountryCodes.TC]: { name: 'Ilhas Turks e Caicos' },
+	[CountryCodes.VI]: { name: 'Ilhas Virgens (USA)' },
+	[CountryCodes.VG]: { name: 'Ilhas Virgens Inglesas' },
+	[CountryCodes.IN]: { name: 'Índia' },
+	[CountryCodes.ID]: { name: 'Indonésia' },
+	[CountryCodes.IR]: { name: 'Iran' },
+	[CountryCodes.IQ]: { name: 'Iraque' },
+	[CountryCodes.IE]: { name: 'Irlanda' },
+	[CountryCodes.IS]: { name: 'Islândia' },
+	[CountryCodes.IL]: { name: 'Israel' },
+	[CountryCodes.IT]: { name: 'Itália' },
+	[CountryCodes.JM]: { name: 'Jamaica' },
+	[CountryCodes.JP]: { name: 'Japão' },
+	[CountryCodes.JO]: { name: 'Jordânia' },
+	[CountryCodes.KI]: { name: 'Kiribati' },
+	[CountryCodes.KW]: { name: 'Kuwait' },
+	[CountryCodes.LA]: { name: 'Laos' },
+	[CountryCodes.LS]: { name: 'Lesoto' },
+	[CountryCodes.LV]: { name: 'Letônia' },
+	[CountryCodes.LB]: { name: 'Líbano' },
+	[CountryCodes.LR]: { name: 'Libéria' },
+	[CountryCodes.LY]: { name: 'Líbia' },
+	[CountryCodes.LI]: { name: 'Liechtenstein' },
+	[CountryCodes.LT]: { name: 'Lituânia' },
+	[CountryCodes.LU]: { name: 'Luxemburgo' },
+	[CountryCodes.MO]: { name: 'Macao' },
+	[CountryCodes.MK]: { name: 'Macedônia' },
+	[CountryCodes.MG]: { name: 'Madagascar' },
+	[CountryCodes.MY]: { name: 'Malásia' },
+	[CountryCodes.MW]: { name: 'Malawi' },
+	[CountryCodes.MV]: { name: 'Maldivas' },
+	[CountryCodes.ML]: { name: 'Mali' },
+	[CountryCodes.MT]: { name: 'Malta' },
+	[CountryCodes.MA]: { name: 'Marrocos' },
+	[CountryCodes.MQ]: { name: 'Martinica' },
+	[CountryCodes.MU]: { name: 'Maurício' },
+	[CountryCodes.MR]: { name: 'Mauritânia' },
+	[CountryCodes.YT]: { name: 'Mayotte' },
+	[CountryCodes.MX]: { name: 'México' },
+	[CountryCodes.FM]: { name: 'Micronésia' },
+	[CountryCodes.MZ]: { name: 'Moçambique' },
+	[CountryCodes.MD]: { name: 'Moldova' },
+	[CountryCodes.MC]: { name: 'Mônaco' },
+	[CountryCodes.MN]: { name: 'Mongólia' },
+	[CountryCodes.MS]: { name: 'Montserrat' },
+	[CountryCodes.NA]: { name: 'Namíbia' },
+	[CountryCodes.NR]: { name: 'Nauru' },
+	[CountryCodes.NP]: { name: 'Nepal' },
+	[CountryCodes.NI]: { name: 'Nicarágua' },
+	[CountryCodes.NE]: { name: 'Niger' },
+	[CountryCodes.NG]: { name: 'Nigéria' },
+	[CountryCodes.NU]: { name: 'Niue' },
+	[CountryCodes.NO]: { name: 'Noruega' },
+	[CountryCodes.NC]: { name: 'Nova Caledônia' },
+	[CountryCodes.NZ]: { name: 'Nova Zelândia' },
+	[CountryCodes.OM]: { name: 'Omã' },
+	[CountryCodes.PW]: { name: 'Palau' },
+	[CountryCodes.PS]: { name: 'Palestina' },
+	[CountryCodes.PA]: { name: 'Panamá' },
+	[CountryCodes.PG]: { name: 'Papua-Nova Guiné' },
+	[CountryCodes.PK]: { name: 'Paquistão' },
+	[CountryCodes.PY]: { name: 'Paraguai' },
+	[CountryCodes.PE]: { name: 'Peru' },
+	[CountryCodes.PF]: { name: 'Polinésia Francesa' },
+	[CountryCodes.PL]: { name: 'Polônia' },
+	[CountryCodes.PR]: { name: 'Porto Rico' },
+	[CountryCodes.PT]: { name: 'Portugal' },
+	[CountryCodes.KE]: { name: 'Quênia' },
+	[CountryCodes.KG]: { name: 'Quirguistão' },
+	[CountryCodes.GB]: { name: 'Reino Unido' },
+	[CountryCodes.CF]: { name: 'República Centro-Africana' },
+	[CountryCodes.SL]: { name: 'República da Serra Leoa' },
+	[CountryCodes.DO]: { name: 'República Dominicana' },
+	[CountryCodes.CZ]: { name: 'República Tcheca' },
+	[CountryCodes.RE]: { name: 'Reunião' },
+	[CountryCodes.RO]: { name: 'Romênia' },
+	[CountryCodes.RW]: { name: 'Ruanda' },
+	[CountryCodes.RU]: { name: 'Rússia' },
+	[CountryCodes.EH]: { name: 'Saara Ocidental' },
+	[CountryCodes.WS]: { name: 'Samoa' },
+	[CountryCodes.AS]: { name: 'Samoa Americana' },
+	[CountryCodes.SH]: { name: 'Santa Helena' },
+	[CountryCodes.LC]: { name: 'Santa Lúcia' },
+	[CountryCodes.KN]: { name: 'São Cristóvão' },
+	[CountryCodes.SM]: { name: 'São Marino' },
+	[CountryCodes.PM]: { name: 'São Pedro e Miquelon' },
+	[CountryCodes.ST]: { name: 'Sao Tomé e Príncipe' },
+	[CountryCodes.VC]: { name: 'São Vicente e Granadinas' },
+	[CountryCodes.SC]: { name: 'Seicheles' },
+	[CountryCodes.SN]: { name: 'Senegal' },
+	[CountryCodes.CS]: { name: 'Sérvia e Montenegro' },
+	[CountryCodes.SG]: { name: 'Singapura' },
+	[CountryCodes.SY]: { name: 'Síria' },
+	[CountryCodes.SO]: { name: 'Somália' },
+	[CountryCodes.LK]: { name: 'Sri Lanka' },
+	[CountryCodes.SZ]: { name: 'Suazilândia' },
+	[CountryCodes.SD]: { name: 'Sudão' },
+	[CountryCodes.SE]: { name: 'Suécia' },
+	[CountryCodes.CH]: { name: 'Suiça' },
+	[CountryCodes.SR]: { name: 'Suriname' },
+	[CountryCodes.TH]: { name: 'Tailândia' },
+	[CountryCodes.TW]: { name: 'Taiwan' },
+	[CountryCodes.TJ]: { name: 'Tajiquistão' },
+	[CountryCodes.TZ]: { name: 'Tanzânia' },
+	[CountryCodes.TF]: { name: 'Terras Austrais e Antárticas Francesas' },
+	[CountryCodes.IO]: { name: 'Território Britânico do Oceano Índico' },
+	[CountryCodes.TL]: { name: 'Timor-Leste' },
+	[CountryCodes.TG]: { name: 'Togo' },
+	[CountryCodes.TO]: { name: 'Tonga' },
+	[CountryCodes.TK]: { name: 'Toquelau' },
+	[CountryCodes.TT]: { name: 'Trinidad e Tobago' },
+	[CountryCodes.TN]: { name: 'Tunísia' },
+	[CountryCodes.TM]: { name: 'Turcomenistão' },
+	[CountryCodes.TR]: { name: 'Turquia' },
+	[CountryCodes.TV]: { name: 'Tuvalu' },
+	[CountryCodes.UA]: { name: 'Ucrânia' },
+	[CountryCodes.UG]: { name: 'Uganda' },
+	[CountryCodes.UY]: { name: 'Uruguai' },
+	[CountryCodes.UZ]: { name: 'Uzbequistão' },
+	[CountryCodes.VU]: { name: 'Vanuatu' },
+	[CountryCodes.VA]: { name: 'Vaticano' },
+	[CountryCodes.VE]: { name: 'Venezuela' },
+	[CountryCodes.VN]: { name: 'Vietnam' },
+	[CountryCodes.WF]: { name: 'Wallis e Futuna' },
+	[CountryCodes.ZM]: { name: 'Zâmbia' },
+	[CountryCodes.ZW]: { name: 'Zimbábue' },
 } as const
 
 export const COUNTRIES_SELECT_OPTIONS = Object.entries(
