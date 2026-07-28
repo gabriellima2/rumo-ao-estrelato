@@ -14,7 +14,7 @@ import { getPlayerPositionLabel } from '@/domains/player/catalog/positions'
 import { Button } from '@/shared/components/ui/button'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 
-export const Route = createFileRoute('/careers')({
+export const Route = createFileRoute('/careers/')({
 	component: RouteComponent,
 })
 
@@ -33,7 +33,8 @@ function RouteComponent() {
 				<header className="flex flex-row items-center justify-between gap-2">
 					<h1 className="text-lg font-medium">Minhas carreiras</h1>
 					<Button
-						render={<Link to="/create-career">Adicionar carreira</Link>}
+						nativeButton={false}
+						render={<Link to="/careers/create">Adicionar carreira</Link>}
 					/>
 				</header>
 				{isLoading ? (

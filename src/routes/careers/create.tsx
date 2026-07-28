@@ -26,10 +26,9 @@ import { GenderSelect } from '@/shared/components/selects/gender-select'
 import { PlayerPositionSelect } from '@/domains/player/components/player-position-select'
 import { usePlayerUseCases } from '@/domains/player/contexts/player-use-cases-context'
 
-export const Route = createFileRoute('/create-career')({
+export const Route = createFileRoute('/careers/create')({
 	component: RouteComponent,
 })
-
 function RouteComponent() {
 	const { navigate } = useRouter()
 	const { createPlayer: createPlayerUseCase } = usePlayerUseCases()
@@ -79,6 +78,7 @@ function RouteComponent() {
 					<Button
 						variant="ghost"
 						title="Voltar"
+						nativeButton={false}
 						render={
 							<Link to="/careers">
 								<ChevronLeft />

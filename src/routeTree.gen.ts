@@ -9,24 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as CreateCareerRouteImport } from './routes/create-career'
-import { Route as CareersRouteImport } from './routes/careers'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CareersIndexRouteImport } from './routes/careers/index'
 import { Route as PlayersPlayerIdRouteImport } from './routes/players/$playerId'
+import { Route as CareersCreateRouteImport } from './routes/careers/create'
 
-const CreateCareerRoute = CreateCareerRouteImport.update({
-  id: '/create-career',
-  path: '/create-career',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CareersRoute = CareersRouteImport.update({
-  id: '/careers',
-  path: '/careers',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareersIndexRoute = CareersIndexRouteImport.update({
+  id: '/careers/',
+  path: '/careers/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayersPlayerIdRoute = PlayersPlayerIdRouteImport.update({
@@ -34,62 +29,60 @@ const PlayersPlayerIdRoute = PlayersPlayerIdRouteImport.update({
   path: '/players/$playerId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CareersCreateRoute = CareersCreateRouteImport.update({
+  id: '/careers/create',
+  path: '/careers/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/careers': typeof CareersRoute
-  '/create-career': typeof CreateCareerRoute
+  '/careers/create': typeof CareersCreateRoute
   '/players/$playerId': typeof PlayersPlayerIdRoute
+  '/careers/': typeof CareersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/careers': typeof CareersRoute
-  '/create-career': typeof CreateCareerRoute
+  '/careers/create': typeof CareersCreateRoute
   '/players/$playerId': typeof PlayersPlayerIdRoute
+  '/careers': typeof CareersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/careers': typeof CareersRoute
-  '/create-career': typeof CreateCareerRoute
+  '/careers/create': typeof CareersCreateRoute
   '/players/$playerId': typeof PlayersPlayerIdRoute
+  '/careers/': typeof CareersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/careers' | '/create-career' | '/players/$playerId'
+  fullPaths: '/' | '/careers/create' | '/players/$playerId' | '/careers/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/careers' | '/create-career' | '/players/$playerId'
-  id: '__root__' | '/' | '/careers' | '/create-career' | '/players/$playerId'
+  to: '/' | '/careers/create' | '/players/$playerId' | '/careers'
+  id: '__root__' | '/' | '/careers/create' | '/players/$playerId' | '/careers/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CareersRoute: typeof CareersRoute
-  CreateCareerRoute: typeof CreateCareerRoute
+  CareersCreateRoute: typeof CareersCreateRoute
   PlayersPlayerIdRoute: typeof PlayersPlayerIdRoute
+  CareersIndexRoute: typeof CareersIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/create-career': {
-      id: '/create-career'
-      path: '/create-career'
-      fullPath: '/create-career'
-      preLoaderRoute: typeof CreateCareerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/careers': {
-      id: '/careers'
-      path: '/careers'
-      fullPath: '/careers'
-      preLoaderRoute: typeof CareersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers/': {
+      id: '/careers/'
+      path: '/careers'
+      fullPath: '/careers/'
+      preLoaderRoute: typeof CareersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/players/$playerId': {
@@ -99,14 +92,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayersPlayerIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/careers/create': {
+      id: '/careers/create'
+      path: '/careers/create'
+      fullPath: '/careers/create'
+      preLoaderRoute: typeof CareersCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CareersRoute: CareersRoute,
-  CreateCareerRoute: CreateCareerRoute,
+  CareersCreateRoute: CareersCreateRoute,
   PlayersPlayerIdRoute: PlayersPlayerIdRoute,
+  CareersIndexRoute: CareersIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
