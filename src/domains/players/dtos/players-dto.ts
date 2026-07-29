@@ -9,3 +9,12 @@ export type CreatePlayerDTOInput = {
 	country: CountryCode
 	position: PlayerPosition
 }
+
+export type GetAllPlayersDTOOutput = Array<{
+	id: string
+	firstName: string
+	lastName: string
+	gender: Gender
+	country: CountryCode
+	position: PlayerPosition
+}>

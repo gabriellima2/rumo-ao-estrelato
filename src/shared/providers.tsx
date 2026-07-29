@@ -1,13 +1,13 @@
 import type { PropsWithChildren } from 'react'
-import { PlayerUseCasesProvider } from '@/domains/player/contexts/player-use-cases-context'
-import { makePlayerLocalStorageRepository } from '@/domains/player/repositories/local-storage/player-local-storage-repository'
+import { PlayersUseCasesProvider } from '@/domains/players/contexts/players-use-cases-context'
+import { makePlayersLocalStorageRepository } from '@/domains/players/repositories/local-storage/players-local-storage-repository'
 
-const playerRepository = makePlayerLocalStorageRepository()
+const playersRepository = makePlayersLocalStorageRepository()
 
 export function Providers({ children }: PropsWithChildren) {
 	return (
-		<PlayerUseCasesProvider playerRepository={playerRepository}>
+		<PlayersUseCasesProvider playersRepository={playersRepository}>
 			{children}
-		</PlayerUseCasesProvider>
+		</PlayersUseCasesProvider>
 	)
 }

@@ -1,8 +1,10 @@
-import type { PlayerRepository } from '../player-repository'
-import type { CreatePlayerDTOInput } from '../../dtos/create-player-dto'
-import type { GetAllPlayersDTOOutput } from '../../dtos/get-all-players-dto'
+import type { PlayersRepository } from '../players-repository'
+import type {
+	CreatePlayerDTOInput,
+	GetAllPlayersDTOOutput,
+} from '../../dtos/players-dto'
 
-export class PlayerLocalStorageRepository implements PlayerRepository {
+export class PlayersLocalStorageRepository implements PlayersRepository {
 	private readonly storageKey = 'players'
 
 	async create(input: CreatePlayerDTOInput): Promise<void> {
@@ -25,7 +27,7 @@ export class PlayerLocalStorageRepository implements PlayerRepository {
 	}
 }
 
-export const makePlayerLocalStorageRepository =
-	(): PlayerLocalStorageRepository => {
-		return new PlayerLocalStorageRepository()
+export const makePlayersLocalStorageRepository =
+	(): PlayersLocalStorageRepository => {
+		return new PlayersLocalStorageRepository()
 	}

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { CommonSelect } from '../../../shared/components/selects/common-select'
 import type { SelectOption } from '@/shared/catalog/select'
-import { PLAYER_POSITION_LABELS } from '@/domains/player/catalog/positions'
+import { PLAYER_POSITION_LABELS } from '@/domains/players/catalog/positions'
 
 type PlayerPositionSelectProps = Omit<
 	React.ComponentProps<typeof CommonSelect>,

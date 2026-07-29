@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { ChevronLeft } from 'lucide-react'
 import type { CountryCode } from '@/shared/catalog/countries'
 import type { Gender } from '@/shared/catalog/genders'
-import type { PlayerPosition } from '@/domains/player/catalog/positions'
+import type { PlayerPosition } from '@/domains/players/catalog/positions'
 import { Button } from '@/shared/components/ui/button'
 import {
 	Field,
@@ -23,15 +23,15 @@ import { isEmptyString } from '@/shared/utils/validators'
 import { toast } from '@/shared/components/ui/toast'
 import { CountrySelect } from '@/shared/components/selects/country-select'
 import { GenderSelect } from '@/shared/components/selects/gender-select'
-import { PlayerPositionSelect } from '@/domains/player/components/player-position-select'
-import { usePlayerUseCases } from '@/domains/player/contexts/player-use-cases-context'
+import { PlayerPositionSelect } from '@/domains/players/components/player-position-select'
+import { usePlayersUseCases } from '@/domains/players/contexts/players-use-cases-context'
 
 export const Route = createFileRoute('/careers/create')({
 	component: RouteComponent,
 })
 function RouteComponent() {
 	const { navigate } = useRouter()
-	const { createPlayer: createPlayerUseCase } = usePlayerUseCases()
+	const { createPlayer: createPlayerUseCase } = usePlayersUseCases()
 
 	const { mutateAsync: createPlayer } = useMutation({
 		mutationFn: createPlayerUseCase,

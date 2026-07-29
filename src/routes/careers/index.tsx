@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
-import { usePlayerUseCases } from '@/domains/player/contexts/player-use-cases-context'
+import { usePlayersUseCases } from '@/domains/players/contexts/players-use-cases-context'
 import {
 	Card,
 	CardContent,
@@ -10,7 +10,7 @@ import {
 	CardTitle,
 } from '@/shared/components/ui/card'
 import { getCountryByCode } from '@/shared/catalog/countries'
-import { getPlayerPositionLabel } from '@/domains/player/catalog/positions'
+import { getPlayerPositionLabel } from '@/domains/players/catalog/positions'
 import { Button } from '@/shared/components/ui/button'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 
@@ -19,7 +19,7 @@ export const Route = createFileRoute('/careers/')({
 })
 
 function RouteComponent() {
-	const { getAllPlayers } = usePlayerUseCases()
+	const { getAllPlayers } = usePlayersUseCases()
 
 	const { data, isLoading } = useQuery({
 		queryKey: ['get-all-players'],
