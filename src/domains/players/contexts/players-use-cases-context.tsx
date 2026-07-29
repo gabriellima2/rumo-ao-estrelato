@@ -5,9 +5,15 @@ import type {
 	GetAllPlayersDTOOutput,
 } from '../dtos/players-dto'
 import type { PlayersRepository } from '../repositories/players-repository'
+import type { PlayerClubsRepository } from '../repositories/player-clubs-repository'
+import type { PlayerSeasonsRepository } from '../repositories/player-seasons-repository'
+
+type CreatePlayerInput = CreatePlayerDTOInput & {
+	clubName: string
+}
 
 type PlayersUseCasesContextValues = {
-	createPlayer: (input: CreatePlayerDTOInput) => Promise<void>
+	createPlayer: (input: CreatePlayerInput) => Promise<void>
 	getAllPlayers: () => Promise<GetAllPlayersDTOOutput>
 }
 
@@ -28,19 +34,55 @@ export function usePlayersUseCases() {
 
 type PlayersUseCasesProviderProps = PropsWithChildren<{
 	playersRepository: PlayersRepository
+	playerClubsRepository: PlayerClubsRepository
+	playerSeasonsRepository: PlayerSeasonsRepository
 }>
 
 export function PlayersUseCasesProvider({
 	children,
 	playersRepository,
+	playerClubsRepository,
+	playerSeasonsRepository,
 }: PlayersUseCasesProviderProps) {
-	async function createPlayer(input: CreatePlayerDTOInput): Promise<void> {
-		await playersRepository.create({
+	function getSequentialSeasonNumber(seasons: Array<{ seasonNumber: number }>) {
+		const sortedSeasons = [...new Set(seasons)].sort(
+			(a, b) => a.seasonNumber - b.seasonNumber,
+		)
+		let expected = 1
+
+		for (const season of sortedSeasons) {
+			if (season.seasonNumber === expected) {
+				expected++
+			} else if (season.seasonNumber > expected) {
+				break
+			}
+		}
+
+		return expected
+	}
+
+	async function createPlayer(input: CreatePlayerInput): Promise<void> {
+		const player = await playersRepository.create({
 			country: input.country,
 			firstName: input.firstName,
 			lastName: input.lastName,
 			gender: input.gender,
 			position: input.position,
+		})
+
+		const playerClub = await playerClubsRepository.create({
+			playerId: player.id,
+			name: input.clubName,
+		})
+
+		const playerSeasons = await playerSeasonsRepository.getByPlayerId(player.id)
+		const seasonNumber = getSequentialSeasonNumber(playerSeasons)
+
+		await playerSeasonsRepository.create({
+			playerId: player.id,
+			playerClubId: playerClub.id,
+			seasonNumber: getSequentialSeasonNumber(playerSeasons),
+			title: `Temporada ${seasonNumber}`,
 		})
 	}
 

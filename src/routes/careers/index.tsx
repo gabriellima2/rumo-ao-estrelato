@@ -30,7 +30,7 @@ function RouteComponent() {
 	return (
 		<main className="flex h-full flex-col items-center px-4 py-8">
 			<div className="w-full max-w-2xl space-y-4">
-				<header className="flex flex-row items-center justify-between gap-2">
+				<header className="flex flex-row items-center justify-between gap-4">
 					<h1 className="text-lg font-medium">Minhas carreiras</h1>
 					<Button
 						nativeButton={false}

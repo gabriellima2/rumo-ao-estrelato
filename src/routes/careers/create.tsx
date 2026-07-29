@@ -2,7 +2,7 @@ import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import z from 'zod'
 import { useMutation } from '@tanstack/react-query'
-import { ChevronLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import type { CountryCode } from '@/shared/catalog/countries'
 import type { Gender } from '@/shared/catalog/genders'
 import type { PlayerPosition } from '@/domains/players/catalog/positions'
@@ -29,6 +29,7 @@ import { usePlayersUseCases } from '@/domains/players/contexts/players-use-cases
 export const Route = createFileRoute('/careers/create')({
 	component: RouteComponent,
 })
+
 function RouteComponent() {
 	const { navigate } = useRouter()
 	const { createPlayer: createPlayerUseCase } = usePlayersUseCases()
@@ -57,6 +58,7 @@ function RouteComponent() {
 			lastName: '',
 			country: EMPTY_SEARCHABLE_SELECT_OPTION,
 			position: '',
+			clubName: '',
 		},
 		validators: {
 			onSubmit: schema,
@@ -68,24 +70,24 @@ function RouteComponent() {
 				lastName: value.lastName,
 				country: value.country.value as CountryCode,
 				position: value.position as PlayerPosition,
+				clubName: value.clubName,
 			}),
 	})
 
 	return (
 		<main className="flex h-full flex-col items-center px-4 py-8">
 			<div className="w-full max-w-2xl space-y-4">
-				<header className="flex flex-row items-center gap-2">
+				<header className="flex flex-row items-center gap-4">
 					<Button
-						variant="ghost"
 						title="Voltar"
+						variant="outline"
 						nativeButton={false}
 						render={
 							<Link to="/careers">
-								<ChevronLeft />
+								<ArrowLeft />
 							</Link>
 						}
 					/>
-
 					<h1 className="text-lg font-medium">Criar carreira</h1>
 				</header>
 				<form
@@ -214,6 +216,30 @@ function RouteComponent() {
 								)
 							}}
 						/>
+						<form.Field
+							name="clubName"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Clube</FieldLabel>
+										<TextInput
+											id={field.name}
+											name={field.name}
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={field.handleChange}
+											placeholder="Ex: Santos"
+										/>
+										{isInvalid && (
+											<FieldError errors={field.state.meta.errors} />
+										)}
+									</Field>
+								)
+							}}
+						/>
 					</FieldGroup>
 					<form.Subscribe
 						selector={(state) => [state.isSubmitting]}
@@ -235,15 +261,21 @@ const schema = z.object({
 		.string()
 		.trim()
 		.nonempty('Obrigatório')
-		.max(50, 'Máximo de 50 caracteres'),
+		.max(40, 'Máximo de 40 caracteres'),
 	lastName: z
 		.string()
 		.trim()
 		.nonempty('Obrigatório')
-		.max(50, 'Máximo de 50 caracteres'),
+		.max(60, 'Máximo de 60 caracteres'),
 	country: searchableSelectSchema.refine(
 		({ value }) => !isEmptyString(value),
 		'Obrigatório',
 	),
 	position: z.string().trim().nonempty('Obrigatório'),
+	clubName: z
+		.string()
+		.trim()
+		.nonempty('Obrigatório')
+		.min(2, 'Mínimo de 2 caracteres')
+		.max(60, 'Máximo de 60 caracteres'),
 })

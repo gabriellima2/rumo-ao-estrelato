@@ -10,6 +10,10 @@ export type CreatePlayerDTOInput = {
 	position: PlayerPosition
 }
 
+export type CreatePlayerDTOOutput = {
+	id: string
+}
+
 export type GetAllPlayersDTOOutput = Array<{
 	id: string
 	firstName: string
