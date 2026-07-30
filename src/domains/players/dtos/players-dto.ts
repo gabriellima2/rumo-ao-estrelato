@@ -22,3 +22,14 @@ export type GetAllPlayersDTOOutput = Array<{
 	country: CountryCode
 	position: PlayerPosition
 }>
+
+export type GetPlayerByIdDTOOutput =
+	| {
+			id: string
+			firstName: string
+			lastName: string
+			gender: Gender
+			country: CountryCode
+			position: PlayerPosition
+	  }
+	| undefined

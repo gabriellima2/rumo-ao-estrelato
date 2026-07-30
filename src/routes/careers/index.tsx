@@ -21,7 +21,7 @@ export const Route = createFileRoute('/careers/')({
 function RouteComponent() {
 	const { getAllPlayers } = usePlayersUseCases()
 
-	const { data, isLoading } = useQuery({
+	const { data: players, isLoading: isLoadingPlayers } = useQuery({
 		queryKey: ['get-all-players'],
 		queryFn: getAllPlayers,
 		throwOnError: true,
@@ -37,36 +37,43 @@ function RouteComponent() {
 						render={<Link to="/careers/create">Adicionar carreira</Link>}
 					/>
 				</header>
-				{isLoading ? (
+				{isLoadingPlayers ? (
 					<div className="space-y-4">
 						<Skeleton className="h-19.5" />
 						<Skeleton className="h-19.5" />
 						<Skeleton className="h-19.5" />
 						<Skeleton className="h-19.5" />
 					</div>
-				) : data ? (
-					<ul className="space-y-4">
-						{data.map((player) => (
-							<li key={player.id}>
-								<Link to="/players/$playerId" params={{ playerId: player.id }}>
-									<Card className="flex flex-row items-center justify-between gap-2">
-										<CardHeader className="flex-1">
-											<CardTitle>
-												{player.firstName} {player.lastName}
-											</CardTitle>
-											<CardDescription>
-												{getPlayerPositionLabel(player.position)} -{' '}
-												{getCountryByCode(player.country)?.name}
-											</CardDescription>
-										</CardHeader>
-										<CardContent>
-											<ChevronRight />
-										</CardContent>
-									</Card>
-								</Link>
-							</li>
-						))}
-					</ul>
+				) : players ? (
+					players.length >= 1 ? (
+						<ul className="space-y-4">
+							{players.map((player) => (
+								<li key={player.id}>
+									<Link
+										to="/players/$playerId"
+										params={{ playerId: player.id }}
+									>
+										<Card className="flex flex-row items-center justify-between gap-4">
+											<CardHeader className="flex-1">
+												<CardTitle>
+													{player.firstName} {player.lastName}
+												</CardTitle>
+												<CardDescription>
+													{getPlayerPositionLabel(player.position)} -{' '}
+													{getCountryByCode(player.country)?.name}
+												</CardDescription>
+											</CardHeader>
+											<CardContent>
+												<ChevronRight />
+											</CardContent>
+										</Card>
+									</Link>
+								</li>
+							))}
+						</ul>
+					) : (
+						<p>Nenhuma carreira encontrada!</p>
+					)
 				) : null}
 			</div>
 		</main>

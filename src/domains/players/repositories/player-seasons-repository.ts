@@ -1,13 +1,13 @@
 import type {
 	CreatePlayerSeasonDTOInput,
+	GetAllPlayerSeasonsByPlayerIdDTOOutput,
 	GetAllPlayerSeasonsDTOOutput,
-	GetPlayerSeasonsByPlayerIdDTOOutput,
 } from '../dtos/player-seasons-dto'
 
 export interface PlayerSeasonsRepository {
 	create: (input: CreatePlayerSeasonDTOInput) => Promise<void>
 	getAll: () => Promise<GetAllPlayerSeasonsDTOOutput>
-	getByPlayerId: (
+	getAllByPlayerId: (
 		playerId: string,
-	) => Promise<GetPlayerSeasonsByPlayerIdDTOOutput>
+	) => Promise<GetAllPlayerSeasonsByPlayerIdDTOOutput>
 }

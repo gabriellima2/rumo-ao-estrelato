@@ -15,10 +15,11 @@ export type GetAllPlayerSeasonsDTOOutput = Array<{
 	isCurrent: boolean
 }>
 
-export type GetPlayerSeasonsByPlayerIdDTOOutput = Array<{
+export type GetAllPlayerSeasonsByPlayerIdDTOOutput = Array<{
 	id: string
 	playerId: string
 	playerClubId: string
+	playerClubName: string | undefined
 	title: string
 	seasonNumber: number
 	isCurrent: boolean

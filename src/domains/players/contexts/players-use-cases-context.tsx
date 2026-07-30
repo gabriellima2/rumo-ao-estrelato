@@ -3,6 +3,7 @@ import type { PropsWithChildren } from 'react'
 import type {
 	CreatePlayerDTOInput,
 	GetAllPlayersDTOOutput,
+	GetPlayerByIdDTOOutput,
 } from '../dtos/players-dto'
 import type { PlayersRepository } from '../repositories/players-repository'
 import type { PlayerClubsRepository } from '../repositories/player-clubs-repository'
@@ -15,6 +16,7 @@ type CreatePlayerInput = CreatePlayerDTOInput & {
 type PlayersUseCasesContextValues = {
 	createPlayer: (input: CreatePlayerInput) => Promise<void>
 	getAllPlayers: () => Promise<GetAllPlayersDTOOutput>
+	getPlayerById: (id: string) => Promise<GetPlayerByIdDTOOutput>
 }
 
 const PlayersUseCasesContext =
@@ -75,7 +77,9 @@ export function PlayersUseCasesProvider({
 			name: input.clubName,
 		})
 
-		const playerSeasons = await playerSeasonsRepository.getByPlayerId(player.id)
+		const playerSeasons = await playerSeasonsRepository.getAllByPlayerId(
+			player.id,
+		)
 		const seasonNumber = getSequentialSeasonNumber(playerSeasons)
 
 		await playerSeasonsRepository.create({
@@ -92,11 +96,17 @@ export function PlayersUseCasesProvider({
 		return players
 	}
 
+	async function getPlayerById(id: string): Promise<GetPlayerByIdDTOOutput> {
+		const player = await playersRepository.getById(id)
+		return player
+	}
+
 	return (
 		<PlayersUseCasesContext.Provider
 			value={{
 				createPlayer,
 				getAllPlayers,
+				getPlayerById,
 			}}
 		>
 			{children}

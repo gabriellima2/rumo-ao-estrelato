@@ -1,12 +1,15 @@
+import { STORAGE_KEYS } from './@constants'
 import type { PlayerSeasonsRepository } from '../player-seasons-repository'
 import type {
 	CreatePlayerSeasonDTOInput,
+	GetAllPlayerSeasonsByPlayerIdDTOOutput,
 	GetAllPlayerSeasonsDTOOutput,
-	GetPlayerSeasonsByPlayerIdDTOOutput,
 } from '../../dtos/player-seasons-dto'
+import type { GetAllPlayerClubsDTOOutput } from '../../dtos/player-clubs-dto'
 
 export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsRepository {
-	private readonly storageKey = 'player-seasons'
+	private readonly storageKey = STORAGE_KEYS.PLAYER_SEASONS
+	private readonly playerClubsStorageKey = STORAGE_KEYS.PLAYER_CLUBS
 
 	async create(input: CreatePlayerSeasonDTOInput): Promise<void> {
 		const current = (await this.getAll()) || []
@@ -28,15 +31,31 @@ export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsReposit
 		return data
 	}
 
-	async getByPlayerId(
+	async getAllByPlayerId(
 		playerId: string,
-	): Promise<GetPlayerSeasonsByPlayerIdDTOOutput> {
+	): Promise<GetAllPlayerSeasonsByPlayerIdDTOOutput> {
 		const seasons = await this.getAll()
-		const playerSeasons = seasons.filter(
-			(season) => season.playerId === playerId,
+		const playerSeasons = seasons.filter((s) => s.playerId === playerId)
+		const sortedPlayerSeasons = playerSeasons.sort(
+			(a, b) => a.seasonNumber - b.seasonNumber,
 		)
 
-		return playerSeasons
+		const clubs: GetAllPlayerClubsDTOOutput =
+			JSON.parse(localStorage.getItem(this.playerClubsStorageKey) || '[]') || []
+		const playerClubs = clubs
+			.filter((c) => c.playerId === playerId)
+			.reduce(
+				(acc, c) => {
+					acc[c.id] = c
+					return acc
+				},
+				{} as Record<string, GetAllPlayerClubsDTOOutput[number]>,
+			)
+
+		return sortedPlayerSeasons.map((ps) => ({
+			...ps,
+			playerClubName: playerClubs[ps.playerClubId]?.name || undefined,
+		}))
 	}
 }
 

@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from './@constants'
 import type { PlayerClubsRepository } from '../player-clubs-repository'
 import type {
 	CreatePlayerClubDTOInput,
@@ -6,7 +7,7 @@ import type {
 } from '../../dtos/player-clubs-dto'
 
 export class PlayerClubsLocalStorageRepository implements PlayerClubsRepository {
-	private readonly storageKey = 'player-clubs'
+	private readonly storageKey = STORAGE_KEYS.PLAYER_CLUBS
 
 	async create(
 		input: CreatePlayerClubDTOInput,

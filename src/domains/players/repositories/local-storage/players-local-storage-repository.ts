@@ -1,12 +1,14 @@
+import { STORAGE_KEYS } from './@constants'
 import type { PlayersRepository } from '../players-repository'
 import type {
 	CreatePlayerDTOInput,
 	CreatePlayerDTOOutput,
 	GetAllPlayersDTOOutput,
+	GetPlayerByIdDTOOutput,
 } from '../../dtos/players-dto'
 
 export class PlayersLocalStorageRepository implements PlayersRepository {
-	private readonly storageKey = 'players'
+	private readonly storageKey = STORAGE_KEYS.PLAYERS
 
 	async create(input: CreatePlayerDTOInput): Promise<CreatePlayerDTOOutput> {
 		const current = (await this.getAll()) || []
@@ -29,6 +31,13 @@ export class PlayersLocalStorageRepository implements PlayersRepository {
 		const data: GetAllPlayersDTOOutput =
 			JSON.parse(localStorage.getItem(this.storageKey) || '[]') || []
 		return data
+	}
+
+	async getById(id: string): Promise<GetPlayerByIdDTOOutput> {
+		const players = await this.getAll()
+		const player = players.find((p) => p.id === id)
+
+		return player
 	}
 }
 
