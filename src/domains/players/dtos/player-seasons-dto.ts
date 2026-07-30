@@ -3,6 +3,7 @@ export type CreatePlayerSeasonDTOInput = {
 	playerClubId: string
 	title: string
 	seasonNumber: number
+	isCurrent: boolean
 }
 
 export type GetAllPlayerSeasonsDTOOutput = Array<{
@@ -11,6 +12,7 @@ export type GetAllPlayerSeasonsDTOOutput = Array<{
 	playerClubId: string
 	title: string
 	seasonNumber: number
+	isCurrent: boolean
 }>
 
 export type GetPlayerSeasonsByPlayerIdDTOOutput = Array<{
@@ -19,4 +21,5 @@ export type GetPlayerSeasonsByPlayerIdDTOOutput = Array<{
 	playerClubId: string
 	title: string
 	seasonNumber: number
+	isCurrent: boolean
 }>

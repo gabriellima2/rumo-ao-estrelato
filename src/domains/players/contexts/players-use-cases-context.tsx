@@ -83,6 +83,7 @@ export function PlayersUseCasesProvider({
 			playerClubId: playerClub.id,
 			seasonNumber: getSequentialSeasonNumber(playerSeasons),
 			title: `Temporada ${seasonNumber}`,
+			isCurrent: true,
 		})
 	}
 

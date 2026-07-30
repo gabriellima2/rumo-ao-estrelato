@@ -17,6 +17,7 @@ export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsReposit
 			playerClubId: input.playerClubId,
 			seasonNumber: input.seasonNumber,
 			title: input.title,
+			isCurrent: input.isCurrent,
 		})
 		localStorage.setItem(this.storageKey, JSON.stringify(current))
 	}
@@ -30,8 +31,7 @@ export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsReposit
 	async getByPlayerId(
 		playerId: string,
 	): Promise<GetPlayerSeasonsByPlayerIdDTOOutput> {
-		const seasons: GetAllPlayerSeasonsDTOOutput =
-			JSON.parse(localStorage.getItem(this.storageKey) || '[]') || []
+		const seasons = await this.getAll()
 		const playerSeasons = seasons.filter(
 			(season) => season.playerId === playerId,
 		)
