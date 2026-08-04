@@ -1,12 +1,18 @@
 import { createContext, use } from 'react'
 import type { PropsWithChildren } from 'react'
 import type { PlayerSeasonsRepository } from '../repositories/player-seasons-repository'
-import type { GetAllPlayerSeasonsByPlayerIdDTOOutput } from '../dtos/player-seasons-dto'
+import type { PlayerClubsRepository } from '../repositories/player-clubs-repository'
+import type { PlayersRepository } from '../repositories/players-repository'
+import type {
+	GetAllPlayerSeasonsByPlayerIdDTOOutput,
+	GetSeasonDetailDTOOutput,
+} from '../dtos/player-seasons-dto'
 
 type PlayerSeasonsUseCasesContextValues = {
 	getAllPlayerSeasonsByPlayerId: (
 		playerId: string,
 	) => Promise<GetAllPlayerSeasonsByPlayerIdDTOOutput>
+	getSeasonDetail: (seasonId: string) => Promise<GetSeasonDetailDTOOutput>
 }
 
 const PlayerSeasonsUseCasesContext =
@@ -26,11 +32,15 @@ export function usePlayerSeasonsUseCases() {
 
 type PlayerSeasonsUseCasesProviderProps = PropsWithChildren<{
 	playerSeasonsRepository: PlayerSeasonsRepository
+	playerClubsRepository: PlayerClubsRepository
+	playersRepository: PlayersRepository
 }>
 
 export function PlayerSeasonsUseCasesProvider({
 	children,
 	playerSeasonsRepository,
+	playerClubsRepository,
+	playersRepository,
 }: PlayerSeasonsUseCasesProviderProps) {
 	async function getAllPlayerSeasonsByPlayerId(
 		playerId: string,
@@ -40,10 +50,46 @@ export function PlayerSeasonsUseCasesProvider({
 		return playerSeasons
 	}
 
+	async function getSeasonDetail(
+		seasonId: string,
+	): Promise<GetSeasonDetailDTOOutput> {
+		const season = await playerSeasonsRepository.getById(seasonId)
+		if (!season) return undefined
+
+		const [player, club] = await Promise.all([
+			playersRepository.getById(season.playerId),
+			playerClubsRepository.getById(season.playerClubId),
+		])
+
+		if (!player || !club) return undefined
+
+		return {
+			season: {
+				id: season.id,
+				title: season.title,
+				seasonNumber: season.seasonNumber,
+				isCurrent: season.isCurrent,
+				playerClubName: season.playerClubName,
+			},
+			player: {
+				id: player.id,
+				firstName: player.firstName,
+				lastName: player.lastName,
+				position: player.position,
+				country: player.country,
+			},
+			club: {
+				id: club.id,
+				name: club.name,
+			},
+		}
+	}
+
 	return (
 		<PlayerSeasonsUseCasesContext.Provider
 			value={{
 				getAllPlayerSeasonsByPlayerId,
+				getSeasonDetail,
 			}}
 		>
 			{children}

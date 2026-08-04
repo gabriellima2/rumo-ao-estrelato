@@ -12,3 +12,11 @@ export type GetAllPlayerClubsDTOOutput = Array<{
 	playerId: string
 	name: string
 }>
+
+export type GetPlayerClubByIdDTOOutput =
+	| {
+			id: string
+			playerId: string
+			name: string
+	  }
+	| undefined

@@ -4,6 +4,7 @@ import type {
 	CreatePlayerClubDTOInput,
 	CreatePlayerClubDTOOutput,
 	GetAllPlayerClubsDTOOutput,
+	GetPlayerClubByIdDTOOutput,
 } from '../../dtos/player-clubs-dto'
 
 export class PlayerClubsLocalStorageRepository implements PlayerClubsRepository {
@@ -29,6 +30,11 @@ export class PlayerClubsLocalStorageRepository implements PlayerClubsRepository 
 		const data: GetAllPlayerClubsDTOOutput =
 			JSON.parse(localStorage.getItem(this.storageKey) || '[]') || []
 		return data
+	}
+
+	async getById(id: string): Promise<GetPlayerClubByIdDTOOutput> {
+		const clubs = await this.getAll()
+		return clubs.find((club) => club.id === id)
 	}
 }
 

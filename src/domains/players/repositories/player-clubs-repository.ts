@@ -2,6 +2,7 @@ import type {
 	CreatePlayerClubDTOInput,
 	CreatePlayerClubDTOOutput,
 	GetAllPlayerClubsDTOOutput,
+	GetPlayerClubByIdDTOOutput,
 } from '../dtos/player-clubs-dto'
 
 export interface PlayerClubsRepository {
@@ -9,4 +10,5 @@ export interface PlayerClubsRepository {
 		input: CreatePlayerClubDTOInput,
 	) => Promise<CreatePlayerClubDTOOutput>
 	getAll: () => Promise<GetAllPlayerClubsDTOOutput>
+	getById: (id: string) => Promise<GetPlayerClubByIdDTOOutput>
 }

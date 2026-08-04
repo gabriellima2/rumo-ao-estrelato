@@ -4,6 +4,7 @@ import type {
 	CreatePlayerSeasonDTOInput,
 	GetAllPlayerSeasonsByPlayerIdDTOOutput,
 	GetAllPlayerSeasonsDTOOutput,
+	GetPlayerSeasonByIdDTOOutput,
 } from '../../dtos/player-seasons-dto'
 import type { GetAllPlayerClubsDTOOutput } from '../../dtos/player-clubs-dto'
 
@@ -29,6 +30,22 @@ export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsReposit
 		const data: GetAllPlayerSeasonsDTOOutput =
 			JSON.parse(localStorage.getItem(this.storageKey) || '[]') || []
 		return data
+	}
+
+	async getById(id: string): Promise<GetPlayerSeasonByIdDTOOutput> {
+		const seasons = await this.getAll()
+		const season = seasons.find((s) => s.id === id)
+
+		if (!season) return undefined
+
+		const clubs: GetAllPlayerClubsDTOOutput =
+			JSON.parse(localStorage.getItem(this.playerClubsStorageKey) || '[]') || []
+		const club = clubs.find((c) => c.id === season.playerClubId)
+
+		return {
+			...season,
+			playerClubName: club?.name,
+		}
 	}
 
 	async getAllByPlayerId(
