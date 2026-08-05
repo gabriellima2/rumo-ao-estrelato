@@ -8,12 +8,18 @@ import { makePlayerMomentTypesLocalStorageRepository } from '@/domains/players/r
 import { makePlayerMomentsLocalStorageRepository } from '@/domains/players/repositories/local-storage/player-moments-local-storage-repository'
 import { PlayerMomentTypesUseCasesProvider } from '@/domains/players/contexts/player-moment-types-use-cases-context'
 import { PlayerMomentsUseCasesProvider } from '@/domains/players/contexts/player-moments-use-cases-context'
+import { makePlayerAchievementsLocalStorageRepository } from '@/domains/players/repositories/local-storage/player-achievements-local-storage-repository'
+import { makePlayerSeasonStatsLocalStorageRepository } from '@/domains/players/repositories/local-storage/player-season-stats-local-storage-repository'
+import { PlayerAchievementsUseCasesProvider } from '@/domains/players/contexts/player-achievements-use-cases-context'
+import { PlayerSeasonStatsUseCasesProvider } from '@/domains/players/contexts/player-season-stats-use-cases-context'
 
 const playersRepository = makePlayersLocalStorageRepository()
 const playerClubsRepository = makePlayerClubsLocalStorageRepository()
 const playerSeasonsRepository = makePlayerSeasonsLocalStorageRepository()
 const playerMomentTypesRepository = makePlayerMomentTypesLocalStorageRepository()
 const playerMomentsRepository = makePlayerMomentsLocalStorageRepository()
+const playerAchievementsRepository = makePlayerAchievementsLocalStorageRepository()
+const playerSeasonStatsRepository = makePlayerSeasonStatsLocalStorageRepository()
 
 export function Providers({ children }: PropsWithChildren) {
 	return (
@@ -33,7 +39,15 @@ export function Providers({ children }: PropsWithChildren) {
 					<PlayerMomentsUseCasesProvider
 						playerMomentsRepository={playerMomentsRepository}
 					>
-						{children}
+						<PlayerAchievementsUseCasesProvider
+							playerAchievementsRepository={playerAchievementsRepository}
+						>
+							<PlayerSeasonStatsUseCasesProvider
+								playerSeasonStatsRepository={playerSeasonStatsRepository}
+							>
+								{children}
+							</PlayerSeasonStatsUseCasesProvider>
+						</PlayerAchievementsUseCasesProvider>
 					</PlayerMomentsUseCasesProvider>
 				</PlayerMomentTypesUseCasesProvider>
 			</PlayerSeasonsUseCasesProvider>
