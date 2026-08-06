@@ -4,6 +4,8 @@ import type { PlayerSeasonsRepository } from '../repositories/player-seasons-rep
 import type { PlayerClubsRepository } from '../repositories/player-clubs-repository'
 import type { PlayersRepository } from '../repositories/players-repository'
 import type {
+	FinalizePlayerSeasonDTOInput,
+	FinalizePlayerSeasonDTOOutput,
 	GetAllPlayerSeasonsByPlayerIdDTOOutput,
 	GetSeasonDetailDTOOutput,
 } from '../dtos/player-seasons-dto'
@@ -13,6 +15,9 @@ type PlayerSeasonsUseCasesContextValues = {
 		playerId: string,
 	) => Promise<GetAllPlayerSeasonsByPlayerIdDTOOutput>
 	getSeasonDetail: (seasonId: string) => Promise<GetSeasonDetailDTOOutput>
+	finalizeSeason: (
+		input: FinalizePlayerSeasonDTOInput,
+	) => Promise<FinalizePlayerSeasonDTOOutput>
 }
 
 const PlayerSeasonsUseCasesContext =
@@ -85,11 +90,18 @@ export function PlayerSeasonsUseCasesProvider({
 		}
 	}
 
+	async function finalizeSeason(
+		input: FinalizePlayerSeasonDTOInput,
+	): Promise<FinalizePlayerSeasonDTOOutput> {
+		return playerSeasonsRepository.finalize(input)
+	}
+
 	return (
 		<PlayerSeasonsUseCasesContext.Provider
 			value={{
 				getAllPlayerSeasonsByPlayerId,
 				getSeasonDetail,
+				finalizeSeason,
 			}}
 		>
 			{children}
