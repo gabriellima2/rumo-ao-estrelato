@@ -14,6 +14,8 @@ import { Route as CareersIndexRouteImport } from './routes/careers/index'
 import { Route as PlayersPlayerIdRouteImport } from './routes/players/$playerId'
 import { Route as CareersCreateRouteImport } from './routes/careers/create'
 import { Route as PlayersSeasonsSeasonIdRouteImport } from './routes/players/seasons/$seasonId'
+import { Route as PlayersSeasonsSeasonIdIndexRouteImport } from './routes/players/seasons/$seasonId.index'
+import { Route as PlayersSeasonsSeasonIdFinalizeRouteImport } from './routes/players/seasons/$seasonId.finalize'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,20 +42,35 @@ const PlayersSeasonsSeasonIdRoute = PlayersSeasonsSeasonIdRouteImport.update({
   path: '/players/seasons/$seasonId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlayersSeasonsSeasonIdIndexRoute =
+  PlayersSeasonsSeasonIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => PlayersSeasonsSeasonIdRoute,
+  } as any)
+const PlayersSeasonsSeasonIdFinalizeRoute =
+  PlayersSeasonsSeasonIdFinalizeRouteImport.update({
+    id: '/finalize',
+    path: '/finalize',
+    getParentRoute: () => PlayersSeasonsSeasonIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/careers/create': typeof CareersCreateRoute
   '/players/$playerId': typeof PlayersPlayerIdRoute
   '/careers/': typeof CareersIndexRoute
-  '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdRoute
+  '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdRouteWithChildren
+  '/players/seasons/$seasonId/finalize': typeof PlayersSeasonsSeasonIdFinalizeRoute
+  '/players/seasons/$seasonId/': typeof PlayersSeasonsSeasonIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/careers/create': typeof CareersCreateRoute
   '/players/$playerId': typeof PlayersPlayerIdRoute
   '/careers': typeof CareersIndexRoute
-  '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdRoute
+  '/players/seasons/$seasonId/finalize': typeof PlayersSeasonsSeasonIdFinalizeRoute
+  '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,7 +78,9 @@ export interface FileRoutesById {
   '/careers/create': typeof CareersCreateRoute
   '/players/$playerId': typeof PlayersPlayerIdRoute
   '/careers/': typeof CareersIndexRoute
-  '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdRoute
+  '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdRouteWithChildren
+  '/players/seasons/$seasonId/finalize': typeof PlayersSeasonsSeasonIdFinalizeRoute
+  '/players/seasons/$seasonId/': typeof PlayersSeasonsSeasonIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -71,12 +90,15 @@ export interface FileRouteTypes {
     | '/players/$playerId'
     | '/careers/'
     | '/players/seasons/$seasonId'
+    | '/players/seasons/$seasonId/finalize'
+    | '/players/seasons/$seasonId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/careers/create'
     | '/players/$playerId'
     | '/careers'
+    | '/players/seasons/$seasonId/finalize'
     | '/players/seasons/$seasonId'
   id:
     | '__root__'
@@ -85,6 +107,8 @@ export interface FileRouteTypes {
     | '/players/$playerId'
     | '/careers/'
     | '/players/seasons/$seasonId'
+    | '/players/seasons/$seasonId/finalize'
+    | '/players/seasons/$seasonId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -92,7 +116,7 @@ export interface RootRouteChildren {
   CareersCreateRoute: typeof CareersCreateRoute
   PlayersPlayerIdRoute: typeof PlayersPlayerIdRoute
   CareersIndexRoute: typeof CareersIndexRoute
-  PlayersSeasonsSeasonIdRoute: typeof PlayersSeasonsSeasonIdRoute
+  PlayersSeasonsSeasonIdRoute: typeof PlayersSeasonsSeasonIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -132,15 +156,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayersSeasonsSeasonIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/players/seasons/$seasonId/': {
+      id: '/players/seasons/$seasonId/'
+      path: '/'
+      fullPath: '/players/seasons/$seasonId/'
+      preLoaderRoute: typeof PlayersSeasonsSeasonIdIndexRouteImport
+      parentRoute: typeof PlayersSeasonsSeasonIdRoute
+    }
+    '/players/seasons/$seasonId/finalize': {
+      id: '/players/seasons/$seasonId/finalize'
+      path: '/finalize'
+      fullPath: '/players/seasons/$seasonId/finalize'
+      preLoaderRoute: typeof PlayersSeasonsSeasonIdFinalizeRouteImport
+      parentRoute: typeof PlayersSeasonsSeasonIdRoute
+    }
   }
 }
+
+interface PlayersSeasonsSeasonIdRouteChildren {
+  PlayersSeasonsSeasonIdFinalizeRoute: typeof PlayersSeasonsSeasonIdFinalizeRoute
+  PlayersSeasonsSeasonIdIndexRoute: typeof PlayersSeasonsSeasonIdIndexRoute
+}
+
+const PlayersSeasonsSeasonIdRouteChildren: PlayersSeasonsSeasonIdRouteChildren =
+  {
+    PlayersSeasonsSeasonIdFinalizeRoute: PlayersSeasonsSeasonIdFinalizeRoute,
+    PlayersSeasonsSeasonIdIndexRoute: PlayersSeasonsSeasonIdIndexRoute,
+  }
+
+const PlayersSeasonsSeasonIdRouteWithChildren =
+  PlayersSeasonsSeasonIdRoute._addFileChildren(
+    PlayersSeasonsSeasonIdRouteChildren,
+  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CareersCreateRoute: CareersCreateRoute,
   PlayersPlayerIdRoute: PlayersPlayerIdRoute,
   CareersIndexRoute: CareersIndexRoute,
-  PlayersSeasonsSeasonIdRoute: PlayersSeasonsSeasonIdRoute,
+  PlayersSeasonsSeasonIdRoute: PlayersSeasonsSeasonIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

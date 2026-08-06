@@ -1,6 +1,8 @@
+import { Link } from '@tanstack/react-router'
 import { getPlayerPositionLabel } from '../catalog/positions'
 import type { GetSeasonDetailDTOOutput } from '../dtos/player-seasons-dto'
 import { getCountryByCode } from '@/shared/catalog/countries'
+import { Button } from '@/shared/components/ui/button'
 import {
 	Card,
 	CardDescription,
@@ -28,7 +30,7 @@ export function SeasonInfoSection({ seasonDetail }: SeasonInfoSectionProps) {
 				</p>
 			</div>
 
-			<div className="space-y-3">
+			<div className="flex flex-col gap-3">
 				<Card
 					className={cn({
 						'border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30':
@@ -54,6 +56,23 @@ export function SeasonInfoSection({ seasonDetail }: SeasonInfoSectionProps) {
 						<CardDescription>Clube</CardDescription>
 					</CardHeader>
 				</Card>
+
+				{season.isCurrent ? (
+					<Button
+						variant="destructive"
+						size="sm"
+						className="w-fit self-end"
+						nativeButton={false}
+						render={
+							<Link
+								to="/players/seasons/$seasonId/finalize"
+								params={{ seasonId: season.id }}
+							/>
+						}
+					>
+						Finalizar temporada
+					</Button>
+				) : null}
 			</div>
 		</div>
 	)

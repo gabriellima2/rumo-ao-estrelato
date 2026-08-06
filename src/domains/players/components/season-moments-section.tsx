@@ -27,6 +27,7 @@ import { toast } from '@/shared/components/ui/toast'
 type SeasonMomentsSectionProps = {
 	playerId: string
 	seasonId: string
+	isCurrentSeason: boolean
 	momentTypes: GetAllPlayerMomentTypesDTOOutput
 	moments: GetPlayerMomentsBySeasonIdDTOOutput
 }
@@ -34,6 +35,7 @@ type SeasonMomentsSectionProps = {
 export function SeasonMomentsSection({
 	playerId,
 	seasonId,
+	isCurrentSeason,
 	momentTypes,
 	moments,
 }: SeasonMomentsSectionProps) {
@@ -87,7 +89,8 @@ export function SeasonMomentsSection({
 		<section className="space-y-4">
 			<h2 className="text-xl font-semibold">Momentos</h2>
 
-			<Card>
+			{isCurrentSeason && (
+				<Card>
 				<CardHeader>
 					<CardTitle className="text-base">Registrar momento</CardTitle>
 				</CardHeader>
@@ -187,6 +190,7 @@ export function SeasonMomentsSection({
 					</form>
 				</CardContent>
 			</Card>
+			)}
 
 			{moments.length >= 1 ? (
 				<ul className="space-y-3">
