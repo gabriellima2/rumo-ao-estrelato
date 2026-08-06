@@ -9,7 +9,6 @@ export type PlayerSeasonStatsDTO = {
 	yellowCards: number
 	redCards: number
 	averageRating: number
-	playerOfTheMatch: number
 }
 
 export type CreatePlayerSeasonStatsDTOInput = {
@@ -22,7 +21,6 @@ export type CreatePlayerSeasonStatsDTOInput = {
 	yellowCards: number
 	redCards: number
 	averageRating: number
-	playerOfTheMatch: number
 }
 
 export type GetPlayerSeasonStatsBySeasonIdDTOOutput =

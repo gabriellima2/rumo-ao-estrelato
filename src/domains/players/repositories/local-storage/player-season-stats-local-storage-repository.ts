@@ -28,7 +28,6 @@ export class PlayerSeasonStatsLocalStorageRepository
 			yellowCards: input.yellowCards,
 			redCards: input.redCards,
 			averageRating: input.averageRating,
-			playerOfTheMatch: input.playerOfTheMatch,
 		})
 
 		localStorage.setItem(this.storageKey, JSON.stringify(current))
