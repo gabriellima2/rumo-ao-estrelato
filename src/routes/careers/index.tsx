@@ -25,6 +25,7 @@ function RouteComponent() {
 		queryKey: ['get-all-players'],
 		queryFn: getAllPlayers,
 		throwOnError: true,
+		refetchOnWindowFocus: false,
 	})
 
 	return (

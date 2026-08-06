@@ -28,12 +28,14 @@ function RouteComponent() {
 		queryKey: ['get-all-players', playerId],
 		queryFn: () => getPlayerById(playerId),
 		throwOnError: true,
+		refetchOnWindowFocus: false,
 	})
 
 	const { data: playerSeasons, isLoading: isLoadingPlayerSeasons } = useQuery({
 		queryKey: ['get-all-players-seasons', playerId],
 		queryFn: () => getAllPlayerSeasonsByPlayerId(playerId),
 		throwOnError: true,
+		refetchOnWindowFocus: false,
 	})
 
 	if (!isLoadingPlayer && !player) {
