@@ -16,7 +16,19 @@ type SeasonInfoSectionProps = {
 }
 
 export function SeasonInfoSection({ seasonDetail }: SeasonInfoSectionProps) {
-	const { player, season, club } = seasonDetail
+	const { player, season, club, segments } = seasonDetail
+	const sortedSegments = [...segments].sort(
+		(a, b) => a.stintIndex - b.stintIndex,
+	)
+	const highlightedSegment =
+		sortedSegments.find((segment) => segment.isCurrent) ??
+		sortedSegments[sortedSegments.length - 1]
+	const previousClubs = sortedSegments
+		.filter((segment) => segment.stintIndex < highlightedSegment.stintIndex)
+		.map((segment) => segment.club.name)
+	const hasMultipleSegments = sortedSegments.length > 1
+	const showClubAsCurrent = season.isCurrent && hasMultipleSegments
+	const showClubCard = season.isCurrent || !hasMultipleSegments
 
 	return (
 		<div className="space-y-6">
@@ -50,28 +62,51 @@ export function SeasonInfoSection({ seasonDetail }: SeasonInfoSectionProps) {
 					</CardHeader>
 				</Card>
 
-				<Card>
-					<CardHeader>
-						<CardTitle className="text-lg">{club.name}</CardTitle>
-						<CardDescription>Clube</CardDescription>
-					</CardHeader>
-				</Card>
+				{showClubCard ? (
+					<Card>
+						<CardHeader>
+							<CardTitle className="text-lg">{club.name}</CardTitle>
+							<CardDescription>
+								{showClubAsCurrent ? 'Clube atual' : 'Clube'}
+							</CardDescription>
+							{previousClubs.length > 0 ? (
+								<p className="text-muted-foreground text-sm">
+									Anteriormente: {previousClubs.join(', ')}
+								</p>
+							) : null}
+						</CardHeader>
+					</Card>
+				) : null}
 
 				{season.isCurrent ? (
-					<Button
-						variant="destructive"
-						size="sm"
-						className="w-fit self-end"
-						nativeButton={false}
-						render={
-							<Link
-								to="/players/seasons/$seasonId/finalize"
-								params={{ seasonId: season.id }}
-							/>
-						}
-					>
-						Finalizar temporada
-					</Button>
+					<div className="flex flex-wrap gap-2 self-end">
+						<Button
+							variant="outline"
+							size="sm"
+							nativeButton={false}
+							render={
+								<Link
+									to="/players/seasons/$seasonId/transfer"
+									params={{ seasonId: season.currentSeasonId }}
+								/>
+							}
+						>
+							Transferir
+						</Button>
+						<Button
+							variant="destructive"
+							size="sm"
+							nativeButton={false}
+							render={
+								<Link
+									to="/players/seasons/$seasonId/finalize"
+									params={{ seasonId: season.currentSeasonId }}
+								/>
+							}
+						>
+							Finalizar temporada
+						</Button>
+					</div>
 				) : null}
 			</div>
 		</div>

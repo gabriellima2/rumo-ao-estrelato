@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 import { usePlayerSeasonsUseCases } from '@/domains/players/contexts/player-seasons-use-cases-context'
 import { usePlayerMomentTypesUseCases } from '@/domains/players/contexts/player-moment-types-use-cases-context'
 import { usePlayerMomentsUseCases } from '@/domains/players/contexts/player-moments-use-cases-context'
+import { SeasonClubStatsSection } from '@/domains/players/components/season-club-stats-section'
 import { SeasonInfoSection } from '@/domains/players/components/season-info-section'
 import { SeasonMomentsSection } from '@/domains/players/components/season-moments-section'
 import { Button } from '@/shared/components/ui/button'
@@ -18,7 +19,7 @@ function RouteComponent() {
 
 	const { getSeasonDetail } = usePlayerSeasonsUseCases()
 	const { getAllPlayerMomentTypes } = usePlayerMomentTypesUseCases()
-	const { getPlayerMomentsBySeasonId } = usePlayerMomentsUseCases()
+	const { getPlayerMomentsBySeasonIds } = usePlayerMomentsUseCases()
 
 	const { data: seasonDetail, isLoading: isLoadingSeasonDetail } = useQuery({
 		queryKey: ['season-detail', seasonId],
@@ -26,6 +27,13 @@ function RouteComponent() {
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
+
+	const segmentSeasonIds =
+		seasonDetail?.segments.map((segment) => segment.seasonId) ?? []
+	const currentSeasonId =
+		seasonDetail?.segments.find((segment) => segment.isCurrent)?.seasonId ??
+		seasonDetail?.season.currentSeasonId ??
+		seasonId
 
 	const { data: momentTypes, isLoading: isLoadingMomentTypes } = useQuery({
 		queryKey: ['player-moment-types'],
@@ -35,8 +43,9 @@ function RouteComponent() {
 	})
 
 	const { data: moments, isLoading: isLoadingMoments } = useQuery({
-		queryKey: ['player-moments', seasonId],
-		queryFn: () => getPlayerMomentsBySeasonId(seasonId),
+		queryKey: ['player-moments', segmentSeasonIds],
+		queryFn: () => getPlayerMomentsBySeasonIds(segmentSeasonIds),
+		enabled: segmentSeasonIds.length > 0,
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
@@ -104,9 +113,13 @@ function RouteComponent() {
 				) : seasonDetail && momentTypes && moments ? (
 					<>
 						<SeasonInfoSection seasonDetail={seasonDetail} />
+						<SeasonClubStatsSection
+							segments={seasonDetail.segments}
+							isCurrentSeason={seasonDetail.season.isCurrent}
+						/>
 						<SeasonMomentsSection
 							playerId={seasonDetail.player.id}
-							seasonId={seasonId}
+							seasonId={currentSeasonId}
 							isCurrentSeason={seasonDetail.season.isCurrent}
 							momentTypes={momentTypes}
 							moments={moments}

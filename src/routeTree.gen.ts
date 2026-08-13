@@ -15,6 +15,7 @@ import { Route as PlayersPlayerIdRouteImport } from './routes/players/$playerId'
 import { Route as CareersCreateRouteImport } from './routes/careers/create'
 import { Route as PlayersSeasonsSeasonIdRouteImport } from './routes/players/seasons/$seasonId'
 import { Route as PlayersSeasonsSeasonIdIndexRouteImport } from './routes/players/seasons/$seasonId.index'
+import { Route as PlayersSeasonsSeasonIdTransferRouteImport } from './routes/players/seasons/$seasonId.transfer'
 import { Route as PlayersSeasonsSeasonIdFinalizeRouteImport } from './routes/players/seasons/$seasonId.finalize'
 
 const IndexRoute = IndexRouteImport.update({
@@ -48,6 +49,12 @@ const PlayersSeasonsSeasonIdIndexRoute =
     path: '/',
     getParentRoute: () => PlayersSeasonsSeasonIdRoute,
   } as any)
+const PlayersSeasonsSeasonIdTransferRoute =
+  PlayersSeasonsSeasonIdTransferRouteImport.update({
+    id: '/transfer',
+    path: '/transfer',
+    getParentRoute: () => PlayersSeasonsSeasonIdRoute,
+  } as any)
 const PlayersSeasonsSeasonIdFinalizeRoute =
   PlayersSeasonsSeasonIdFinalizeRouteImport.update({
     id: '/finalize',
@@ -62,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/careers/': typeof CareersIndexRoute
   '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdRouteWithChildren
   '/players/seasons/$seasonId/finalize': typeof PlayersSeasonsSeasonIdFinalizeRoute
+  '/players/seasons/$seasonId/transfer': typeof PlayersSeasonsSeasonIdTransferRoute
   '/players/seasons/$seasonId/': typeof PlayersSeasonsSeasonIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -70,6 +78,7 @@ export interface FileRoutesByTo {
   '/players/$playerId': typeof PlayersPlayerIdRoute
   '/careers': typeof CareersIndexRoute
   '/players/seasons/$seasonId/finalize': typeof PlayersSeasonsSeasonIdFinalizeRoute
+  '/players/seasons/$seasonId/transfer': typeof PlayersSeasonsSeasonIdTransferRoute
   '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdIndexRoute
 }
 export interface FileRoutesById {
@@ -80,6 +89,7 @@ export interface FileRoutesById {
   '/careers/': typeof CareersIndexRoute
   '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdRouteWithChildren
   '/players/seasons/$seasonId/finalize': typeof PlayersSeasonsSeasonIdFinalizeRoute
+  '/players/seasons/$seasonId/transfer': typeof PlayersSeasonsSeasonIdTransferRoute
   '/players/seasons/$seasonId/': typeof PlayersSeasonsSeasonIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -91,6 +101,7 @@ export interface FileRouteTypes {
     | '/careers/'
     | '/players/seasons/$seasonId'
     | '/players/seasons/$seasonId/finalize'
+    | '/players/seasons/$seasonId/transfer'
     | '/players/seasons/$seasonId/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +110,7 @@ export interface FileRouteTypes {
     | '/players/$playerId'
     | '/careers'
     | '/players/seasons/$seasonId/finalize'
+    | '/players/seasons/$seasonId/transfer'
     | '/players/seasons/$seasonId'
   id:
     | '__root__'
@@ -108,6 +120,7 @@ export interface FileRouteTypes {
     | '/careers/'
     | '/players/seasons/$seasonId'
     | '/players/seasons/$seasonId/finalize'
+    | '/players/seasons/$seasonId/transfer'
     | '/players/seasons/$seasonId/'
   fileRoutesById: FileRoutesById
 }
@@ -163,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayersSeasonsSeasonIdIndexRouteImport
       parentRoute: typeof PlayersSeasonsSeasonIdRoute
     }
+    '/players/seasons/$seasonId/transfer': {
+      id: '/players/seasons/$seasonId/transfer'
+      path: '/transfer'
+      fullPath: '/players/seasons/$seasonId/transfer'
+      preLoaderRoute: typeof PlayersSeasonsSeasonIdTransferRouteImport
+      parentRoute: typeof PlayersSeasonsSeasonIdRoute
+    }
     '/players/seasons/$seasonId/finalize': {
       id: '/players/seasons/$seasonId/finalize'
       path: '/finalize'
@@ -175,12 +195,14 @@ declare module '@tanstack/react-router' {
 
 interface PlayersSeasonsSeasonIdRouteChildren {
   PlayersSeasonsSeasonIdFinalizeRoute: typeof PlayersSeasonsSeasonIdFinalizeRoute
+  PlayersSeasonsSeasonIdTransferRoute: typeof PlayersSeasonsSeasonIdTransferRoute
   PlayersSeasonsSeasonIdIndexRoute: typeof PlayersSeasonsSeasonIdIndexRoute
 }
 
 const PlayersSeasonsSeasonIdRouteChildren: PlayersSeasonsSeasonIdRouteChildren =
   {
     PlayersSeasonsSeasonIdFinalizeRoute: PlayersSeasonsSeasonIdFinalizeRoute,
+    PlayersSeasonsSeasonIdTransferRoute: PlayersSeasonsSeasonIdTransferRoute,
     PlayersSeasonsSeasonIdIndexRoute: PlayersSeasonsSeasonIdIndexRoute,
   }
 
