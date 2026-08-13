@@ -10,6 +10,9 @@ type PlayerMomentsUseCasesContextValues = {
 	getPlayerMomentsBySeasonId: (
 		seasonId: string,
 	) => Promise<GetPlayerMomentsBySeasonIdDTOOutput>
+	getPlayerMomentsBySeasonIds: (
+		seasonIds: string[],
+	) => Promise<GetPlayerMomentsBySeasonIdDTOOutput>
 	createPlayerMoment: (input: CreatePlayerMomentDTOInput) => Promise<void>
 }
 
@@ -42,6 +45,12 @@ export function PlayerMomentsUseCasesProvider({
 		return playerMomentsRepository.getAllBySeasonId(seasonId)
 	}
 
+	async function getPlayerMomentsBySeasonIds(
+		seasonIds: string[],
+	): Promise<GetPlayerMomentsBySeasonIdDTOOutput> {
+		return playerMomentsRepository.getAllBySeasonIds(seasonIds)
+	}
+
 	async function createPlayerMoment(
 		input: CreatePlayerMomentDTOInput,
 	): Promise<void> {
@@ -52,6 +61,7 @@ export function PlayerMomentsUseCasesProvider({
 		<PlayerMomentsUseCasesContext.Provider
 			value={{
 				getPlayerMomentsBySeasonId,
+				getPlayerMomentsBySeasonIds,
 				createPlayerMoment,
 			}}
 		>

@@ -36,4 +36,11 @@ export const SYSTEM_PLAYER_MOMENT_TYPES: Array<PlayerMomentTypeDTO> = [
 		color: '#7C3AED',
 		isSystem: true,
 	},
+	{
+		id: 'system-transfer',
+		name: 'Transferência',
+		icon: 'ArrowRightLeft',
+		color: '#0891B2',
+		isSystem: true,
+	},
 ]

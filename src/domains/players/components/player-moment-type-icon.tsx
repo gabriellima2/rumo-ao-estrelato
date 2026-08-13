@@ -1,7 +1,8 @@
-import {Circle, CircleDot, FileSignature, HeartPulse, Star, Trophy} from 'lucide-react'
+import {ArrowRightLeft, Circle, CircleDot, FileSignature, HeartPulse, Star, Trophy} from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 const ICON_MAP: Record<string, LucideIcon> = {
+	ArrowRightLeft,
 	Circle,
 	CircleDot,
 	FileSignature,

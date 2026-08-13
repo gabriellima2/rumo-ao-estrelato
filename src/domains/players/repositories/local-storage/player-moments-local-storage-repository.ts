@@ -54,6 +54,29 @@ export class PlayerMomentsLocalStorageRepository implements PlayerMomentsReposit
 					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
 			)
 
+		return this.enrichMoments(seasonMoments)
+	}
+
+	async getAllBySeasonIds(
+		seasonIds: string[],
+	): Promise<GetPlayerMomentsBySeasonIdDTOOutput> {
+		if (seasonIds.length === 0) return []
+
+		const seasonIdSet = new Set(seasonIds)
+		const moments = await this.getStoredMoments()
+		const seasonMoments = moments
+			.filter((moment) => seasonIdSet.has(moment.playerSeasonId))
+			.sort(
+				(a, b) =>
+					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+			)
+
+		return this.enrichMoments(seasonMoments)
+	}
+
+	private enrichMoments(
+		seasonMoments: Array<StoredPlayerMoment>,
+	): GetPlayerMomentsBySeasonIdDTOOutput {
 		const types: GetAllPlayerMomentTypesDTOOutput =
 			JSON.parse(localStorage.getItem(this.momentTypesStorageKey) || '[]') ||
 			[]

@@ -21,7 +21,19 @@ export class PlayerMomentTypesLocalStorageRepository implements PlayerMomentType
 
 		const data: GetAllPlayerMomentTypesDTOOutput =
 			JSON.parse(localStorage.getItem(this.storageKey) || '[]') || []
-		return data
+
+		const existingIds = new Set(data.map((type) => type.id))
+		const missingSystemTypes = SYSTEM_PLAYER_MOMENT_TYPES.filter(
+			(type) => !existingIds.has(type.id),
+		)
+
+		if (missingSystemTypes.length === 0) {
+			return data
+		}
+
+		const merged = [...data, ...missingSystemTypes]
+		localStorage.setItem(this.storageKey, JSON.stringify(merged))
+		return merged
 	}
 }
 

@@ -8,4 +8,7 @@ export interface PlayerMomentsRepository {
 	getAllBySeasonId: (
 		seasonId: string,
 	) => Promise<GetPlayerMomentsBySeasonIdDTOOutput>
+	getAllBySeasonIds: (
+		seasonIds: string[],
+	) => Promise<GetPlayerMomentsBySeasonIdDTOOutput>
 }
