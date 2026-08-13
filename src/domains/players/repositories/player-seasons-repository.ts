@@ -5,6 +5,8 @@ import type {
 	GetAllPlayerSeasonsByPlayerIdDTOOutput,
 	GetAllPlayerSeasonsDTOOutput,
 	GetPlayerSeasonByIdDTOOutput,
+	TransferPlayerSeasonDTOInput,
+	TransferPlayerSeasonDTOOutput,
 } from '../dtos/player-seasons-dto'
 
 export interface PlayerSeasonsRepository {
@@ -12,9 +14,15 @@ export interface PlayerSeasonsRepository {
 	finalize: (
 		input: FinalizePlayerSeasonDTOInput,
 	) => Promise<FinalizePlayerSeasonDTOOutput>
+	transfer: (
+		input: TransferPlayerSeasonDTOInput,
+	) => Promise<TransferPlayerSeasonDTOOutput>
 	getAll: () => Promise<GetAllPlayerSeasonsDTOOutput>
 	getById: (id: string) => Promise<GetPlayerSeasonByIdDTOOutput>
 	getAllByPlayerId: (
 		playerId: string,
+	) => Promise<GetAllPlayerSeasonsByPlayerIdDTOOutput>
+	getSegmentsBySeasonId: (
+		seasonId: string,
 	) => Promise<GetAllPlayerSeasonsByPlayerIdDTOOutput>
 }
