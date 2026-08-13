@@ -3,11 +3,15 @@ import type { PropsWithChildren } from 'react'
 import type { PlayerSeasonsRepository } from '../repositories/player-seasons-repository'
 import type { PlayerClubsRepository } from '../repositories/player-clubs-repository'
 import type { PlayersRepository } from '../repositories/players-repository'
+import type { PlayerMomentsRepository } from '../repositories/player-moments-repository'
+import type { PlayerSeasonStatsRepository } from '../repositories/player-season-stats-repository'
 import type {
 	FinalizePlayerSeasonDTOInput,
 	FinalizePlayerSeasonDTOOutput,
 	GetAllPlayerSeasonsByPlayerIdDTOOutput,
 	GetSeasonDetailDTOOutput,
+	TransferPlayerSeasonDTOInput,
+	TransferPlayerSeasonDTOOutput,
 } from '../dtos/player-seasons-dto'
 
 type PlayerSeasonsUseCasesContextValues = {
@@ -18,6 +22,9 @@ type PlayerSeasonsUseCasesContextValues = {
 	finalizeSeason: (
 		input: FinalizePlayerSeasonDTOInput,
 	) => Promise<FinalizePlayerSeasonDTOOutput>
+	transferSeason: (
+		input: TransferPlayerSeasonDTOInput,
+	) => Promise<TransferPlayerSeasonDTOOutput>
 }
 
 const PlayerSeasonsUseCasesContext =
@@ -39,6 +46,8 @@ type PlayerSeasonsUseCasesProviderProps = PropsWithChildren<{
 	playerSeasonsRepository: PlayerSeasonsRepository
 	playerClubsRepository: PlayerClubsRepository
 	playersRepository: PlayersRepository
+	playerMomentsRepository: PlayerMomentsRepository
+	playerSeasonStatsRepository: PlayerSeasonStatsRepository
 }>
 
 export function PlayerSeasonsUseCasesProvider({
@@ -46,6 +55,8 @@ export function PlayerSeasonsUseCasesProvider({
 	playerSeasonsRepository,
 	playerClubsRepository,
 	playersRepository,
+	playerMomentsRepository,
+	playerSeasonStatsRepository,
 }: PlayerSeasonsUseCasesProviderProps) {
 	async function getAllPlayerSeasonsByPlayerId(
 		playerId: string,
@@ -61,20 +72,58 @@ export function PlayerSeasonsUseCasesProvider({
 		const season = await playerSeasonsRepository.getById(seasonId)
 		if (!season) return undefined
 
-		const [player, club] = await Promise.all([
+		const [player, segmentSeasons] = await Promise.all([
 			playersRepository.getById(season.playerId),
-			playerClubsRepository.getById(season.playerClubId),
+			playerSeasonsRepository.getSegmentsBySeasonId(seasonId),
 		])
 
-		if (!player || !club) return undefined
+		if (!player || segmentSeasons.length === 0) return undefined
+
+		const currentSegment =
+			segmentSeasons.find((segment) => segment.isCurrent) ??
+			segmentSeasons[segmentSeasons.length - 1]
+
+		const [currentClub, ...segmentStatsResults] = await Promise.all([
+			playerClubsRepository.getById(currentSegment.playerClubId),
+			...segmentSeasons.map((segment) =>
+				playerSeasonStatsRepository.getBySeasonId(segment.id),
+			),
+		])
+
+		if (!currentClub) return undefined
+
+		const segments = segmentSeasons.map((segment, index) => {
+			const stats = segmentStatsResults[index]
+			const clubName = segment.playerClubName
+
+			if (!clubName) {
+				throw new Error('Clube não encontrado')
+			}
+
+			return {
+				seasonId: segment.id,
+				stintIndex: segment.stintIndex,
+				club: {
+					id: segment.playerClubId,
+					name: clubName,
+				},
+				isCurrent: segment.isCurrent,
+				...(stats ? { stats } : {}),
+			}
+		})
+
+		const isLogicalSeasonCurrent = segmentSeasons.some(
+			(segment) => segment.isCurrent,
+		)
 
 		return {
 			season: {
 				id: season.id,
+				currentSeasonId: currentSegment.id,
 				title: season.title,
 				seasonNumber: season.seasonNumber,
-				isCurrent: season.isCurrent,
-				playerClubName: season.playerClubName,
+				isCurrent: isLogicalSeasonCurrent,
+				playerClubName: currentClub.name,
 			},
 			player: {
 				id: player.id,
@@ -84,9 +133,10 @@ export function PlayerSeasonsUseCasesProvider({
 				country: player.country,
 			},
 			club: {
-				id: club.id,
-				name: club.name,
+				id: currentClub.id,
+				name: currentClub.name,
 			},
+			segments,
 		}
 	}
 
@@ -96,12 +146,34 @@ export function PlayerSeasonsUseCasesProvider({
 		return playerSeasonsRepository.finalize(input)
 	}
 
+	async function transferSeason(
+		input: TransferPlayerSeasonDTOInput,
+	): Promise<TransferPlayerSeasonDTOOutput> {
+		const season = await playerSeasonsRepository.getById(input.seasonId)
+
+		if (!season) {
+			throw new Error('Temporada não encontrada')
+		}
+
+		const result = await playerSeasonsRepository.transfer(input)
+
+		await playerMomentsRepository.create({
+			playerId: season.playerId,
+			playerSeasonId: result.newSeasonId,
+			title: `Transferência para ${input.newClubName.trim()}`,
+			playerMomentTypeId: 'system-transfer',
+		})
+
+		return result
+	}
+
 	return (
 		<PlayerSeasonsUseCasesContext.Provider
 			value={{
 				getAllPlayerSeasonsByPlayerId,
 				getSeasonDetail,
 				finalizeSeason,
+				transferSeason,
 			}}
 		>
 			{children}
