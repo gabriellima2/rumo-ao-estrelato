@@ -85,6 +85,7 @@ export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsReposit
 			id: Math.random().toString(),
 			playerId: season.playerId,
 			playerSeasonId: season.id,
+			playerClubId: season.playerClubId,
 			...input.stats,
 		})
 
@@ -94,6 +95,7 @@ export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsReposit
 				id: Math.random().toString(),
 				playerId: season.playerId,
 				playerSeasonId: season.id,
+				playerClubId: season.playerClubId,
 				name: achievement.name,
 				achievementType: achievement.achievementType,
 				competitionType: achievement.competitionType ?? null,
@@ -169,6 +171,7 @@ export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsReposit
 			id: Math.random().toString(),
 			playerId: season.playerId,
 			playerSeasonId: season.id,
+			playerClubId: season.playerClubId,
 			...input.stats,
 		})
 
@@ -178,6 +181,7 @@ export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsReposit
 				id: Math.random().toString(),
 				playerId: season.playerId,
 				playerSeasonId: season.id,
+				playerClubId: season.playerClubId,
 				name: achievement.name,
 				achievementType: achievement.achievementType,
 				competitionType: achievement.competitionType ?? null,
@@ -309,22 +313,52 @@ export class PlayerSeasonsLocalStorageRepository implements PlayerSeasonsReposit
 	}
 
 	private getStoredStats(): Array<PlayerSeasonStatsDTO> {
-		const data: Array<PlayerSeasonStatsDTO> =
+		const seasons = this.getStoredSeasons()
+		const seasonById = new Map(seasons.map((season) => [season.id, season]))
+		const data: Array<
+			Omit<PlayerSeasonStatsDTO, 'playerClubId'> & { playerClubId?: string }
+		> =
 			JSON.parse(
 				localStorage.getItem(this.playerSeasonStatsStorageKey) || '[]',
 			) || []
-		return data
+
+		return data.map((item) => {
+			const playerClubId =
+				item.playerClubId ?? seasonById.get(item.playerSeasonId)?.playerClubId
+
+			if (!playerClubId) {
+				throw new Error('Clube não encontrado para estatísticas da temporada')
+			}
+
+			return { ...item, playerClubId }
+		})
 	}
 
 	private getStoredAchievements(): Array<PlayerAchievementDTO> {
-		const data: Array<PlayerAchievementDTO> =
+		const seasons = this.getStoredSeasons()
+		const seasonById = new Map(seasons.map((season) => [season.id, season]))
+		const data: Array<
+			Omit<PlayerAchievementDTO, 'playerClubId'> & { playerClubId?: string }
+		> =
 			JSON.parse(
 				localStorage.getItem(this.playerAchievementsStorageKey) || '[]',
 			) || []
-		return data.map((achievement) => ({
-			...achievement,
-			competitionType: (achievement.competitionType ?? null),
-		}))
+
+		return data.map((achievement) => {
+			const playerClubId =
+				achievement.playerClubId ??
+				seasonById.get(achievement.playerSeasonId)?.playerClubId
+
+			if (!playerClubId) {
+				throw new Error('Clube não encontrado para conquista da temporada')
+			}
+
+			return {
+				...achievement,
+				playerClubId,
+				competitionType: achievement.competitionType ?? null,
+			}
+		})
 	}
 }
 

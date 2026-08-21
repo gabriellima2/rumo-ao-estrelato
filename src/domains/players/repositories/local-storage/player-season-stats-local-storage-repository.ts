@@ -7,12 +7,20 @@ import type {
 	PlayerSeasonStatsDTO,
 } from '../../dtos/player-season-stats-dto'
 
-type StoredPlayerSeasonStats = PlayerSeasonStatsDTO
+type RawStoredPlayerSeasonStats = Omit<PlayerSeasonStatsDTO, 'playerClubId'> & {
+	playerClubId?: string
+}
+
+type StoredSeason = {
+	id: string
+	playerClubId: string
+}
 
 export class PlayerSeasonStatsLocalStorageRepository
 	implements PlayerSeasonStatsRepository
 {
 	private readonly storageKey = STORAGE_KEYS.PLAYER_SEASON_STATS
+	private readonly playerSeasonsStorageKey = STORAGE_KEYS.PLAYER_SEASONS
 
 	async create(input: CreatePlayerSeasonStatsDTOInput): Promise<void> {
 		const current = await this.getStoredStats()
@@ -21,6 +29,7 @@ export class PlayerSeasonStatsLocalStorageRepository
 			id: Math.random().toString(),
 			playerId: input.playerId,
 			playerSeasonId: input.playerSeasonId,
+			playerClubId: input.playerClubId,
 			appearances: input.appearances,
 			goals: input.goals,
 			assists: input.assists,
@@ -47,10 +56,36 @@ export class PlayerSeasonStatsLocalStorageRepository
 		return stats.filter((item) => item.playerId === playerId)
 	}
 
-	private async getStoredStats(): Promise<Array<StoredPlayerSeasonStats>> {
-		const data: Array<StoredPlayerSeasonStats> =
+	private async getStoredStats(): Promise<Array<PlayerSeasonStatsDTO>> {
+		const data: Array<RawStoredPlayerSeasonStats> =
 			JSON.parse(localStorage.getItem(this.storageKey) || '[]') || []
-		return data
+		const seasonById = this.getSeasonByIdMap()
+
+		return data.map((item) => normalizeStoredStats(item, seasonById))
+	}
+
+	private getSeasonByIdMap(): Map<string, StoredSeason> {
+		const seasons: Array<StoredSeason> =
+			JSON.parse(localStorage.getItem(this.playerSeasonsStorageKey) || '[]') ||
+			[]
+		return new Map(seasons.map((season) => [season.id, season]))
+	}
+}
+
+function normalizeStoredStats(
+	item: RawStoredPlayerSeasonStats,
+	seasonById: Map<string, StoredSeason>,
+): PlayerSeasonStatsDTO {
+	const playerClubId =
+		item.playerClubId ?? seasonById.get(item.playerSeasonId)?.playerClubId
+
+	if (!playerClubId) {
+		throw new Error('Clube não encontrado para estatísticas da temporada')
+	}
+
+	return {
+		...item,
+		playerClubId,
 	}
 }
 

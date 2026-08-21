@@ -5,6 +5,7 @@ export type PlayerAchievementDTO = {
 	id: string
 	playerId: string
 	playerSeasonId: string
+	playerClubId: string
 	name: string
 	achievementType: AchievementType
 	competitionType: CompetitionType | null
@@ -13,6 +14,7 @@ export type PlayerAchievementDTO = {
 export type CreatePlayerAchievementDTOInput = {
 	playerId: string
 	playerSeasonId: string
+	playerClubId: string
 	name: string
 	achievementType: AchievementType
 	competitionType?: CompetitionType | null

@@ -8,13 +8,20 @@ import type {
 } from '../../dtos/player-achievements-dto'
 import type { CompetitionType } from '../../catalog/competition-types'
 
-type StoredPlayerAchievement = PlayerAchievementDTO
+type RawStoredPlayerAchievement = Omit<PlayerAchievementDTO, 'playerClubId'> & {
+	playerClubId?: string
+}
 
+type StoredSeason = {
+	id: string
+	playerClubId: string
+}
 
 export class PlayerAchievementsLocalStorageRepository
 	implements PlayerAchievementsRepository
 {
 	private readonly storageKey = STORAGE_KEYS.PLAYER_ACHIEVEMENTS
+	private readonly playerSeasonsStorageKey = STORAGE_KEYS.PLAYER_SEASONS
 
 	async create(input: CreatePlayerAchievementDTOInput): Promise<void> {
 		const current = await this.getStoredAchievements()
@@ -23,6 +30,7 @@ export class PlayerAchievementsLocalStorageRepository
 			id: Math.random().toString(),
 			playerId: input.playerId,
 			playerSeasonId: input.playerSeasonId,
+			playerClubId: input.playerClubId,
 			name: input.name,
 			achievementType: input.achievementType,
 			competitionType: normalizeCompetitionType(input.competitionType),
@@ -36,9 +44,9 @@ export class PlayerAchievementsLocalStorageRepository
 	): Promise<GetPlayerAchievementsBySeasonIdDTOOutput> {
 		const achievements = await this.getStoredAchievements()
 
-		return achievements
-			.filter((achievement) => achievement.playerSeasonId === seasonId)
-			.map(normalizeAchievement)
+		return achievements.filter(
+			(achievement) => achievement.playerSeasonId === seasonId,
+		)
 	}
 
 	async getAllByPlayerId(
@@ -46,15 +54,22 @@ export class PlayerAchievementsLocalStorageRepository
 	): Promise<GetAllPlayerAchievementsByPlayerIdDTOOutput> {
 		const achievements = await this.getStoredAchievements()
 
-		return achievements
-			.filter((achievement) => achievement.playerId === playerId)
-			.map(normalizeAchievement)
+		return achievements.filter((achievement) => achievement.playerId === playerId)
 	}
 
-	private async getStoredAchievements(): Promise<Array<StoredPlayerAchievement>> {
-		const data: Array<StoredPlayerAchievement> =
+	private async getStoredAchievements(): Promise<Array<PlayerAchievementDTO>> {
+		const data: Array<RawStoredPlayerAchievement> =
 			JSON.parse(localStorage.getItem(this.storageKey) || '[]') || []
-		return data
+		const seasonById = this.getSeasonByIdMap()
+
+		return data.map((item) => normalizeStoredAchievement(item, seasonById))
+	}
+
+	private getSeasonByIdMap(): Map<string, StoredSeason> {
+		const seasons: Array<StoredSeason> =
+			JSON.parse(localStorage.getItem(this.playerSeasonsStorageKey) || '[]') ||
+			[]
+		return new Map(seasons.map((season) => [season.id, season]))
 	}
 }
 
@@ -64,15 +79,23 @@ function normalizeCompetitionType(
 	return competitionType ?? null
 }
 
-function normalizeAchievement(
-	achievement: StoredPlayerAchievement,
-): StoredPlayerAchievement {
+function normalizeStoredAchievement(
+	item: RawStoredPlayerAchievement,
+	seasonById: Map<string, StoredSeason>,
+): PlayerAchievementDTO {
+	const playerClubId =
+		item.playerClubId ?? seasonById.get(item.playerSeasonId)?.playerClubId
+
+	if (!playerClubId) {
+		throw new Error('Clube não encontrado para conquista da temporada')
+	}
+
 	return {
-		...achievement,
-		competitionType: normalizeCompetitionType(achievement.competitionType),
+		...item,
+		playerClubId,
+		competitionType: normalizeCompetitionType(item.competitionType),
 	}
 }
-
 
 export const makePlayerAchievementsLocalStorageRepository =
 	(): PlayerAchievementsLocalStorageRepository => {

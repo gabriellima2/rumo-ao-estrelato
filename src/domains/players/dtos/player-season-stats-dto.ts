@@ -2,6 +2,7 @@ export type PlayerSeasonStatsDTO = {
 	id: string
 	playerId: string
 	playerSeasonId: string
+	playerClubId: string
 	appearances: number
 	goals: number
 	assists: number
@@ -14,6 +15,7 @@ export type PlayerSeasonStatsDTO = {
 export type CreatePlayerSeasonStatsDTOInput = {
 	playerId: string
 	playerSeasonId: string
+	playerClubId: string
 	appearances: number
 	goals: number
 	assists: number
