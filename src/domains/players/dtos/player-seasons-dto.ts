@@ -118,3 +118,28 @@ export type GetSeasonDetailDTOOutput =
 			segments: SeasonDetailSegment[]
 	  }
 	| undefined
+
+export type AggregatedPlayerSeasonStats = Omit<
+	PlayerSeasonStatsDTO,
+	'id' | 'playerId' | 'playerSeasonId' | 'playerClubId'
+>
+
+export type PlayerCareerAchievementItem = {
+	id: string
+	name: string
+	seasonTitle: string
+	seasonNumber: number
+	clubName: string
+}
+
+export type PlayerCareerTitleGroup = {
+	key: string
+	label: string
+	count: number
+	items: PlayerCareerAchievementItem[]
+}
+
+export type GetPlayerCareerSummaryDTOOutput = {
+	stats: AggregatedPlayerSeasonStats
+	titleGroups: PlayerCareerTitleGroup[]
+}

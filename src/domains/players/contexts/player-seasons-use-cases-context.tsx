@@ -1,14 +1,18 @@
 import { createContext, use } from 'react'
+import { aggregatePlayerSeasonStats } from '../utils/aggregate-player-season-stats'
+import { groupPlayerAchievements } from '../utils/group-player-achievements'
 import type { PropsWithChildren } from 'react'
 import type { PlayerSeasonsRepository } from '../repositories/player-seasons-repository'
 import type { PlayerClubsRepository } from '../repositories/player-clubs-repository'
 import type { PlayersRepository } from '../repositories/players-repository'
 import type { PlayerMomentsRepository } from '../repositories/player-moments-repository'
 import type { PlayerSeasonStatsRepository } from '../repositories/player-season-stats-repository'
+import type { PlayerAchievementsRepository } from '../repositories/player-achievements-repository'
 import type {
 	FinalizePlayerSeasonDTOInput,
 	FinalizePlayerSeasonDTOOutput,
 	GetAllPlayerSeasonsByPlayerIdDTOOutput,
+	GetPlayerCareerSummaryDTOOutput,
 	GetSeasonDetailDTOOutput,
 	TransferPlayerSeasonDTOInput,
 	TransferPlayerSeasonDTOOutput,
@@ -19,6 +23,9 @@ type PlayerSeasonsUseCasesContextValues = {
 		playerId: string,
 	) => Promise<GetAllPlayerSeasonsByPlayerIdDTOOutput>
 	getSeasonDetail: (seasonId: string) => Promise<GetSeasonDetailDTOOutput>
+	getPlayerCareerSummary: (
+		playerId: string,
+	) => Promise<GetPlayerCareerSummaryDTOOutput>
 	finalizeSeason: (
 		input: FinalizePlayerSeasonDTOInput,
 	) => Promise<FinalizePlayerSeasonDTOOutput>
@@ -48,6 +55,7 @@ type PlayerSeasonsUseCasesProviderProps = PropsWithChildren<{
 	playersRepository: PlayersRepository
 	playerMomentsRepository: PlayerMomentsRepository
 	playerSeasonStatsRepository: PlayerSeasonStatsRepository
+	playerAchievementsRepository: PlayerAchievementsRepository
 }>
 
 export function PlayerSeasonsUseCasesProvider({
@@ -57,6 +65,7 @@ export function PlayerSeasonsUseCasesProvider({
 	playersRepository,
 	playerMomentsRepository,
 	playerSeasonStatsRepository,
+	playerAchievementsRepository,
 }: PlayerSeasonsUseCasesProviderProps) {
 	async function getAllPlayerSeasonsByPlayerId(
 		playerId: string,
@@ -140,6 +149,47 @@ export function PlayerSeasonsUseCasesProvider({
 		}
 	}
 
+	async function getPlayerCareerSummary(
+		playerId: string,
+	): Promise<GetPlayerCareerSummaryDTOOutput> {
+		const [stats, achievements, clubs] = await Promise.all([
+			playerSeasonStatsRepository.getAllByPlayerId(playerId),
+			playerAchievementsRepository.getAllByPlayerId(playerId),
+			playerClubsRepository.getAll(),
+		])
+
+		const playerClubs = clubs.filter((club) => club.playerId === playerId)
+		const clubNameById = new Map(
+			playerClubs.map((club) => [club.id, club.name]),
+		)
+
+		const uniqueSeasonIds = [
+			...new Set(achievements.map((achievement) => achievement.playerSeasonId)),
+		]
+		const seasons = await Promise.all(
+			uniqueSeasonIds.map((seasonId) =>
+				playerSeasonsRepository.getById(seasonId),
+			),
+		)
+		const seasonById = new Map(
+			seasons
+				.filter((season) => season !== undefined)
+				.map((season) => [
+					season.id,
+					{ title: season.title, seasonNumber: season.seasonNumber },
+				]),
+		)
+
+		return {
+			stats: aggregatePlayerSeasonStats(stats),
+			titleGroups: groupPlayerAchievements(
+				achievements,
+				clubNameById,
+				seasonById,
+			),
+		}
+	}
+
 	async function finalizeSeason(
 		input: FinalizePlayerSeasonDTOInput,
 	): Promise<FinalizePlayerSeasonDTOOutput> {
@@ -172,6 +222,7 @@ export function PlayerSeasonsUseCasesProvider({
 			value={{
 				getAllPlayerSeasonsByPlayerId,
 				getSeasonDetail,
+				getPlayerCareerSummary,
 				finalizeSeason,
 				transferSeason,
 			}}

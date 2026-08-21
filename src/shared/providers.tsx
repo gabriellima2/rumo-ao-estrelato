@@ -34,6 +34,7 @@ export function Providers({ children }: PropsWithChildren) {
 				playersRepository={playersRepository}
 				playerMomentsRepository={playerMomentsRepository}
 				playerSeasonStatsRepository={playerSeasonStatsRepository}
+				playerAchievementsRepository={playerAchievementsRepository}
 			>
 				<PlayerMomentTypesUseCasesProvider
 					playerMomentTypesRepository={playerMomentTypesRepository}
