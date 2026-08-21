@@ -101,6 +101,7 @@ function RouteComponent() {
 			queryClient.invalidateQueries({ queryKey: ['get-all-players-seasons'] })
 			queryClient.invalidateQueries({ queryKey: ['player-season-stats'] })
 			queryClient.invalidateQueries({ queryKey: ['player-achievements'] })
+			queryClient.invalidateQueries({ queryKey: ['player-career-summary'] })
 
 			toast.add({
 				type: 'success',
