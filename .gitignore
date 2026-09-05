@@ -11,3 +11,8 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+docs
+
+# Supabase CLI
+supabase/.temp/
+supabase/.branches/
