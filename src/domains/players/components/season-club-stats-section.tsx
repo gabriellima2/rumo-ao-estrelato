@@ -1,4 +1,4 @@
-import type { SeasonDetailSegment } from '../dtos/player-seasons-dto'
+import type { SeasonDetailSegment } from '../api/types/seasons'
 import {
 	Card,
 	CardContent,

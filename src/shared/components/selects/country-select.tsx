@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { SearchableSelect } from './searchable-select'
 import type { SelectOption } from '@/shared/catalog/select'
-import { COUNTRIES } from '@/shared/catalog/countries'
+import { countryQueries } from '@/domains/players/queries/countries'
 
 type CountrySelectProps = Omit<
 	React.ComponentProps<typeof SearchableSelect>,
@@ -9,14 +10,16 @@ type CountrySelectProps = Omit<
 >
 
 export function CountrySelect(props: CountrySelectProps) {
+	const { data: countries, isLoading } = useQuery(countryQueries.options())
+
 	const options = useMemo(
 		() =>
-			Object.entries(COUNTRIES).map<SelectOption>(([value, { name }]) => ({
-				value,
-				label: name,
+			(countries ?? []).map<SelectOption>((country) => ({
+				value: country.id,
+				label: country.name,
 			})),
-		[],
+		[countries],
 	)
 
-	return <SearchableSelect {...props} options={options} />
+	return <SearchableSelect {...props} options={options} isLoading={isLoading} />
 }

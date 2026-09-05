@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { ChevronRight } from 'lucide-react'
-import { usePlayersUseCases } from '@/domains/players/contexts/players-use-cases-context'
+import { ChevronRight, LogOut } from 'lucide-react'
+import { requireAuth } from '@/integrations/supabase/auth-guard'
+import { useAuth } from '@/integrations/supabase/auth-context'
+import { playerQueries } from '@/domains/players/queries/players'
 import {
 	Card,
 	CardContent,
@@ -9,21 +11,20 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/shared/components/ui/card'
-import { getCountryByCode } from '@/shared/catalog/countries'
 import { getPlayerPositionLabel } from '@/domains/players/catalog/positions'
 import { Button } from '@/shared/components/ui/button'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 
 export const Route = createFileRoute('/careers/')({
+	beforeLoad: requireAuth,
 	component: RouteComponent,
 })
 
 function RouteComponent() {
-	const { getAllPlayers } = usePlayersUseCases()
+	const { signOut } = useAuth()
 
 	const { data: players, isLoading: isLoadingPlayers } = useQuery({
-		queryKey: ['get-all-players'],
-		queryFn: getAllPlayers,
+		...playerQueries.all(),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
@@ -33,10 +34,20 @@ function RouteComponent() {
 			<div className="w-full max-w-2xl space-y-4">
 				<header className="flex flex-row items-center justify-between gap-4">
 					<h1 className="text-lg font-medium">Minhas carreiras</h1>
-					<Button
-						nativeButton={false}
-						render={<Link to="/careers/create">Adicionar carreira</Link>}
-					/>
+					<div className="flex items-center gap-2">
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => signOut()}
+							title="Sair"
+						>
+							<LogOut />
+						</Button>
+						<Button
+							nativeButton={false}
+							render={<Link to="/careers/create">Adicionar carreira</Link>}
+						/>
+					</div>
 				</header>
 				{isLoadingPlayers ? (
 					<div className="space-y-4">
@@ -57,11 +68,11 @@ function RouteComponent() {
 										<Card className="flex flex-row items-center justify-between gap-4">
 											<CardHeader className="flex-1">
 												<CardTitle>
-													{player.firstName} {player.lastName}
+													{player.first_name} {player.last_name}
 												</CardTitle>
 												<CardDescription>
 													{getPlayerPositionLabel(player.position)} -{' '}
-													{getCountryByCode(player.country)?.name}
+													{player.country_name}
 												</CardDescription>
 											</CardHeader>
 											<CardContent>

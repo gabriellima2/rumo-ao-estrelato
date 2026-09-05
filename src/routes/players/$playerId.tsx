@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
+import { requireAuth } from '@/integrations/supabase/auth-guard'
 import { PlayerCareerStatsSection } from '@/domains/players/components/player-career-stats-section'
 import { PlayerCareerTitlesSection } from '@/domains/players/components/player-career-titles-section'
-import { usePlayerSeasonsUseCases } from '@/domains/players/contexts/player-seasons-use-cases-context'
-import { usePlayersUseCases } from '@/domains/players/contexts/players-use-cases-context'
+import { playerQueries } from '@/domains/players/queries/players'
+import { seasonQueries } from '@/domains/players/queries/seasons'
 import { Button } from '@/shared/components/ui/button'
 import { Skeleton } from '@/shared/components/ui/skeleton'
 import {
@@ -17,33 +18,27 @@ import {
 import { cn } from '@/shared/lib/utils'
 
 export const Route = createFileRoute('/players/$playerId')({
+	beforeLoad: requireAuth,
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	const { playerId } = Route.useParams()
 
-	const { getAllPlayerSeasonsByPlayerId, getPlayerCareerSummary } =
-		usePlayerSeasonsUseCases()
-	const { getPlayerById } = usePlayersUseCases()
-
 	const { data: player, isLoading: isLoadingPlayer } = useQuery({
-		queryKey: ['get-all-players', playerId],
-		queryFn: () => getPlayerById(playerId),
+		...playerQueries.byId(playerId),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
 
 	const { data: careerSummary, isLoading: isLoadingCareerSummary } = useQuery({
-		queryKey: ['player-career-summary', playerId],
-		queryFn: () => getPlayerCareerSummary(playerId),
+		...seasonQueries.careerSummary(playerId),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
 
 	const { data: playerSeasons, isLoading: isLoadingPlayerSeasons } = useQuery({
-		queryKey: ['get-all-players-seasons', playerId],
-		queryFn: () => getAllPlayerSeasonsByPlayerId(playerId),
+		...seasonQueries.byPlayer(playerId),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
@@ -88,7 +83,7 @@ function RouteComponent() {
 						{isLoadingPlayer ? (
 							<Skeleton className="h-6 w-40" />
 						) : player ? (
-							`${player.firstName} ${player.lastName}`
+							`${player.first_name} ${player.last_name}`
 						) : null}
 					</h1>
 				</header>
@@ -142,8 +137,7 @@ function RouteComponent() {
 											>
 												<CardHeader className="flex-1">
 													<CardTitle>
-														{season.title}{' '}
-														{season.isCurrent ? '(Atual)' : ''}
+														{season.title} {season.isCurrent ? '(Atual)' : ''}
 													</CardTitle>
 													<CardDescription>
 														{season.playerClubName}

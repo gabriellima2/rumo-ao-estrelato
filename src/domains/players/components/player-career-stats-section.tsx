@@ -1,6 +1,6 @@
 import { hasAnyCareerStats } from '../utils/aggregate-player-season-stats'
 import { PlayerCareerSummaryHelp } from './player-career-summary-help'
-import type { AggregatedPlayerSeasonStats } from '../dtos/player-seasons-dto'
+import type { AggregatedPlayerSeasonStats } from '../utils/aggregate-player-season-stats'
 import {
 	Card,
 	CardContent,

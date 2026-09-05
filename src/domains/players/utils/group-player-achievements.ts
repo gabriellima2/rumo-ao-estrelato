@@ -6,12 +6,26 @@ import {
 	CompetitionTypes,
 	getCompetitionTypeLabel,
 } from '../catalog/competition-types'
-import type { PlayerAchievementDTO } from '../dtos/player-achievements-dto'
-import type { PlayerCareerTitleGroup } from '../dtos/player-seasons-dto'
+import type { PlayerAchievement } from '../types'
 
 type SeasonMetadata = {
 	title: string
 	seasonNumber: number
+}
+
+export type PlayerCareerAchievementItem = {
+	id: string
+	name: string
+	seasonTitle: string
+	seasonNumber: number
+	clubName: string
+}
+
+export type PlayerCareerTitleGroup = {
+	key: string
+	label: string
+	count: number
+	items: PlayerCareerAchievementItem[]
 }
 
 const TITLE_GROUP_ORDER: Array<{
@@ -29,19 +43,16 @@ const TITLE_GROUP_ORDER: Array<{
 ]
 
 export function groupPlayerAchievements(
-	achievements: Array<PlayerAchievementDTO>,
+	achievements: PlayerAchievement[],
 	clubNameById: Map<string, string>,
 	seasonById: Map<string, SeasonMetadata>,
-): Array<PlayerCareerTitleGroup> {
-	const groupedItems = new Map<
-		string,
-		PlayerCareerTitleGroup['items']
-	>()
+): PlayerCareerTitleGroup[] {
+	const groupedItems = new Map<string, PlayerCareerTitleGroup['items']>()
 
 	for (const achievement of achievements) {
 		const key = getAchievementGroupKey(achievement)
-		const season = seasonById.get(achievement.playerSeasonId)
-		const clubName = clubNameById.get(achievement.playerClubId)
+		const season = seasonById.get(achievement.player_season_id)
+		const clubName = clubNameById.get(achievement.player_club_id)
 
 		if (!season || !clubName) {
 			continue
@@ -80,10 +91,10 @@ export function groupPlayerAchievements(
 	})
 }
 
-function getAchievementGroupKey(achievement: PlayerAchievementDTO): string {
-	if (achievement.achievementType === AchievementTypes.IndividualAward) {
+function getAchievementGroupKey(achievement: PlayerAchievement): string {
+	if (achievement.achievement_type === AchievementTypes.IndividualAward) {
 		return AchievementTypes.IndividualAward
 	}
 
-	return achievement.competitionType ?? CompetitionTypes.Other
+	return achievement.competition_type ?? CompetitionTypes.Other
 }

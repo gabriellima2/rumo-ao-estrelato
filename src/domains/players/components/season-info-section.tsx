@@ -1,7 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { getPlayerPositionLabel } from '../catalog/positions'
-import type { GetSeasonDetailDTOOutput } from '../dtos/player-seasons-dto'
-import { getCountryByCode } from '@/shared/catalog/countries'
+import type { SeasonDetail } from '../api/types/seasons'
 import { Button } from '@/shared/components/ui/button'
 import {
 	Card,
@@ -12,7 +11,7 @@ import {
 import { cn } from '@/shared/lib/utils'
 
 type SeasonInfoSectionProps = {
-	seasonDetail: NonNullable<GetSeasonDetailDTOOutput>
+	seasonDetail: SeasonDetail
 }
 
 export function SeasonInfoSection({ seasonDetail }: SeasonInfoSectionProps) {
@@ -37,8 +36,7 @@ export function SeasonInfoSection({ seasonDetail }: SeasonInfoSectionProps) {
 					{player.firstName} {player.lastName}
 				</h1>
 				<p className="text-muted-foreground">
-					{getPlayerPositionLabel(player.position)} ·{' '}
-					{getCountryByCode(player.country)?.name}
+					{getPlayerPositionLabel(player.position)} · {player.countryName}
 				</p>
 			</div>
 

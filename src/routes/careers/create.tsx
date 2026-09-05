@@ -3,9 +3,9 @@ import { useForm } from '@tanstack/react-form'
 import z from 'zod'
 import { useMutation } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
-import type { CountryCode } from '@/shared/catalog/countries'
 import type { Gender } from '@/shared/catalog/genders'
 import type { PlayerPosition } from '@/domains/players/catalog/positions'
+import { requireAuth } from '@/integrations/supabase/auth-guard'
 import { Button } from '@/shared/components/ui/button'
 import {
 	Field,
@@ -24,18 +24,17 @@ import { toast } from '@/shared/components/ui/toast'
 import { CountrySelect } from '@/shared/components/selects/country-select'
 import { GenderSelect } from '@/shared/components/selects/gender-select'
 import { PlayerPositionSelect } from '@/domains/players/components/player-position-select'
-import { usePlayersUseCases } from '@/domains/players/contexts/players-use-cases-context'
+import { playerMutations } from '@/domains/players/queries/players'
 
 export const Route = createFileRoute('/careers/create')({
+	beforeLoad: requireAuth,
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	const { navigate } = useRouter()
-	const { createPlayer: createPlayerUseCase } = usePlayersUseCases()
-
 	const { mutateAsync: createPlayer } = useMutation({
-		mutationFn: createPlayerUseCase,
+		mutationFn: playerMutations.createCareer,
 		onSuccess: () => {
 			toast.add({
 				type: 'success',
@@ -68,7 +67,7 @@ function RouteComponent() {
 				gender: value.gender as Gender,
 				firstName: value.firstName,
 				lastName: value.lastName,
-				country: value.country.value as CountryCode,
+				countryId: value.country.value,
 				position: value.position as PlayerPosition,
 				clubName: value.clubName,
 			}),

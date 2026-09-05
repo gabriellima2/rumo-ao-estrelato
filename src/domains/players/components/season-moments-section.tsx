@@ -1,11 +1,10 @@
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import z from 'zod'
-import { usePlayerMomentsUseCases } from '../contexts/player-moments-use-cases-context'
+import { momentMutations } from '../queries/moments'
 import { PlayerMomentTypePicker } from './player-moment-type-picker'
 import { PlayerMomentCard } from './player-moment-card'
-import type { GetPlayerMomentsBySeasonIdDTOOutput } from '../dtos/player-moments-dto'
-import type { GetAllPlayerMomentTypesDTOOutput } from '../dtos/player-moment-types-dto'
+import type { PlayerMomentEnriched, PlayerMomentType } from '../types'
 import { Button } from '@/shared/components/ui/button'
 import {
 	Card,
@@ -28,8 +27,8 @@ type SeasonMomentsSectionProps = {
 	playerId: string
 	seasonId: string
 	isCurrentSeason: boolean
-	momentTypes: GetAllPlayerMomentTypesDTOOutput
-	moments: GetPlayerMomentsBySeasonIdDTOOutput
+	momentTypes: PlayerMomentType[]
+	moments: PlayerMomentEnriched[]
 }
 
 export function SeasonMomentsSection({
@@ -40,14 +39,13 @@ export function SeasonMomentsSection({
 	moments,
 }: SeasonMomentsSectionProps) {
 	const queryClient = useQueryClient()
-	const { createPlayerMoment } = usePlayerMomentsUseCases()
 
 	const defaultTypeId = momentTypes[0]?.id ?? ''
 
 	const { mutateAsync: createMoment } = useMutation({
-		mutationFn: createPlayerMoment,
+		mutationFn: momentMutations.create,
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['player-moments', seasonId] })
+			queryClient.invalidateQueries({ queryKey: ['player-moments'] })
 			toast.add({
 				type: 'success',
 				title: 'Momento registrado!',
@@ -71,13 +69,11 @@ export function SeasonMomentsSection({
 			onSubmit: schema,
 		},
 		onSubmit: async ({ value }) => {
-			const description = value.description.trim()
-
 			await createMoment({
 				playerId,
 				playerSeasonId: seasonId,
 				title: value.title,
-				...(description ? { description } : {}),
+				description: value.description.trim() || undefined,
 				playerMomentTypeId: value.playerMomentTypeId,
 			})
 			form.reset()
@@ -91,105 +87,109 @@ export function SeasonMomentsSection({
 
 			{isCurrentSeason && (
 				<Card>
-				<CardHeader>
-					<CardTitle className="text-base">Registrar momento</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<form
-						onSubmit={(e) => {
-							e.preventDefault()
-							e.stopPropagation()
-							form.handleSubmit()
-						}}
-						className="flex flex-col gap-4"
-					>
-						<FieldGroup>
-							<form.Field
-								name="playerMomentTypeId"
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-										<Field data-invalid={isInvalid}>
-											<FieldLabel>Tipo</FieldLabel>
-											<PlayerMomentTypePicker
-												types={momentTypes}
-												value={field.state.value}
-												onChange={field.handleChange}
-											/>
-											{isInvalid && (
-												<FieldError errors={field.state.meta.errors} />
-											)}
-										</Field>
-									)
-								}}
+					<CardHeader>
+						<CardTitle className="text-base">Registrar momento</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<form
+							onSubmit={(e) => {
+								e.preventDefault()
+								e.stopPropagation()
+								form.handleSubmit()
+							}}
+							className="flex flex-col gap-4"
+						>
+							<FieldGroup>
+								<form.Field
+									name="playerMomentTypeId"
+									children={(field) => {
+										const isInvalid =
+											field.state.meta.isTouched && !field.state.meta.isValid
+										return (
+											<Field data-invalid={isInvalid}>
+												<FieldLabel>Tipo</FieldLabel>
+												<PlayerMomentTypePicker
+													types={momentTypes}
+													value={field.state.value}
+													onChange={field.handleChange}
+												/>
+												{isInvalid && (
+													<FieldError errors={field.state.meta.errors} />
+												)}
+											</Field>
+										)
+									}}
+								/>
+								<form.Field
+									name="title"
+									children={(field) => {
+										const isInvalid =
+											field.state.meta.isTouched && !field.state.meta.isValid
+										return (
+											<Field data-invalid={isInvalid}>
+												<FieldLabel htmlFor={field.name}>Título</FieldLabel>
+												<TextInput
+													id={field.name}
+													name={field.name}
+													isInvalid={isInvalid}
+													value={field.state.value}
+													onBlur={field.handleBlur}
+													onValueChange={field.handleChange}
+													placeholder="Ex: Hat-trick no clássico"
+												/>
+												{isInvalid && (
+													<FieldError errors={field.state.meta.errors} />
+												)}
+											</Field>
+										)
+									}}
+								/>
+								<form.Field
+									name="description"
+									children={(field) => {
+										const isInvalid =
+											field.state.meta.isTouched && !field.state.meta.isValid
+										return (
+											<Field data-invalid={isInvalid}>
+												<FieldLabel htmlFor={field.name}>
+													Descrição{' '}
+													<span className="text-muted-foreground font-normal">
+														(opcional)
+													</span>
+												</FieldLabel>
+												<Textarea
+													id={field.name}
+													name={field.name}
+													aria-invalid={isInvalid}
+													value={field.state.value}
+													onBlur={field.handleBlur}
+													onChange={(e) => field.handleChange(e.target.value)}
+													placeholder="Conte o que aconteceu..."
+													rows={3}
+												/>
+												{isInvalid && (
+													<FieldError errors={field.state.meta.errors} />
+												)}
+											</Field>
+										)
+									}}
+								/>
+							</FieldGroup>
+							<form.Subscribe
+								selector={(state) => [state.isSubmitting]}
+								children={([isSubmitting]) => (
+									<Button
+										type="submit"
+										disabled={isSubmitting}
+										className="w-full"
+									>
+										{isSubmitting ? <Spinner /> : 'Salvar momento'}
+									</Button>
+								)}
 							/>
-							<form.Field
-								name="title"
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>Título</FieldLabel>
-											<TextInput
-												id={field.name}
-												name={field.name}
-												isInvalid={isInvalid}
-												value={field.state.value}
-												onBlur={field.handleBlur}
-												onValueChange={field.handleChange}
-												placeholder="Ex: Hat-trick no clássico"
-											/>
-											{isInvalid && (
-												<FieldError errors={field.state.meta.errors} />
-											)}
-										</Field>
-									)
-								}}
-							/>
-							<form.Field
-								name="description"
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>
-												Descrição{' '}
-												<span className="font-normal text-muted-foreground">
-													(opcional)
-												</span>
-											</FieldLabel>
-											<Textarea
-												id={field.name}
-												name={field.name}
-												aria-invalid={isInvalid}
-												value={field.state.value}
-												onBlur={field.handleBlur}
-												onChange={(e) => field.handleChange(e.target.value)}
-												placeholder="Conte o que aconteceu..."
-												rows={3}
-											/>
-											{isInvalid && (
-												<FieldError errors={field.state.meta.errors} />
-											)}
-										</Field>
-									)
-								}}
-							/>
-						</FieldGroup>
-						<form.Subscribe
-							selector={(state) => [state.isSubmitting]}
-							children={([isSubmitting]) => (
-								<Button type="submit" disabled={isSubmitting} className="w-full">
-									{isSubmitting ? <Spinner /> : 'Salvar momento'}
-								</Button>
-							)}
-						/>
-					</form>
-				</CardContent>
-			</Card>
+						</form>
+					</CardContent>
+				</Card>
 			)}
 
 			{moments.length >= 1 ? (
@@ -201,7 +201,7 @@ export function SeasonMomentsSection({
 					))}
 				</ul>
 			) : (
-				<p className="py-4 text-center text-sm text-muted-foreground">
+				<p className="text-muted-foreground py-4 text-center text-sm">
 					Nenhum momento registrado ainda.
 				</p>
 			)}
@@ -216,8 +216,5 @@ const schema = z.object({
 		.trim()
 		.nonempty('Obrigatório')
 		.max(80, 'Máximo de 80 caracteres'),
-	description: z
-		.string()
-		.trim()
-		.max(500, 'Máximo de 500 caracteres')
+	description: z.string().trim().max(500, 'Máximo de 500 caracteres'),
 })

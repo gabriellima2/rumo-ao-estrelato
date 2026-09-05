@@ -1,5 +1,6 @@
 export const CompetitionTypes = {
 	League: 'league',
+	State: 'state',
 	NationalCup: 'national_cup',
 	LeagueCup: 'league_cup',
 	SuperCup: 'super_cup',
@@ -13,6 +14,7 @@ export type CompetitionType =
 
 export const COMPETITION_TYPE_LABELS: Record<CompetitionType, string> = {
 	[CompetitionTypes.League]: 'Liga',
+	[CompetitionTypes.State]: 'Estadual',
 	[CompetitionTypes.NationalCup]: 'Copa nacional',
 	[CompetitionTypes.LeagueCup]: 'Copa da liga',
 	[CompetitionTypes.SuperCup]: 'Supercopa',

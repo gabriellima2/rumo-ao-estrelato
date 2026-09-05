@@ -13,7 +13,10 @@ import {
 	COMPETITION_TYPE_LABELS,
 	CompetitionTypes,
 } from '@/domains/players/catalog/competition-types'
-import { usePlayerSeasonsUseCases } from '@/domains/players/contexts/player-seasons-use-cases-context'
+import {
+	seasonMutations,
+	seasonQueries,
+} from '@/domains/players/queries/seasons'
 import { MultiStepForm } from '@/shared/components/multi-step-form/multi-step-form'
 import { MultiStepFormContext } from '@/shared/components/multi-step-form/multi-step-form-context'
 import { useMultiStepForm } from '@/shared/components/multi-step-form/use-multi-step-form'
@@ -83,24 +86,19 @@ function RouteComponent() {
 	const { seasonId } = Route.useParams()
 	const { navigate } = useRouter()
 	const queryClient = useQueryClient()
-	const { getSeasonDetail, transferSeason: transferSeasonUseCase } =
-		usePlayerSeasonsUseCases()
 	const stepState = useMultiStepForm({ steps: TRANSFER_SEASON_STEPS })
 
 	const { data: seasonDetail, isLoading } = useQuery({
-		queryKey: ['season-detail', seasonId],
-		queryFn: () => getSeasonDetail(seasonId),
+		...seasonQueries.detail(seasonId),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
 
 	const { mutateAsync: transferSeason, isPending } = useMutation({
-		mutationFn: transferSeasonUseCase,
+		mutationFn: seasonMutations.transfer,
 		onSuccess: ({ newSeasonId }) => {
 			queryClient.invalidateQueries({ queryKey: ['season-detail'] })
-			queryClient.invalidateQueries({ queryKey: ['get-all-players-seasons'] })
-			queryClient.invalidateQueries({ queryKey: ['player-season-stats'] })
-			queryClient.invalidateQueries({ queryKey: ['player-achievements'] })
+			queryClient.invalidateQueries({ queryKey: ['player-seasons'] })
 			queryClient.invalidateQueries({ queryKey: ['player-career-summary'] })
 			queryClient.invalidateQueries({ queryKey: ['player-moments'] })
 
@@ -257,7 +255,7 @@ function RouteComponent() {
 								<MultiStepForm.Step id="stats">
 									<p className="text-muted-foreground mb-4 text-sm">
 										Registre as estatísticas pelo{' '}
-										<span className="font-medium text-foreground">
+										<span className="text-foreground font-medium">
 											{seasonDetail.club.name}
 										</span>{' '}
 										antes da transferência.
@@ -304,9 +302,7 @@ function RouteComponent() {
 											name="wonAchievements"
 											children={(field) => (
 												<Field>
-													<FieldLabel>
-														Ganhou títulos neste clube?
-													</FieldLabel>
+													<FieldLabel>Ganhou títulos neste clube?</FieldLabel>
 													<YesNoToggle
 														value={field.state.value}
 														onChange={(value) => {
@@ -442,7 +438,7 @@ function RouteComponent() {
 									<FieldGroup>
 										<p className="text-muted-foreground mb-2 text-sm">
 											Saindo do{' '}
-											<span className="font-medium text-foreground">
+											<span className="text-foreground font-medium">
 												{seasonDetail.club.name}
 											</span>
 											. Informe o novo clube para continuar a temporada.
@@ -537,6 +533,7 @@ const achievementItemSchema = z.object({
 	competitionType: z
 		.enum([
 			CompetitionTypes.League,
+			CompetitionTypes.State,
 			CompetitionTypes.NationalCup,
 			CompetitionTypes.LeagueCup,
 			CompetitionTypes.SuperCup,

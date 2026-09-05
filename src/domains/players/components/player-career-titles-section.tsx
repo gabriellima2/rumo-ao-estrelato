@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import type { PlayerCareerTitleGroup } from '../dtos/player-seasons-dto'
+import type { PlayerCareerTitleGroup } from '../utils/group-player-achievements'
 import {
 	Card,
 	CardContent,
@@ -52,8 +52,7 @@ export function PlayerCareerTitlesSection({
 										<CardHeader className="flex-1">
 											<CardTitle>{group.label}</CardTitle>
 											<CardDescription>
-												{group.count}{' '}
-												{group.count === 1 ? 'título' : 'títulos'}
+												{group.count} {group.count === 1 ? 'título' : 'títulos'}
 											</CardDescription>
 										</CardHeader>
 										<CardContent>
@@ -71,7 +70,7 @@ export function PlayerCareerTitlesSection({
 										{group.items.map((item) => (
 											<li
 												key={item.id}
-												className="rounded-lg border bg-card p-3"
+												className="bg-card rounded-lg border p-3"
 											>
 												<p className="text-sm font-medium">{item.name}</p>
 												<p className="text-muted-foreground text-xs">

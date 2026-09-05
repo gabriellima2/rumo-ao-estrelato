@@ -29,9 +29,9 @@ export function PlayerCareerSummaryHelp() {
 					<PopoverTitle>Atualização do resumo</PopoverTitle>
 					<PopoverDescription className="leading-relaxed">
 						Estas estatísticas e títulos são atualizados ao finalizar a
-						temporada ou ao registrar uma transferência — quando você preenche os
-						números e conquistas da passagem pelo clube na temporada. Registrar
-						momentos da carreira não altera este resumo.
+						temporada ou ao registrar uma transferência — quando você preenche
+						os números e conquistas da passagem pelo clube na temporada.
+						Registrar momentos da carreira não altera este resumo.
 					</PopoverDescription>
 				</PopoverHeader>
 			</PopoverContent>

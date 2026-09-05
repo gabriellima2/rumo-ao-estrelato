@@ -3,17 +3,20 @@ import { useForm } from '@tanstack/react-form'
 import z from 'zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowLeft, X } from 'lucide-react'
-import type {AchievementType} from '@/domains/players/catalog/achievement-types';
-import type {CompetitionType} from '@/domains/players/catalog/competition-types';
+import type { AchievementType } from '@/domains/players/catalog/achievement-types'
+import type { CompetitionType } from '@/domains/players/catalog/competition-types'
 import {
 	ACHIEVEMENT_TYPE_LABELS,
-	AchievementTypes
+	AchievementTypes,
 } from '@/domains/players/catalog/achievement-types'
 import {
 	COMPETITION_TYPE_LABELS,
-	CompetitionTypes
+	CompetitionTypes,
 } from '@/domains/players/catalog/competition-types'
-import { usePlayerSeasonsUseCases } from '@/domains/players/contexts/player-seasons-use-cases-context'
+import {
+	seasonMutations,
+	seasonQueries,
+} from '@/domains/players/queries/seasons'
 import { MultiStepForm } from '@/shared/components/multi-step-form/multi-step-form'
 import { MultiStepFormContext } from '@/shared/components/multi-step-form/multi-step-form-context'
 import { useMultiStepForm } from '@/shared/components/multi-step-form/use-multi-step-form'
@@ -83,24 +86,19 @@ function RouteComponent() {
 	const { seasonId } = Route.useParams()
 	const { navigate } = useRouter()
 	const queryClient = useQueryClient()
-	const { getSeasonDetail, finalizeSeason: finalizeSeasonUseCase } =
-		usePlayerSeasonsUseCases()
 	const stepState = useMultiStepForm({ steps: FINALIZE_SEASON_STEPS })
 
 	const { data: seasonDetail, isLoading } = useQuery({
-		queryKey: ['season-detail', seasonId],
-		queryFn: () => getSeasonDetail(seasonId),
+		...seasonQueries.detail(seasonId),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
 
 	const { mutateAsync: finalizeSeason, isPending } = useMutation({
-		mutationFn: finalizeSeasonUseCase,
+		mutationFn: seasonMutations.finalize,
 		onSuccess: ({ newSeasonId }) => {
 			queryClient.invalidateQueries({ queryKey: ['season-detail'] })
-			queryClient.invalidateQueries({ queryKey: ['get-all-players-seasons'] })
-			queryClient.invalidateQueries({ queryKey: ['player-season-stats'] })
-			queryClient.invalidateQueries({ queryKey: ['player-achievements'] })
+			queryClient.invalidateQueries({ queryKey: ['player-seasons'] })
 			queryClient.invalidateQueries({ queryKey: ['player-career-summary'] })
 
 			toast.add({
@@ -460,9 +458,9 @@ function RouteComponent() {
 											selector={(state) => state.values.stayedAtClub}
 											children={(stayedAtClub) =>
 												stayedAtClub ? (
-													<p className="text-muted-foreground rounded-lg border bg-muted/30 p-4 text-sm">
+													<p className="text-muted-foreground bg-muted/30 rounded-lg border p-4 text-sm">
 														A próxima temporada será criada automaticamente no{' '}
-														<span className="font-medium text-foreground">
+														<span className="text-foreground font-medium">
 															{seasonDetail.club.name}
 														</span>
 														.
@@ -563,6 +561,7 @@ const achievementItemSchema = z.object({
 	competitionType: z
 		.enum([
 			CompetitionTypes.League,
+			CompetitionTypes.State,
 			CompetitionTypes.NationalCup,
 			CompetitionTypes.LeagueCup,
 			CompetitionTypes.SuperCup,

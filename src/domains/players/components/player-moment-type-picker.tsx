@@ -1,9 +1,9 @@
 import { PlayerMomentTypeIcon } from './player-moment-type-icon'
-import type { GetAllPlayerMomentTypesDTOOutput } from '../dtos/player-moment-types-dto'
+import type { PlayerMomentType } from '../types'
 import { cn } from '@/shared/lib/utils'
 
 type PlayerMomentTypePickerProps = {
-	types: GetAllPlayerMomentTypesDTOOutput
+	types: PlayerMomentType[]
 	value: string
 	onChange: (typeId: string) => void
 }
@@ -29,11 +29,7 @@ export function PlayerMomentTypePicker({
 								? 'border-transparent text-white'
 								: 'border-border bg-background text-foreground hover:bg-muted',
 						)}
-						style={
-							isSelected
-								? { backgroundColor: type.color }
-								: undefined
-						}
+						style={isSelected ? { backgroundColor: type.color } : undefined}
 					>
 						<PlayerMomentTypeIcon
 							icon={type.icon}

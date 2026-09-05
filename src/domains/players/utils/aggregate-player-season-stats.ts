@@ -1,5 +1,14 @@
-import type { PlayerSeasonStatsDTO } from '../dtos/player-season-stats-dto'
-import type { AggregatedPlayerSeasonStats } from '../dtos/player-seasons-dto'
+import type { PlayerSeasonStats } from '../types'
+
+export type AggregatedPlayerSeasonStats = {
+	appearances: number
+	goals: number
+	assists: number
+	cleanSheets: number
+	yellowCards: number
+	redCards: number
+	averageRating: number
+}
 
 const EMPTY_STATS: AggregatedPlayerSeasonStats = {
 	appearances: 0,
@@ -12,7 +21,7 @@ const EMPTY_STATS: AggregatedPlayerSeasonStats = {
 }
 
 export function aggregatePlayerSeasonStats(
-	stats: Array<PlayerSeasonStatsDTO>,
+	stats: PlayerSeasonStats[],
 ): AggregatedPlayerSeasonStats {
 	if (stats.length === 0) {
 		return EMPTY_STATS
@@ -26,11 +35,11 @@ export function aggregatePlayerSeasonStats(
 			acc.appearances += item.appearances
 			acc.goals += item.goals
 			acc.assists += item.assists
-			acc.cleanSheets += item.cleanSheets
-			acc.yellowCards += item.yellowCards
-			acc.redCards += item.redCards
+			acc.cleanSheets += item.clean_sheets
+			acc.yellowCards += item.yellow_cards
+			acc.redCards += item.red_cards
 
-			weightedRatingSum += item.averageRating * item.appearances
+			weightedRatingSum += item.average_rating * item.appearances
 			totalAppearances += item.appearances
 
 			return acc

@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
-import { usePlayerSeasonsUseCases } from '@/domains/players/contexts/player-seasons-use-cases-context'
-import { usePlayerMomentTypesUseCases } from '@/domains/players/contexts/player-moment-types-use-cases-context'
-import { usePlayerMomentsUseCases } from '@/domains/players/contexts/player-moments-use-cases-context'
+import { seasonQueries } from '@/domains/players/queries/seasons'
+import { momentTypeQueries } from '@/domains/players/queries/moment-types'
+import { momentQueries } from '@/domains/players/queries/moments'
 import { SeasonClubStatsSection } from '@/domains/players/components/season-club-stats-section'
 import { SeasonInfoSection } from '@/domains/players/components/season-info-section'
 import { SeasonMomentsSection } from '@/domains/players/components/season-moments-section'
@@ -17,13 +17,8 @@ export const Route = createFileRoute('/players/seasons/$seasonId/')({
 function RouteComponent() {
 	const { seasonId } = Route.useParams()
 
-	const { getSeasonDetail } = usePlayerSeasonsUseCases()
-	const { getAllPlayerMomentTypes } = usePlayerMomentTypesUseCases()
-	const { getPlayerMomentsBySeasonIds } = usePlayerMomentsUseCases()
-
 	const { data: seasonDetail, isLoading: isLoadingSeasonDetail } = useQuery({
-		queryKey: ['season-detail', seasonId],
-		queryFn: () => getSeasonDetail(seasonId),
+		...seasonQueries.detail(seasonId),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
@@ -36,16 +31,13 @@ function RouteComponent() {
 		seasonId
 
 	const { data: momentTypes, isLoading: isLoadingMomentTypes } = useQuery({
-		queryKey: ['player-moment-types'],
-		queryFn: getAllPlayerMomentTypes,
+		...momentTypeQueries.all(),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
 
 	const { data: moments, isLoading: isLoadingMoments } = useQuery({
-		queryKey: ['player-moments', segmentSeasonIds],
-		queryFn: () => getPlayerMomentsBySeasonIds(segmentSeasonIds),
-		enabled: segmentSeasonIds.length > 0,
+		...momentQueries.bySeasonIds(segmentSeasonIds),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
