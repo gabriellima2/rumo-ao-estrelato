@@ -174,7 +174,7 @@ module.exports = class CacheHandler {
 			await redis.setex(
 				CACHE_PREFIX + key,
 				ctx.revalidate,
-				JSON.stringify(cacheData)
+				JSON.stringify(cacheData),
 			)
 		} else {
 			await redis.set(CACHE_PREFIX + key, JSON.stringify(cacheData))
@@ -208,7 +208,7 @@ module.exports = class CacheHandler {
 				new GetObjectCommand({
 					Bucket: BUCKET,
 					Key: `cache/${key}`,
-				})
+				}),
 			)
 			const body = await response.Body.transformToString()
 			return JSON.parse(body)
@@ -228,7 +228,7 @@ module.exports = class CacheHandler {
 					lastModified: Date.now(),
 				}),
 				ContentType: 'application/json',
-			})
+			}),
 		)
 	}
 }

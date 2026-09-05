@@ -34,7 +34,7 @@ async function UsersPage() {
 
 	// Or fetch from external API
 	const posts = await fetch('https://api.example.com/posts').then((r) =>
-		r.json()
+		r.json(),
 	)
 
 	return (

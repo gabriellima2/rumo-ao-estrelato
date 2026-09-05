@@ -507,7 +507,7 @@ import dynamic from 'next/dynamic'
 
 const Analytics = dynamic(
 	() => import('@vercel/analytics/react').then((m) => m.Analytics),
-	{ ssr: false }
+	{ ssr: false },
 )
 
 export default function RootLayout({ children }) {
@@ -545,7 +545,7 @@ import dynamic from 'next/dynamic'
 
 const MonacoEditor = dynamic(
 	() => import('./monaco-editor').then((m) => m.MonacoEditor),
-	{ ssr: false }
+	{ ssr: false },
 )
 
 function CodePanel({ code }: { code: string }) {
@@ -1321,7 +1321,7 @@ function cachePrefs(user: FullUser) {
 			JSON.stringify({
 				theme: user.preferences.theme,
 				notifications: user.preferences.notifications,
-			})
+			}),
 		)
 	} catch {}
 }
@@ -1688,7 +1688,7 @@ When a hook contains multiple independent tasks with different dependencies, spl
 const sortedProducts = useMemo(() => {
 	const filtered = products.filter((p) => p.category === category)
 	const sorted = filtered.toSorted((a, b) =>
-		sortOrder === 'asc' ? a.price - b.price : b.price - a.price
+		sortOrder === 'asc' ? a.price - b.price : b.price - a.price,
 	)
 	return sorted
 }, [products, category, sortOrder])
@@ -1699,15 +1699,15 @@ const sortedProducts = useMemo(() => {
 ```tsx
 const filteredProducts = useMemo(
 	() => products.filter((p) => p.category === category),
-	[products, category]
+	[products, category],
 )
 
 const sortedProducts = useMemo(
 	() =>
 		filteredProducts.toSorted((a, b) =>
-			sortOrder === 'asc' ? a.price - b.price : b.price - a.price
+			sortOrder === 'asc' ? a.price - b.price : b.price - a.price,
 		),
-	[filteredProducts, sortOrder]
+	[filteredProducts, sortOrder],
 )
 ```
 
@@ -1778,7 +1778,7 @@ function TodoList() {
 		(newItems: Item[]) => {
 			setItems([...items, ...newItems])
 		},
-		[items]
+		[items],
 	) // ❌ items dependency causes recreations
 
 	// Risk of stale closure if dependency is forgotten
@@ -1863,7 +1863,7 @@ function FilteredList({ items }: { items: Item[] }) {
 function UserProfile() {
 	// JSON.parse runs on every render
 	const [settings, setSettings] = useState(
-		JSON.parse(localStorage.getItem('settings') || '{}')
+		JSON.parse(localStorage.getItem('settings') || '{}'),
 	)
 
 	return <SettingsForm settings={settings} onChange={setSettings} />
@@ -1962,7 +1962,7 @@ function Search({ items }: { items: Item[] }) {
 	const deferredQuery = useDeferredValue(query)
 	const filtered = useMemo(
 		() => items.filter((item) => fuzzyMatch(item, deferredQuery)),
-		[items, deferredQuery]
+		[items, deferredQuery],
 	)
 	const isStale = query !== deferredQuery
 
@@ -2120,7 +2120,7 @@ Apply `content-visibility: auto` to defer off-screen rendering.
 ```tsx
 function MessageList({ messages }: { messages: Message[] }) {
 	return (
-		<div className="overflow-y-auto h-screen">
+		<div className="h-screen overflow-y-auto">
 			{messages.map((msg) => (
 				<div key={msg.id} className="message-item">
 					<Avatar user={msg.author} />
@@ -2144,7 +2144,7 @@ Extract static JSX outside components to avoid re-creation.
 
 ```tsx
 function LoadingSkeleton() {
-	return <div className="animate-pulse h-20 bg-gray-200" />
+	return <div className="h-20 animate-pulse bg-gray-200" />
 }
 
 function Container() {
@@ -2155,7 +2155,7 @@ function Container() {
 **Correct: reuses same element**
 
 ```tsx
-const loadingSkeleton = <div className="animate-pulse h-20 bg-gray-200" />
+const loadingSkeleton = <div className="h-20 animate-pulse bg-gray-200" />
 
 function Container() {
 	return <div>{loading && loadingSkeleton}</div>
@@ -2818,7 +2818,7 @@ let cookieCache: Record<string, string> | null = null
 function getCookie(name: string) {
 	if (!cookieCache) {
 		cookieCache = Object.fromEntries(
-			document.cookie.split('; ').map((c) => c.split('='))
+			document.cookie.split('; ').map((c) => c.split('=')),
 		)
 	}
 	return cookieCache[name]

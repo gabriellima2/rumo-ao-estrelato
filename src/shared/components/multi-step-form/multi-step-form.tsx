@@ -10,7 +10,10 @@ type MultiStepFormProviderProps = PropsWithChildren<{
 	steps: ReadonlyArray<MultiStepFormStep>
 }>
 
-function MultiStepFormProvider({ steps, children }: MultiStepFormProviderProps) {
+function MultiStepFormProvider({
+	steps,
+	children,
+}: MultiStepFormProviderProps) {
 	const stepState = useMultiStepForm({ steps })
 
 	return (

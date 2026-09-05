@@ -16,7 +16,9 @@ type MultiStepFormContextValue = {
 	goBack: () => void
 }
 
-const MultiStepFormContext = createContext<MultiStepFormContextValue | null>(null)
+const MultiStepFormContext = createContext<MultiStepFormContextValue | null>(
+	null,
+)
 
 export function useMultiStepFormContext() {
 	const context = use(MultiStepFormContext)

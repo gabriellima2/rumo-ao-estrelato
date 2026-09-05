@@ -17,11 +17,14 @@ export function useMultiStepForm({
 	const isLast = currentStepIndex === steps.length - 1
 	const progress = ((currentStepIndex + 1) / steps.length) * 100
 
-	const goToStep = useCallback((index: number) => {
-		if (index >= 0 && index < steps.length) {
-			setCurrentStepIndex(index)
-		}
-	}, [steps.length])
+	const goToStep = useCallback(
+		(index: number) => {
+			if (index >= 0 && index < steps.length) {
+				setCurrentStepIndex(index)
+			}
+		},
+		[steps.length],
+	)
 
 	const goNext = useCallback(() => {
 		setCurrentStepIndex((index) => Math.min(index + 1, steps.length - 1))
