@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { ChevronRight, LogOut } from 'lucide-react'
+import { ChevronRight, PlusIcon } from 'lucide-react'
 import { requireAuth } from '@/integrations/supabase/auth-guard'
-import { useAuth } from '@/integrations/supabase/auth-context'
 import { playerQueries } from '@/domains/players/queries/players'
 import {
 	Card,
@@ -13,7 +12,18 @@ import {
 } from '@/shared/components/ui/card'
 import { getPlayerPositionLabel } from '@/domains/players/catalog/positions'
 import { Button } from '@/shared/components/ui/button'
-import { Skeleton } from '@/shared/components/ui/skeleton'
+import {
+	Header,
+	HeaderActions,
+	HeaderTitle,
+} from '@/shared/components/dashboard/header'
+import { Shell, ShellContent } from '@/shared/components/dashboard/shell'
+import {
+	CardList,
+	CardListEmpty,
+	CardListItem,
+	CardListSkeleton,
+} from '@/shared/components/dashboard/card-list'
 
 export const Route = createFileRoute('/careers/')({
 	beforeLoad: requireAuth,
@@ -21,8 +31,6 @@ export const Route = createFileRoute('/careers/')({
 })
 
 function RouteComponent() {
-	const { signOut } = useAuth()
-
 	const { data: players, isLoading: isLoadingPlayers } = useQuery({
 		...playerQueries.all(),
 		throwOnError: true,
@@ -30,39 +38,32 @@ function RouteComponent() {
 	})
 
 	return (
-		<main className="flex h-full flex-col items-center px-4 py-8">
-			<div className="w-full max-w-2xl space-y-4">
-				<header className="flex flex-row items-center justify-between gap-4">
-					<h1 className="text-lg font-medium">Minhas carreiras</h1>
-					<div className="flex items-center gap-2">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => signOut()}
-							title="Sair"
-						>
-							<LogOut />
-						</Button>
+		<Shell>
+			<ShellContent>
+				<Header>
+					<HeaderTitle>Minhas carreiras</HeaderTitle>
+					<HeaderActions>
 						<Button
 							nativeButton={false}
-							render={<Link to="/careers/create">Adicionar carreira</Link>}
+							render={
+								<Link title="Adicionar carreira" to="/careers/create">
+									<PlusIcon aria-hidden />
+								</Link>
+							}
 						/>
-					</div>
-				</header>
+					</HeaderActions>
+				</Header>
+
 				{isLoadingPlayers ? (
-					<div className="space-y-4">
-						<Skeleton className="h-19.5" />
-						<Skeleton className="h-19.5" />
-						<Skeleton className="h-19.5" />
-						<Skeleton className="h-19.5" />
-					</div>
+					<CardListSkeleton count={4} />
 				) : players ? (
-					players.length >= 1 ? (
-						<ul className="space-y-4">
+					players.length > 0 ? (
+						<CardList>
 							{players.map((player) => (
-								<li key={player.id}>
+								<CardListItem key={player.id}>
 									<Link
 										to="/players/$playerId"
+										title={`Ver carreira do jogador ${player.first_name} ${player.last_name}`}
 										params={{ playerId: player.id }}
 									>
 										<Card className="flex flex-row items-center justify-between gap-4">
@@ -71,23 +72,25 @@ function RouteComponent() {
 													{player.first_name} {player.last_name}
 												</CardTitle>
 												<CardDescription>
-													{getPlayerPositionLabel(player.position)} -{' '}
-													{player.country_name}
+													{getPlayerPositionLabel(player.position)}
 												</CardDescription>
 											</CardHeader>
 											<CardContent>
-												<ChevronRight />
+												<ChevronRight aria-hidden />
 											</CardContent>
 										</Card>
 									</Link>
-								</li>
+								</CardListItem>
 							))}
-						</ul>
+						</CardList>
 					) : (
-						<p>Nenhuma carreira encontrada!</p>
+						<CardListEmpty>
+							Você ainda não possui nenhuma carreira cadastrada. Clique no botão
+							acima para adicionar uma nova carreira.
+						</CardListEmpty>
 					)
 				) : null}
-			</div>
-		</main>
+			</ShellContent>
+		</Shell>
 	)
 }
