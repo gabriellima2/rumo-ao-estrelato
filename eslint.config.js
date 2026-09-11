@@ -1,6 +1,7 @@
 //  @ts-check
 
 import { tanstackConfig } from '@tanstack/eslint-config'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 
 export default [
 	...tanstackConfig,
@@ -13,6 +14,7 @@ export default [
 			'@typescript-eslint/no-unnecessary-condition': 'off',
 		},
 	},
+	eslintPluginPrettierRecommended,
 	{
 		ignores: [
 			'eslint.config.js',
