@@ -28,7 +28,7 @@ export function HeaderStart({
 }: React.ComponentProps<'div'>) {
 	return (
 		<div
-			className={cn('flex flex-row items-center gap-4', className)}
+			className={cn('flex flex-row items-center gap-2 md:gap-4', className)}
 			{...props}
 		/>
 	)
@@ -40,7 +40,10 @@ export function HeaderTitle({
 }: React.ComponentProps<'h1'>) {
 	return (
 		<h1
-			className={cn('font-serif text-2xl font-bold tracking-tight', className)}
+			className={cn(
+				'font-serif text-xl font-bold tracking-tight md:text-2xl',
+				className,
+			)}
 			{...props}
 		/>
 	)
