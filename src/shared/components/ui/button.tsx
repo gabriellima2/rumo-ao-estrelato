@@ -1,5 +1,6 @@
 import { Button as ButtonPrimitive } from '@base-ui/react/button'
 import { cva } from 'class-variance-authority'
+import { Spinner } from './spinner'
 import type { VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/shared/lib/utils'
@@ -45,14 +46,28 @@ function Button({
 	className,
 	variant = 'default',
 	size = 'default',
+	isLoading = false,
+	disabled = false,
+	leftIcon,
+	rightIcon,
 	...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonPrimitive.Props &
+	VariantProps<typeof buttonVariants> & {
+		isLoading?: boolean
+		leftIcon?: React.ReactNode
+		rightIcon?: React.ReactNode
+	}) {
 	return (
 		<ButtonPrimitive
 			data-slot="button"
+			disabled={isLoading || disabled}
 			className={cn(buttonVariants({ variant, size, className }))}
 			{...props}
-		/>
+		>
+			{isLoading && leftIcon ? <Spinner /> : leftIcon}
+			{isLoading && !leftIcon && !rightIcon ? <Spinner /> : props.children}
+			{isLoading && rightIcon ? <Spinner /> : rightIcon}
+		</ButtonPrimitive>
 	)
 }
 

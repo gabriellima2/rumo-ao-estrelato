@@ -44,7 +44,7 @@ function FieldGroup({ className, ...props }: React.ComponentProps<'div'>) {
 		<div
 			data-slot="field-group"
 			className={cn(
-				'group/field-group @container/field-group flex w-full flex-col gap-5 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
+				'group/field-group @container/field-group flex w-full flex-col gap-4 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
 				className,
 			)}
 			{...props}
@@ -178,16 +178,18 @@ function FieldError({
 	className,
 	children,
 	errors,
+	isInvalid,
 	...props
 }: React.ComponentProps<'div'> & {
 	errors?: Array<{ message?: string } | undefined>
+	isInvalid?: boolean
 }) {
 	const content = useMemo(() => {
 		if (children) {
 			return children
 		}
 
-		if (!errors?.length) {
+		if (!errors?.length || !isInvalid) {
 			return null
 		}
 
@@ -195,19 +197,8 @@ function FieldError({
 			...new Map(errors.map((error) => [error?.message, error])).values(),
 		]
 
-		if (uniqueErrors?.length == 1) {
-			return uniqueErrors[0]?.message
-		}
-
-		return (
-			<ul className="ml-4 flex list-disc flex-col gap-1">
-				{uniqueErrors.map(
-					(error, index) =>
-						error?.message && <li key={index}>{error.message}</li>,
-				)}
-			</ul>
-		)
-	}, [children, errors])
+		return uniqueErrors[0]?.message
+	}, [children, errors, isInvalid])
 
 	if (!content) {
 		return null

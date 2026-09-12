@@ -97,9 +97,10 @@ function RouteComponent() {
 											onValueChange={field.handleChange}
 											placeholder="voce@email.com"
 										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
 									</Field>
 								)
 							}}
@@ -123,9 +124,10 @@ function RouteComponent() {
 											onValueChange={field.handleChange}
 											placeholder="Mínimo 6 caracteres"
 										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
 									</Field>
 								)
 							}}
@@ -151,9 +153,10 @@ function RouteComponent() {
 											onValueChange={field.handleChange}
 											placeholder="Repita a senha"
 										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
 									</Field>
 								)
 							}}

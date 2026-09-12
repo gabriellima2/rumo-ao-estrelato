@@ -113,9 +113,10 @@ export function SeasonMomentsSection({
 													value={field.state.value}
 													onChange={field.handleChange}
 												/>
-												{isInvalid && (
-													<FieldError errors={field.state.meta.errors} />
-												)}
+												<FieldError
+													isInvalid={isInvalid}
+													errors={field.state.meta.errors}
+												/>
 											</Field>
 										)
 									}}
@@ -137,9 +138,10 @@ export function SeasonMomentsSection({
 													onValueChange={field.handleChange}
 													placeholder="Ex: Hat-trick no clássico"
 												/>
-												{isInvalid && (
-													<FieldError errors={field.state.meta.errors} />
-												)}
+												<FieldError
+													isInvalid={isInvalid}
+													errors={field.state.meta.errors}
+												/>
 											</Field>
 										)
 									}}
@@ -167,9 +169,10 @@ export function SeasonMomentsSection({
 													placeholder="Conte o que aconteceu..."
 													rows={3}
 												/>
-												{isInvalid && (
-													<FieldError errors={field.state.meta.errors} />
-												)}
+												<FieldError
+													isInvalid={isInvalid}
+													errors={field.state.meta.errors}
+												/>
 											</Field>
 										)
 									}}

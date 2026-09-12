@@ -277,9 +277,10 @@ function RouteComponent() {
 																}
 																placeholder="0"
 															/>
-															{isInvalid && (
-																<FieldError errors={field.state.meta.errors} />
-															)}
+															<FieldError
+																isInvalid={isInvalid}
+																errors={field.state.meta.errors}
+															/>
 														</Field>
 													)
 												}}
@@ -486,11 +487,10 @@ function RouteComponent() {
 																		onValueChange={field.handleChange}
 																		placeholder="Ex: Barcelona"
 																	/>
-																	{isInvalid && (
-																		<FieldError
-																			errors={field.state.meta.errors}
-																		/>
-																	)}
+																	<FieldError
+																		isInvalid={isInvalid}
+																		errors={field.state.meta.errors}
+																	/>
 																</Field>
 															)
 														}}
