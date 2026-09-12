@@ -17,6 +17,6 @@ export async function redirectIfAuthenticated() {
 	} = await supabase.auth.getSession()
 
 	if (session) {
-		throw redirect({ to: '/careers' })
+		throw redirect({ to: '/players' })
 	}
 }

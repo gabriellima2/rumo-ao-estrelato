@@ -53,7 +53,7 @@ function RouteComponent() {
 							variant="outline"
 							nativeButton={false}
 							render={
-								<Link to="/careers">
+								<Link to="/players">
 									<ArrowLeft />
 								</Link>
 							}
@@ -74,7 +74,7 @@ function RouteComponent() {
 						variant="outline"
 						nativeButton={false}
 						render={
-							<Link to="/careers">
+							<Link to="/players">
 								<ArrowLeft />
 							</Link>
 						}

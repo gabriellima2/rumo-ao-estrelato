@@ -28,7 +28,7 @@ function RouteComponent() {
 		mutationFn: ({ email, password }: { email: string; password: string }) =>
 			signIn(email, password),
 		onSuccess: () => {
-			navigate({ to: '/careers' })
+			navigate({ to: '/players' })
 		},
 		onError: () => {
 			toast.add({

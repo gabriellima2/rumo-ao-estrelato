@@ -1,8 +1,8 @@
-import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import z from 'zod'
 import { useMutation } from '@tanstack/react-query'
-import { ArrowLeft } from 'lucide-react'
+import { SaveIcon } from 'lucide-react'
 import type { Gender } from '@/shared/catalog/genders'
 import type { PlayerPosition } from '@/domains/players/catalog/positions'
 import { requireAuth } from '@/integrations/supabase/auth-guard'
@@ -13,7 +13,6 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from '@/shared/components/ui/field'
-import { Spinner } from '@/shared/components/ui/spinner'
 import { TextInput } from '@/shared/components/inputs/text-input'
 import {
 	EMPTY_SEARCHABLE_SELECT_OPTION,
@@ -25,8 +24,21 @@ import { CountrySelect } from '@/shared/components/selects/country-select'
 import { GenderSelect } from '@/shared/components/selects/gender-select'
 import { PlayerPositionSelect } from '@/domains/players/components/player-position-select'
 import { playerMutations } from '@/domains/players/queries/players'
+import { Shell, ShellContent } from '@/shared/components/dashboard/shell'
+import {
+	Header,
+	HeaderStart,
+	HeaderTitle,
+} from '@/shared/components/dashboard/header'
+import { BackButton } from '@/shared/components/buttons/back-button'
+import { Form } from '@/shared/components/ui/form'
+import { VALIDATION_MESSAGES } from '@/shared/validation-messages'
+import {
+	PLAYER_CLUB_VALIDATIONS,
+	PLAYER_VALIDATIONS,
+} from '@/domains/players/validations'
 
-export const Route = createFileRoute('/careers/create')({
+export const Route = createFileRoute('/players/create')({
 	beforeLoad: requireAuth,
 	component: RouteComponent,
 })
@@ -34,18 +46,18 @@ export const Route = createFileRoute('/careers/create')({
 function RouteComponent() {
 	const { navigate } = useRouter()
 	const { mutateAsync: createPlayer } = useMutation({
-		mutationFn: playerMutations.createCareer,
+		mutationFn: playerMutations.create,
 		onSuccess: () => {
 			toast.add({
 				type: 'success',
-				title: 'Carreira adicionada com sucesso!',
+				title: 'Jogador adicionado com sucesso!',
 			})
-			navigate({ to: '/careers' })
+			navigate({ to: '/players' })
 		},
 		onError: () => {
 			toast.add({
 				type: 'error',
-				title: 'Erro ao adicionar carreira',
+				title: 'Erro ao adicionar jogador',
 			})
 		},
 	})
@@ -74,53 +86,16 @@ function RouteComponent() {
 	})
 
 	return (
-		<main className="flex h-full flex-col items-center px-4 py-8">
-			<div className="w-full max-w-2xl space-y-4">
-				<header className="flex flex-row items-center gap-4">
-					<Button
-						title="Voltar"
-						variant="outline"
-						nativeButton={false}
-						render={
-							<Link to="/careers">
-								<ArrowLeft />
-							</Link>
-						}
-					/>
-					<h1 className="text-lg font-medium">Criar carreira</h1>
-				</header>
-				<form
-					onSubmit={(e) => {
-						e.preventDefault()
-						e.stopPropagation()
-						form.handleSubmit()
-					}}
-					className="flex flex-col items-end gap-4"
-				>
+		<Shell>
+			<ShellContent>
+				<Header>
+					<HeaderStart>
+						<BackButton to="/players" />
+						<HeaderTitle>Adicionar jogador</HeaderTitle>
+					</HeaderStart>
+				</Header>
+				<Form onSubmit={form.handleSubmit}>
 					<FieldGroup>
-						<form.Field
-							name="gender"
-							children={(field) => {
-								const isInvalid =
-									field.state.meta.isTouched && !field.state.meta.isValid
-								return (
-									<Field data-invalid={isInvalid}>
-										<FieldLabel htmlFor={field.name}>Gênero</FieldLabel>
-										<GenderSelect
-											id={field.name}
-											name={field.name}
-											aria-invalid={isInvalid}
-											value={field.state.value}
-											onValueChange={field.handleChange}
-											onBlur={field.handleBlur}
-										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
-									</Field>
-								)
-							}}
-						/>
 						<form.Field
 							name="firstName"
 							children={(field) => {
@@ -138,9 +113,10 @@ function RouteComponent() {
 											onValueChange={field.handleChange}
 											placeholder="Ex: João"
 										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
 									</Field>
 								)
 							}}
@@ -162,9 +138,34 @@ function RouteComponent() {
 											onValueChange={field.handleChange}
 											placeholder="Ex: Silva"
 										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="gender"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Gênero</FieldLabel>
+										<GenderSelect
+											id={field.name}
+											name={field.name}
+											aria-invalid={isInvalid}
+											value={field.state.value}
+											onValueChange={field.handleChange}
+											onBlur={field.handleBlur}
+										/>
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
 									</Field>
 								)
 							}}
@@ -185,9 +186,10 @@ function RouteComponent() {
 											onValueChange={field.handleChange}
 											onBlur={field.handleBlur}
 										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
 									</Field>
 								)
 							}}
@@ -208,9 +210,10 @@ function RouteComponent() {
 											onValueChange={field.handleChange}
 											onBlur={field.handleBlur}
 										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
 									</Field>
 								)
 							}}
@@ -232,9 +235,10 @@ function RouteComponent() {
 											onValueChange={field.handleChange}
 											placeholder="Ex: Santos"
 										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
 									</Field>
 								)
 							}}
@@ -243,38 +247,54 @@ function RouteComponent() {
 					<form.Subscribe
 						selector={(state) => [state.isSubmitting]}
 						children={([isSubmitting]) => (
-							<Button type="submit" disabled={isSubmitting}>
-								{isSubmitting ? <Spinner /> : 'Criar carreira'}
+							<Button
+								type="submit"
+								isLoading={isSubmitting}
+								leftIcon={<SaveIcon aria-hidden />}
+							>
+								Salvar
 							</Button>
 						)}
 					/>
-				</form>
-			</div>
-		</main>
+				</Form>
+			</ShellContent>
+		</Shell>
 	)
 }
 
 const schema = z.object({
-	gender: z.string().trim().nonempty('Obrigatório'),
+	gender: z.string().trim().nonempty(VALIDATION_MESSAGES.required),
 	firstName: z
 		.string()
 		.trim()
-		.nonempty('Obrigatório')
-		.max(40, 'Máximo de 40 caracteres'),
+		.nonempty(VALIDATION_MESSAGES.required)
+		.max(
+			PLAYER_VALIDATIONS.firstName.maxLength,
+			VALIDATION_MESSAGES.maxLength(PLAYER_VALIDATIONS.firstName.maxLength),
+		),
 	lastName: z
 		.string()
 		.trim()
-		.nonempty('Obrigatório')
-		.max(60, 'Máximo de 60 caracteres'),
+		.nonempty(VALIDATION_MESSAGES.required)
+		.max(
+			PLAYER_VALIDATIONS.lastName.maxLength,
+			VALIDATION_MESSAGES.maxLength(PLAYER_VALIDATIONS.lastName.maxLength),
+		),
 	country: searchableSelectSchema.refine(
 		({ value }) => !isEmptyString(value),
-		'Obrigatório',
+		VALIDATION_MESSAGES.required,
 	),
-	position: z.string().trim().nonempty('Obrigatório'),
+	position: z.string().trim().nonempty(VALIDATION_MESSAGES.required),
 	clubName: z
 		.string()
 		.trim()
-		.nonempty('Obrigatório')
-		.min(2, 'Mínimo de 2 caracteres')
-		.max(60, 'Máximo de 60 caracteres'),
+		.nonempty(VALIDATION_MESSAGES.required)
+		.min(
+			PLAYER_CLUB_VALIDATIONS.name.minLength,
+			VALIDATION_MESSAGES.minLength(PLAYER_CLUB_VALIDATIONS.name.minLength),
+		)
+		.max(
+			PLAYER_CLUB_VALIDATIONS.name.maxLength,
+			VALIDATION_MESSAGES.maxLength(PLAYER_CLUB_VALIDATIONS.name.maxLength),
+		),
 })

@@ -15,5 +15,5 @@ export const playerQueries = {
 }
 
 export const playerMutations = {
-	createCareer: createPlayerCareer,
+	create: createPlayerCareer,
 }

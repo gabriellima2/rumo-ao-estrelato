@@ -36,7 +36,7 @@ function RouteComponent() {
 				return
 			}
 
-			navigate({ to: '/careers' })
+			navigate({ to: '/players' })
 		},
 		onError: () => {
 			toast.add({
