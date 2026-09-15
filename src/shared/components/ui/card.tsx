@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { Skeleton } from './skeleton'
 import { cn } from '@/shared/lib/utils'
 
 function Card({
@@ -92,6 +93,13 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
 	)
 }
 
+function CardSkeleton({
+	className,
+	...props
+}: React.ComponentProps<typeof Skeleton>) {
+	return <Skeleton className={cn('h-19.5', className)} {...props} />
+}
+
 export {
 	Card,
 	CardHeader,
@@ -100,4 +108,5 @@ export {
 	CardAction,
 	CardDescription,
 	CardContent,
+	CardSkeleton,
 }

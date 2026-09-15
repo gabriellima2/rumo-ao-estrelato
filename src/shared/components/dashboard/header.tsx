@@ -1,3 +1,4 @@
+import { Skeleton } from '../ui/skeleton'
 import { cn } from '@/shared/lib/utils'
 
 export function Header({
@@ -47,6 +48,13 @@ export function HeaderTitle({
 			{...props}
 		/>
 	)
+}
+
+export function HeaderTitleSkeleton({
+	className,
+	...props
+}: React.ComponentProps<typeof Skeleton>) {
+	return <Skeleton className={cn('h-7 w-40 md:h-8', className)} {...props} />
 }
 
 export function HeaderDescription({

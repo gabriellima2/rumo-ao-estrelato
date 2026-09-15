@@ -1,4 +1,4 @@
-import { Skeleton } from '../ui/skeleton'
+import { CardSkeleton } from '../ui/card'
 import { cn } from '@/shared/lib/utils'
 
 export function CardList({ className, ...props }: React.ComponentProps<'ul'>) {
@@ -9,7 +9,7 @@ export function CardListSkeleton({ count = 4 }: { count?: number }) {
 	return (
 		<div className="space-y-4" aria-busy="true">
 			{Array.from({ length: count }, (_, i) => (
-				<Skeleton key={i} className="h-19.5" />
+				<CardSkeleton key={i} />
 			))}
 		</div>
 	)
@@ -22,10 +22,19 @@ export function CardListItem({
 	return <li className={cn(className)} {...props} />
 }
 
-export function CardListEmpty({ children }: { children: React.ReactNode }) {
+export function CardListEmpty({
+	children,
+	align = 'center',
+}: {
+	children: React.ReactNode
+	align?: 'center' | 'left'
+}) {
 	return (
 		<p
-			className="text-muted-foreground mx-auto max-w-xl text-center"
+			className={cn('text-muted-foreground max-w-xl', {
+				'text-left': align === 'left',
+				'mx-auto text-center': align === 'center',
+			})}
 			role="status"
 		>
 			{children}
