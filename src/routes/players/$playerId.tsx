@@ -1,21 +1,39 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { ArrowLeft, ChevronRight } from 'lucide-react'
 import { requireAuth } from '@/integrations/supabase/auth-guard'
-import { PlayerCareerStatsSection } from '@/domains/players/components/player-career-stats-section'
-import { PlayerCareerTitlesSection } from '@/domains/players/components/player-career-titles-section'
+import {
+	PlayerCareerStatsCard,
+	PlayerCareerStatsCardSkeleton,
+} from '@/domains/players/components/cards/player-career-stats-card'
+import {
+	PlayerCareerAchievements,
+	PlayerCareerAchievementsSkeleton,
+} from '@/domains/players/components/player-career-achievements'
 import { playerQueries } from '@/domains/players/queries/players'
 import { seasonQueries } from '@/domains/players/queries/seasons'
-import { Button } from '@/shared/components/ui/button'
-import { Skeleton } from '@/shared/components/ui/skeleton'
+import { Shell, ShellContent } from '@/shared/components/dashboard/shell'
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/shared/components/ui/card'
-import { cn } from '@/shared/lib/utils'
+	Header,
+	HeaderStart,
+	HeaderTitle,
+	HeaderTitleSkeleton,
+} from '@/shared/components/dashboard/header'
+import { BackButton } from '@/shared/components/buttons/back-button'
+import { PlayerSeasonCard } from '@/domains/players/components/cards/player-season-card'
+import {
+	CardList,
+	CardListEmpty,
+	CardListItem,
+	CardListSkeleton,
+} from '@/shared/components/dashboard/card-list'
+import {
+	Section,
+	SectionGroup,
+	SectionHeader,
+	SectionTitle,
+	SectionTitleSkeleton,
+} from '@/shared/components/dashboard/section'
+import { PlayerCareerSummaryHelp } from '@/domains/players/components/player-career-summary-help'
 
 export const Route = createFileRoute('/players/$playerId')({
 	beforeLoad: requireAuth,
@@ -31,132 +49,137 @@ function RouteComponent() {
 		refetchOnWindowFocus: false,
 	})
 
+	return (
+		<Shell>
+			<ShellContent>
+				<Header>
+					<HeaderStart>
+						<BackButton to="/players" />
+						{isLoadingPlayer ? (
+							<HeaderTitleSkeleton />
+						) : (
+							<HeaderTitle>
+								{player
+									? `${player.first_name} ${player.last_name}`
+									: 'Jogador não encontrado'}
+							</HeaderTitle>
+						)}
+					</HeaderStart>
+				</Header>
+
+				{isLoadingPlayer ? (
+					<>
+						<CareerSummarySkeleton />
+						<PlayerSeasonsSkeleton />
+					</>
+				) : player ? (
+					<>
+						<CareerSummary playerId={playerId} />
+						<PlayerSeasons playerId={playerId} />
+					</>
+				) : null}
+			</ShellContent>
+		</Shell>
+	)
+}
+
+function CareerSummarySkeleton() {
+	return (
+		<SectionGroup>
+			<Section>
+				<SectionTitleSkeleton />
+				<PlayerCareerStatsCardSkeleton />
+			</Section>
+			<Section>
+				<SectionTitleSkeleton />
+				<PlayerCareerAchievementsSkeleton />
+			</Section>
+		</SectionGroup>
+	)
+}
+
+function CareerSummary({ playerId }: { playerId: string }) {
 	const { data: careerSummary, isLoading: isLoadingCareerSummary } = useQuery({
 		...seasonQueries.careerSummary(playerId),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
 
+	if (isLoadingCareerSummary) {
+		return <CareerSummarySkeleton />
+	}
+
+	if (!careerSummary) {
+		return null
+	}
+
+	return (
+		<SectionGroup>
+			<Section>
+				<SectionHeader>
+					<SectionTitle>Estatísticas gerais</SectionTitle>
+					<PlayerCareerSummaryHelp />
+				</SectionHeader>
+				<PlayerCareerStatsCard stats={careerSummary.stats} />
+			</Section>
+
+			<Section>
+				<SectionTitle>Títulos conquistados</SectionTitle>
+				<PlayerCareerAchievements
+					achievementGroups={careerSummary.achievementGroups}
+				/>
+			</Section>
+		</SectionGroup>
+	)
+}
+
+function PlayerSeasonsSkeleton() {
+	return (
+		<Section>
+			<SectionTitleSkeleton />
+			<CardListSkeleton count={2} />
+		</Section>
+	)
+}
+
+function PlayerSeasons({ playerId }: { playerId: string }) {
 	const { data: playerSeasons, isLoading: isLoadingPlayerSeasons } = useQuery({
 		...seasonQueries.byPlayer(playerId),
 		throwOnError: true,
 		refetchOnWindowFocus: false,
 	})
 
-	if (!isLoadingPlayer && !player) {
-		return (
-			<main className="flex h-full flex-col items-center px-4 py-8">
-				<div className="w-full max-w-2xl space-y-4">
-					<header className="flex flex-row items-center gap-4">
-						<Button
-							title="Voltar"
-							variant="outline"
-							nativeButton={false}
-							render={
-								<Link to="/players">
-									<ArrowLeft />
-								</Link>
-							}
-						/>
-						<h1 className="text-lg font-medium">Jogador não encontrado!</h1>
-					</header>
-				</div>
-			</main>
-		)
+	if (isLoadingPlayerSeasons) {
+		return <PlayerSeasonsSkeleton />
+	}
+
+	if (!playerSeasons) {
+		return null
 	}
 
 	return (
-		<main className="flex h-full flex-col items-center px-4 py-8">
-			<div className="w-full max-w-2xl space-y-8">
-				<header className="flex flex-row items-center gap-4">
-					<Button
-						title="Voltar"
-						variant="outline"
-						nativeButton={false}
-						render={
-							<Link to="/players">
-								<ArrowLeft />
+		<Section>
+			<SectionTitle>Temporadas</SectionTitle>
+			{playerSeasons.length > 0 ? (
+				<CardList>
+					{playerSeasons.map((season) => (
+						<CardListItem key={season.id}>
+							<Link
+								to="/players/seasons/$seasonId"
+								params={{ seasonId: season.id }}
+							>
+								<PlayerSeasonCard
+									isCurrent={season.isCurrent}
+									title={season.title}
+									playerClubName={season.playerClubName}
+								/>
 							</Link>
-						}
-					/>
-					<h1 className="text-lg font-medium">
-						{isLoadingPlayer ? (
-							<Skeleton className="h-6 w-40" />
-						) : player ? (
-							`${player.first_name} ${player.last_name}`
-						) : null}
-					</h1>
-				</header>
-
-				{isLoadingCareerSummary ? (
-					<div className="space-y-8">
-						<div className="space-y-4">
-							<Skeleton className="h-7 w-48" />
-							<Skeleton className="h-40" />
-						</div>
-						<div className="space-y-4">
-							<Skeleton className="h-7 w-48" />
-							<Skeleton className="h-19.5" />
-							<Skeleton className="h-19.5" />
-						</div>
-					</div>
-				) : careerSummary ? (
-					<div className="flex flex-col gap-8">
-						<PlayerCareerStatsSection stats={careerSummary.stats} />
-						<PlayerCareerTitlesSection
-							titleGroups={careerSummary.titleGroups}
-						/>
-					</div>
-				) : null}
-
-				<section className="space-y-4">
-					<h2 className="text-xl font-semibold">Temporadas</h2>
-					{isLoadingPlayerSeasons ? (
-						<div className="space-y-4">
-							<Skeleton className="h-19.5" />
-							<Skeleton className="h-19.5" />
-							<Skeleton className="h-19.5" />
-						</div>
-					) : playerSeasons ? (
-						playerSeasons.length >= 1 ? (
-							<ul className="space-y-4">
-								{playerSeasons.map((season) => (
-									<li key={season.id}>
-										<Link
-											to="/players/seasons/$seasonId"
-											params={{ seasonId: season.id }}
-										>
-											<Card
-												className={cn(
-													'flex flex-row items-center justify-between gap-4',
-													{
-														'bg-accent text-accent-foreground':
-															season.isCurrent,
-													},
-												)}
-											>
-												<CardHeader className="flex-1">
-													<CardTitle>
-														{season.title} {season.isCurrent ? '(Atual)' : ''}
-													</CardTitle>
-													<CardDescription>
-														{season.playerClubName}
-													</CardDescription>
-												</CardHeader>
-												<CardContent>
-													<ChevronRight />
-												</CardContent>
-											</Card>
-										</Link>
-									</li>
-								))}
-							</ul>
-						) : (
-							<p>Nenhuma temporada encontrada!</p>
-						)
-					) : null}
-				</section>
-			</div>
-		</main>
+						</CardListItem>
+					))}
+				</CardList>
+			) : (
+				<CardListEmpty align="left">Nenhuma temporada encontrada</CardListEmpty>
+			)}
+		</Section>
 	)
 }

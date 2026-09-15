@@ -2,7 +2,7 @@ import type { AchievementType } from '../../catalog/achievement-types'
 import type { CompetitionType } from '../../catalog/competition-types'
 import type { PlayerPosition } from '../../catalog/positions'
 import type { CountryCode } from '@/shared/catalog/countries'
-import type { PlayerCareerTitleGroup } from '../../utils/group-player-achievements'
+import type { PlayerCareerAchievementGroup } from '../../utils/group-player-achievements'
 import type { AggregatedPlayerSeasonStats } from '../../utils/aggregate-player-season-stats'
 
 export type SeasonCore = {
@@ -71,7 +71,7 @@ export type SeasonDetail = {
 
 export type CareerSummary = {
 	stats: AggregatedPlayerSeasonStats
-	titleGroups: PlayerCareerTitleGroup[]
+	achievementGroups: PlayerCareerAchievementGroup[]
 }
 
 export type SeasonStatsInput = {

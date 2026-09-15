@@ -268,7 +268,7 @@ export async function getCareerSummary(
 
 	return {
 		stats: aggregatePlayerSeasonStats(stats),
-		titleGroups: groupPlayerAchievements(
+		achievementGroups: groupPlayerAchievements(
 			achievements,
 			clubNameById,
 			seasonById,

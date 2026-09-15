@@ -21,14 +21,14 @@ export type PlayerCareerAchievementItem = {
 	clubName: string
 }
 
-export type PlayerCareerTitleGroup = {
+export type PlayerCareerAchievementGroup = {
 	key: string
 	label: string
 	count: number
 	items: PlayerCareerAchievementItem[]
 }
 
-const TITLE_GROUP_ORDER: Array<{
+const ACHIEVEMENT_GROUP_ORDER: Array<{
 	key: string
 	label: string
 }> = [
@@ -46,8 +46,8 @@ export function groupPlayerAchievements(
 	achievements: PlayerAchievement[],
 	clubNameById: Map<string, string>,
 	seasonById: Map<string, SeasonMetadata>,
-): PlayerCareerTitleGroup[] {
-	const groupedItems = new Map<string, PlayerCareerTitleGroup['items']>()
+): PlayerCareerAchievementGroup[] {
+	const groupedItems = new Map<string, PlayerCareerAchievementGroup['items']>()
 
 	for (const achievement of achievements) {
 		const key = getAchievementGroupKey(achievement)
@@ -69,7 +69,7 @@ export function groupPlayerAchievements(
 		groupedItems.set(key, items)
 	}
 
-	return TITLE_GROUP_ORDER.flatMap(({ key, label }) => {
+	return ACHIEVEMENT_GROUP_ORDER.flatMap(({ key, label }) => {
 		const items = groupedItems.get(key)
 
 		if (!items || items.length === 0) {
