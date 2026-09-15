@@ -1,17 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { ChevronRight, PlusIcon } from 'lucide-react'
-import type { PlayerPosition } from '@/domains/players/catalog/positions'
+import { PlusIcon } from 'lucide-react'
 import { requireAuth } from '@/integrations/supabase/auth-guard'
 import { playerQueries } from '@/domains/players/queries/players'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/shared/components/ui/card'
-import { getPlayerPositionLabel } from '@/domains/players/catalog/positions'
 import { Button } from '@/shared/components/ui/button'
 import {
 	Header,
@@ -25,6 +16,7 @@ import {
 	CardListItem,
 	CardListSkeleton,
 } from '@/shared/components/dashboard/card-list'
+import { PlayerCard } from '@/domains/players/components/cards/player-card'
 
 export const Route = createFileRoute('/players/')({
 	beforeLoad: requireAuth,
@@ -55,7 +47,7 @@ function RouteComponent() {
 	)
 }
 
-const PlayersList = () => {
+function PlayersList() {
 	const { data: players, isLoading: isLoadingPlayers } = useQuery({
 		...playerQueries.all(),
 		throwOnError: true,
@@ -70,13 +62,19 @@ const PlayersList = () => {
 				players.length > 0 ? (
 					<CardList>
 						{players.map((player) => (
-							<PlayerCard
-								key={player.id}
-								id={player.id}
-								firstName={player.first_name}
-								lastName={player.last_name}
-								position={player.position}
-							/>
+							<CardListItem key={player.id}>
+								<Link
+									to="/players/$playerId"
+									title={`Ver jogador ${player.first_name} ${player.last_name}`}
+									params={{ playerId: player.id }}
+								>
+									<PlayerCard
+										firstName={player.first_name}
+										lastName={player.last_name}
+										position={player.position}
+									/>
+								</Link>
+							</CardListItem>
 						))}
 					</CardList>
 				) : (
@@ -87,41 +85,5 @@ const PlayersList = () => {
 				)
 			) : null}
 		</>
-	)
-}
-
-const PlayerCard = ({
-	id,
-	firstName,
-	lastName,
-	position,
-}: {
-	id: string
-	firstName: string
-	lastName: string
-	position: PlayerPosition
-}) => {
-	return (
-		<CardListItem key={id}>
-			<Link
-				to="/players/$playerId"
-				title={`Ver jogador ${firstName} ${lastName}`}
-				params={{ playerId: id }}
-			>
-				<Card className="flex flex-row items-center justify-between gap-4">
-					<CardHeader className="flex-1">
-						<CardTitle>
-							{firstName} {lastName}
-						</CardTitle>
-						<CardDescription>
-							{getPlayerPositionLabel(position)}
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<ChevronRight aria-hidden />
-					</CardContent>
-				</Card>
-			</Link>
-		</CardListItem>
 	)
 }

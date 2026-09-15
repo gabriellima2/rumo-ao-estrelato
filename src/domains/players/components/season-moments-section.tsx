@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import z from 'zod'
 import { momentMutations } from '../queries/moments'
 import { PlayerMomentTypePicker } from './player-moment-type-picker'
-import { PlayerMomentCard } from './player-moment-card'
+import { PlayerMomentCard } from './cards/player-moment-card'
 import type { PlayerMomentEnriched, PlayerMomentType } from '../types'
 import { Button } from '@/shared/components/ui/button'
 import {

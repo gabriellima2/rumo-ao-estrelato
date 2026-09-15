@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { PlayerMomentTypeIcon } from './player-moment-type-icon'
-import type { PlayerMomentEnriched } from '../types'
+import { PlayerMomentTypeIcon } from '../player-moment-type-icon'
+import type { PlayerMomentEnriched } from '@/domains/players/types'
 import {
 	Card,
 	CardContent,
@@ -11,7 +11,15 @@ import {
 } from '@/shared/components/ui/card'
 
 type PlayerMomentCardProps = {
-	moment: PlayerMomentEnriched
+	moment: Pick<
+		PlayerMomentEnriched,
+		| 'player_moment_type_color'
+		| 'player_moment_type_icon'
+		| 'player_moment_type_name'
+		| 'title'
+		| 'description'
+		| 'created_at'
+	>
 }
 
 export function PlayerMomentCard({ moment }: PlayerMomentCardProps) {
