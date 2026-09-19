@@ -1,6 +1,7 @@
 import { Button as ButtonPrimitive } from '@base-ui/react/button'
 import { cva } from 'class-variance-authority'
 import { Spinner } from './spinner'
+import { Skeleton } from './skeleton'
 import type { VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/shared/lib/utils'
@@ -71,4 +72,30 @@ function Button({
 	)
 }
 
-export { Button, buttonVariants }
+function ButtonSkeleton({
+	size = 'default',
+	className,
+}: {
+	size?: VariantProps<typeof buttonVariants>['size']
+	className?: string
+}) {
+	return (
+		<Skeleton
+			className={cn(
+				{
+					'h-6 w-14 rounded-[min(var(--radius-md),10px)]': size === 'xs',
+					'h-7 w-16 rounded-[min(var(--radius-md),12px)]': size === 'sm',
+					'h-8 w-20': size === 'default',
+					'h-9 w-24': size === 'lg',
+					'size-6 rounded-[min(var(--radius-md),10px)]': size === 'icon-xs',
+					'size-7 rounded-[min(var(--radius-md),12px)]': size === 'icon-sm',
+					'size-8': size === 'icon',
+					'size-9': size === 'icon-lg',
+				},
+				className,
+			)}
+		/>
+	)
+}
+
+export { Button, ButtonSkeleton, buttonVariants }
