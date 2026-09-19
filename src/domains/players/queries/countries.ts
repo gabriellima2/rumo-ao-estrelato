@@ -7,5 +7,6 @@ export const countryQueries = {
 			queryKey: ['countries-options'],
 			queryFn: listCountriesOptions,
 			staleTime: Infinity,
+			refetchOnWindowFocus: false,
 		}),
 }

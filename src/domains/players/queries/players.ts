@@ -6,11 +6,13 @@ export const playerQueries = {
 		queryOptions({
 			queryKey: ['players'],
 			queryFn: listPlayers,
+			refetchOnWindowFocus: false,
 		}),
 	byId: (id: string) =>
 		queryOptions({
 			queryKey: ['players', id],
 			queryFn: () => getPlayerById(id),
+			refetchOnWindowFocus: false,
 		}),
 }
 

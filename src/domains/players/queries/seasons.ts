@@ -12,16 +12,19 @@ export const seasonQueries = {
 		queryOptions({
 			queryKey: ['player-seasons', playerId],
 			queryFn: () => listSeasonsByPlayer(playerId),
+			refetchOnWindowFocus: false,
 		}),
 	detail: (seasonId: string) =>
 		queryOptions({
 			queryKey: ['season-detail', seasonId],
 			queryFn: () => getSeasonDetail(seasonId),
+			refetchOnWindowFocus: false,
 		}),
 	careerSummary: (playerId: string) =>
 		queryOptions({
 			queryKey: ['player-career-summary', playerId],
 			queryFn: () => getCareerSummary(playerId),
+			refetchOnWindowFocus: false,
 		}),
 }
 

@@ -91,7 +91,6 @@ function RouteComponent() {
 	const { data: seasonDetail, isLoading } = useQuery({
 		...seasonQueries.detail(seasonId),
 		throwOnError: true,
-		refetchOnWindowFocus: false,
 	})
 
 	const { mutateAsync: finalizeSeason, isPending } = useMutation({

@@ -51,7 +51,6 @@ function PlayersList() {
 	const { data: players, isLoading: isLoadingPlayers } = useQuery({
 		...playerQueries.all(),
 		throwOnError: true,
-		refetchOnWindowFocus: false,
 	})
 
 	return (

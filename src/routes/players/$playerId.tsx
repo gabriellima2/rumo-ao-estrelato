@@ -46,7 +46,6 @@ function RouteComponent() {
 	const { data: player, isLoading: isLoadingPlayer } = useQuery({
 		...playerQueries.byId(playerId),
 		throwOnError: true,
-		refetchOnWindowFocus: false,
 	})
 
 	return (
@@ -102,7 +101,6 @@ function CareerSummary({ playerId }: { playerId: string }) {
 	const { data: careerSummary, isLoading: isLoadingCareerSummary } = useQuery({
 		...seasonQueries.careerSummary(playerId),
 		throwOnError: true,
-		refetchOnWindowFocus: false,
 	})
 
 	if (isLoadingCareerSummary) {
@@ -146,7 +144,6 @@ function PlayerSeasons({ playerId }: { playerId: string }) {
 	const { data: playerSeasons, isLoading: isLoadingPlayerSeasons } = useQuery({
 		...seasonQueries.byPlayer(playerId),
 		throwOnError: true,
-		refetchOnWindowFocus: false,
 	})
 
 	if (isLoadingPlayerSeasons) {

@@ -7,5 +7,6 @@ export const momentTypeQueries = {
 			queryKey: ['player-moment-types'],
 			queryFn: listMomentTypes,
 			staleTime: Infinity,
+			refetchOnWindowFocus: false,
 		}),
 }
