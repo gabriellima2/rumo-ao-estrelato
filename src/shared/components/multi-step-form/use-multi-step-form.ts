@@ -1,15 +1,17 @@
 import { useCallback, useMemo, useState } from 'react'
 import type { MultiStepFormStep } from './multi-step-form-context'
 
-type UseMultiStepFormOptions = {
-	steps: ReadonlyArray<MultiStepFormStep>
+type UseMultiStepFormOptions<T extends string> = {
+	steps: ReadonlyArray<MultiStepFormStep<T>>
 	initialStepIndex?: number
+	validateCurrentStep: (stepId: T) => boolean
 }
 
-export function useMultiStepForm({
+export function useMultiStepForm<T extends string>({
 	steps,
 	initialStepIndex = 0,
-}: UseMultiStepFormOptions) {
+	validateCurrentStep,
+}: UseMultiStepFormOptions<T>) {
 	const [currentStepIndex, setCurrentStepIndex] = useState(initialStepIndex)
 
 	const currentStep = steps[currentStepIndex]
@@ -27,8 +29,10 @@ export function useMultiStepForm({
 	)
 
 	const goNext = useCallback(() => {
-		setCurrentStepIndex((index) => Math.min(index + 1, steps.length - 1))
-	}, [steps.length])
+		if (validateCurrentStep(currentStep.id)) {
+			setCurrentStepIndex((index) => Math.min(index + 1, steps.length - 1))
+		}
+	}, [steps.length, currentStep.id, validateCurrentStep])
 
 	const goBack = useCallback(() => {
 		setCurrentStepIndex((index) => Math.max(index - 1, 0))

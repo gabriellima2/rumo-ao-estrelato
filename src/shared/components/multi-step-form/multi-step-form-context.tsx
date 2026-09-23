@@ -1,7 +1,7 @@
 import { createContext, use } from 'react'
 
-export type MultiStepFormStep = {
-	id: string
+export type MultiStepFormStep<T extends string = string> = {
+	id: T
 }
 
 type MultiStepFormContextValue = {
