@@ -25,3 +25,10 @@ export const COMPETITION_TYPE_LABELS: Record<CompetitionType, string> = {
 
 export const getCompetitionTypeLabel = (competitionType: CompetitionType) =>
 	COMPETITION_TYPE_LABELS[competitionType]
+
+export const COMPETITION_TYPE_OPTIONS = Object.values(CompetitionTypes).map(
+	(type) => ({
+		value: type,
+		label: COMPETITION_TYPE_LABELS[type],
+	}),
+)
