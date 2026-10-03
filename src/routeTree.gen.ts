@@ -9,25 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as LoginRouteImport } from './routes/login'
+import { Route as ProtectedRouteImport } from './routes/_protected'
+import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PlayersIndexRouteImport } from './routes/players/index'
-import { Route as PlayersCreateRouteImport } from './routes/players/create'
-import { Route as PlayersPlayerIdRouteImport } from './routes/players/$playerId'
-import { Route as PlayersSeasonsSeasonIdRouteImport } from './routes/players/seasons/$seasonId'
-import { Route as PlayersSeasonsSeasonIdIndexRouteImport } from './routes/players/seasons/$seasonId.index'
-import { Route as PlayersSeasonsSeasonIdTransferRouteImport } from './routes/players/seasons/$seasonId.transfer'
-import { Route as PlayersSeasonsSeasonIdFinalizeRouteImport } from './routes/players/seasons/$seasonId.finalize'
+import { Route as ProtectedProtectedRouteImport } from './routes/_protected/protected'
+import { Route as AuthUpdatePasswordRouteImport } from './routes/_auth/update-password'
+import { Route as AuthSignUpSuccessRouteImport } from './routes/_auth/sign-up-success'
+import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as AuthAuthRouteImport } from './routes/_auth/auth'
+import { Route as ProtectedPlayersIndexRouteImport } from './routes/_protected/players/index'
+import { Route as ProtectedPlayersCreateRouteImport } from './routes/_protected/players/create'
+import { Route as ProtectedPlayersPlayerIdRouteImport } from './routes/_protected/players/$playerId'
+import { Route as ProtectedPlayersSeasonsSeasonIdRouteImport } from './routes/_protected/players/seasons/$seasonId'
+import { Route as ProtectedPlayersSeasonsSeasonIdIndexRouteImport } from './routes/_protected/players/seasons/$seasonId.index'
+import { Route as ProtectedPlayersSeasonsSeasonIdTransferRouteImport } from './routes/_protected/players/seasons/$seasonId.transfer'
+import { Route as ProtectedPlayersSeasonsSeasonIdFinalizeRouteImport } from './routes/_protected/players/seasons/$seasonId.finalize'
 
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
+const ProtectedRoute = ProtectedRouteImport.update({
+  id: '/_protected',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -35,87 +40,146 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlayersIndexRoute = PlayersIndexRouteImport.update({
+const ProtectedProtectedRoute = ProtectedProtectedRouteImport.update({
+  id: '/protected',
+  path: '/protected',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const AuthUpdatePasswordRoute = AuthUpdatePasswordRouteImport.update({
+  id: '/update-password',
+  path: '/update-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthSignUpSuccessRoute = AuthSignUpSuccessRouteImport.update({
+  id: '/sign-up-success',
+  path: '/sign-up-success',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthAuthRoute = AuthAuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => AuthRoute,
+} as any)
+const ProtectedPlayersIndexRoute = ProtectedPlayersIndexRouteImport.update({
   id: '/players/',
   path: '/players/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ProtectedRoute,
 } as any)
-const PlayersCreateRoute = PlayersCreateRouteImport.update({
+const ProtectedPlayersCreateRoute = ProtectedPlayersCreateRouteImport.update({
   id: '/players/create',
   path: '/players/create',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ProtectedRoute,
 } as any)
-const PlayersPlayerIdRoute = PlayersPlayerIdRouteImport.update({
-  id: '/players/$playerId',
-  path: '/players/$playerId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlayersSeasonsSeasonIdRoute = PlayersSeasonsSeasonIdRouteImport.update({
-  id: '/players/seasons/$seasonId',
-  path: '/players/seasons/$seasonId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlayersSeasonsSeasonIdIndexRoute =
-  PlayersSeasonsSeasonIdIndexRouteImport.update({
+const ProtectedPlayersPlayerIdRoute =
+  ProtectedPlayersPlayerIdRouteImport.update({
+    id: '/players/$playerId',
+    path: '/players/$playerId',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+const ProtectedPlayersSeasonsSeasonIdRoute =
+  ProtectedPlayersSeasonsSeasonIdRouteImport.update({
+    id: '/players/seasons/$seasonId',
+    path: '/players/seasons/$seasonId',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+const ProtectedPlayersSeasonsSeasonIdIndexRoute =
+  ProtectedPlayersSeasonsSeasonIdIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => PlayersSeasonsSeasonIdRoute,
+    getParentRoute: () => ProtectedPlayersSeasonsSeasonIdRoute,
   } as any)
-const PlayersSeasonsSeasonIdTransferRoute =
-  PlayersSeasonsSeasonIdTransferRouteImport.update({
+const ProtectedPlayersSeasonsSeasonIdTransferRoute =
+  ProtectedPlayersSeasonsSeasonIdTransferRouteImport.update({
     id: '/transfer',
     path: '/transfer',
-    getParentRoute: () => PlayersSeasonsSeasonIdRoute,
+    getParentRoute: () => ProtectedPlayersSeasonsSeasonIdRoute,
   } as any)
-const PlayersSeasonsSeasonIdFinalizeRoute =
-  PlayersSeasonsSeasonIdFinalizeRouteImport.update({
+const ProtectedPlayersSeasonsSeasonIdFinalizeRoute =
+  ProtectedPlayersSeasonsSeasonIdFinalizeRouteImport.update({
     id: '/finalize',
     path: '/finalize',
-    getParentRoute: () => PlayersSeasonsSeasonIdRoute,
+    getParentRoute: () => ProtectedPlayersSeasonsSeasonIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
-  '/players/$playerId': typeof PlayersPlayerIdRoute
-  '/players/create': typeof PlayersCreateRoute
-  '/players/': typeof PlayersIndexRoute
-  '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdRouteWithChildren
-  '/players/seasons/$seasonId/finalize': typeof PlayersSeasonsSeasonIdFinalizeRoute
-  '/players/seasons/$seasonId/transfer': typeof PlayersSeasonsSeasonIdTransferRoute
-  '/players/seasons/$seasonId/': typeof PlayersSeasonsSeasonIdIndexRoute
+  '/auth': typeof AuthAuthRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/login': typeof AuthLoginRoute
+  '/sign-up': typeof AuthSignUpRoute
+  '/sign-up-success': typeof AuthSignUpSuccessRoute
+  '/update-password': typeof AuthUpdatePasswordRoute
+  '/protected': typeof ProtectedProtectedRoute
+  '/players/$playerId': typeof ProtectedPlayersPlayerIdRoute
+  '/players/create': typeof ProtectedPlayersCreateRoute
+  '/players/': typeof ProtectedPlayersIndexRoute
+  '/players/seasons/$seasonId': typeof ProtectedPlayersSeasonsSeasonIdRouteWithChildren
+  '/players/seasons/$seasonId/finalize': typeof ProtectedPlayersSeasonsSeasonIdFinalizeRoute
+  '/players/seasons/$seasonId/transfer': typeof ProtectedPlayersSeasonsSeasonIdTransferRoute
+  '/players/seasons/$seasonId/': typeof ProtectedPlayersSeasonsSeasonIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
-  '/players/$playerId': typeof PlayersPlayerIdRoute
-  '/players/create': typeof PlayersCreateRoute
-  '/players': typeof PlayersIndexRoute
-  '/players/seasons/$seasonId/finalize': typeof PlayersSeasonsSeasonIdFinalizeRoute
-  '/players/seasons/$seasonId/transfer': typeof PlayersSeasonsSeasonIdTransferRoute
-  '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdIndexRoute
+  '/auth': typeof AuthAuthRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/login': typeof AuthLoginRoute
+  '/sign-up': typeof AuthSignUpRoute
+  '/sign-up-success': typeof AuthSignUpSuccessRoute
+  '/update-password': typeof AuthUpdatePasswordRoute
+  '/protected': typeof ProtectedProtectedRoute
+  '/players/$playerId': typeof ProtectedPlayersPlayerIdRoute
+  '/players/create': typeof ProtectedPlayersCreateRoute
+  '/players': typeof ProtectedPlayersIndexRoute
+  '/players/seasons/$seasonId/finalize': typeof ProtectedPlayersSeasonsSeasonIdFinalizeRoute
+  '/players/seasons/$seasonId/transfer': typeof ProtectedPlayersSeasonsSeasonIdTransferRoute
+  '/players/seasons/$seasonId': typeof ProtectedPlayersSeasonsSeasonIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/signup': typeof SignupRoute
-  '/players/$playerId': typeof PlayersPlayerIdRoute
-  '/players/create': typeof PlayersCreateRoute
-  '/players/': typeof PlayersIndexRoute
-  '/players/seasons/$seasonId': typeof PlayersSeasonsSeasonIdRouteWithChildren
-  '/players/seasons/$seasonId/finalize': typeof PlayersSeasonsSeasonIdFinalizeRoute
-  '/players/seasons/$seasonId/transfer': typeof PlayersSeasonsSeasonIdTransferRoute
-  '/players/seasons/$seasonId/': typeof PlayersSeasonsSeasonIdIndexRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/_protected': typeof ProtectedRouteWithChildren
+  '/_auth/auth': typeof AuthAuthRoute
+  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/sign-up': typeof AuthSignUpRoute
+  '/_auth/sign-up-success': typeof AuthSignUpSuccessRoute
+  '/_auth/update-password': typeof AuthUpdatePasswordRoute
+  '/_protected/protected': typeof ProtectedProtectedRoute
+  '/_protected/players/$playerId': typeof ProtectedPlayersPlayerIdRoute
+  '/_protected/players/create': typeof ProtectedPlayersCreateRoute
+  '/_protected/players/': typeof ProtectedPlayersIndexRoute
+  '/_protected/players/seasons/$seasonId': typeof ProtectedPlayersSeasonsSeasonIdRouteWithChildren
+  '/_protected/players/seasons/$seasonId/finalize': typeof ProtectedPlayersSeasonsSeasonIdFinalizeRoute
+  '/_protected/players/seasons/$seasonId/transfer': typeof ProtectedPlayersSeasonsSeasonIdTransferRoute
+  '/_protected/players/seasons/$seasonId/': typeof ProtectedPlayersSeasonsSeasonIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
+    | '/forgot-password'
     | '/login'
-    | '/signup'
+    | '/sign-up'
+    | '/sign-up-success'
+    | '/update-password'
+    | '/protected'
     | '/players/$playerId'
     | '/players/create'
     | '/players/'
@@ -126,8 +190,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
+    | '/forgot-password'
     | '/login'
-    | '/signup'
+    | '/sign-up'
+    | '/sign-up-success'
+    | '/update-password'
+    | '/protected'
     | '/players/$playerId'
     | '/players/create'
     | '/players'
@@ -137,41 +206,44 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/login'
-    | '/signup'
-    | '/players/$playerId'
-    | '/players/create'
-    | '/players/'
-    | '/players/seasons/$seasonId'
-    | '/players/seasons/$seasonId/finalize'
-    | '/players/seasons/$seasonId/transfer'
-    | '/players/seasons/$seasonId/'
+    | '/_auth'
+    | '/_protected'
+    | '/_auth/auth'
+    | '/_auth/forgot-password'
+    | '/_auth/login'
+    | '/_auth/sign-up'
+    | '/_auth/sign-up-success'
+    | '/_auth/update-password'
+    | '/_protected/protected'
+    | '/_protected/players/$playerId'
+    | '/_protected/players/create'
+    | '/_protected/players/'
+    | '/_protected/players/seasons/$seasonId'
+    | '/_protected/players/seasons/$seasonId/finalize'
+    | '/_protected/players/seasons/$seasonId/transfer'
+    | '/_protected/players/seasons/$seasonId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LoginRoute: typeof LoginRoute
-  SignupRoute: typeof SignupRoute
-  PlayersPlayerIdRoute: typeof PlayersPlayerIdRoute
-  PlayersCreateRoute: typeof PlayersCreateRoute
-  PlayersIndexRoute: typeof PlayersIndexRoute
-  PlayersSeasonsSeasonIdRoute: typeof PlayersSeasonsSeasonIdRouteWithChildren
+  AuthRoute: typeof AuthRouteWithChildren
+  ProtectedRoute: typeof ProtectedRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ProtectedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -181,84 +253,173 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/players/': {
-      id: '/players/'
+    '/_protected/protected': {
+      id: '/_protected/protected'
+      path: '/protected'
+      fullPath: '/protected'
+      preLoaderRoute: typeof ProtectedProtectedRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_auth/update-password': {
+      id: '/_auth/update-password'
+      path: '/update-password'
+      fullPath: '/update-password'
+      preLoaderRoute: typeof AuthUpdatePasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/sign-up-success': {
+      id: '/_auth/sign-up-success'
+      path: '/sign-up-success'
+      fullPath: '/sign-up-success'
+      preLoaderRoute: typeof AuthSignUpSuccessRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/auth': {
+      id: '/_auth/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthAuthRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_protected/players/': {
+      id: '/_protected/players/'
       path: '/players'
       fullPath: '/players/'
-      preLoaderRoute: typeof PlayersIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof ProtectedPlayersIndexRouteImport
+      parentRoute: typeof ProtectedRoute
     }
-    '/players/create': {
-      id: '/players/create'
+    '/_protected/players/create': {
+      id: '/_protected/players/create'
       path: '/players/create'
       fullPath: '/players/create'
-      preLoaderRoute: typeof PlayersCreateRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof ProtectedPlayersCreateRouteImport
+      parentRoute: typeof ProtectedRoute
     }
-    '/players/$playerId': {
-      id: '/players/$playerId'
+    '/_protected/players/$playerId': {
+      id: '/_protected/players/$playerId'
       path: '/players/$playerId'
       fullPath: '/players/$playerId'
-      preLoaderRoute: typeof PlayersPlayerIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof ProtectedPlayersPlayerIdRouteImport
+      parentRoute: typeof ProtectedRoute
     }
-    '/players/seasons/$seasonId': {
-      id: '/players/seasons/$seasonId'
+    '/_protected/players/seasons/$seasonId': {
+      id: '/_protected/players/seasons/$seasonId'
       path: '/players/seasons/$seasonId'
       fullPath: '/players/seasons/$seasonId'
-      preLoaderRoute: typeof PlayersSeasonsSeasonIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof ProtectedPlayersSeasonsSeasonIdRouteImport
+      parentRoute: typeof ProtectedRoute
     }
-    '/players/seasons/$seasonId/': {
-      id: '/players/seasons/$seasonId/'
+    '/_protected/players/seasons/$seasonId/': {
+      id: '/_protected/players/seasons/$seasonId/'
       path: '/'
       fullPath: '/players/seasons/$seasonId/'
-      preLoaderRoute: typeof PlayersSeasonsSeasonIdIndexRouteImport
-      parentRoute: typeof PlayersSeasonsSeasonIdRoute
+      preLoaderRoute: typeof ProtectedPlayersSeasonsSeasonIdIndexRouteImport
+      parentRoute: typeof ProtectedPlayersSeasonsSeasonIdRoute
     }
-    '/players/seasons/$seasonId/transfer': {
-      id: '/players/seasons/$seasonId/transfer'
+    '/_protected/players/seasons/$seasonId/transfer': {
+      id: '/_protected/players/seasons/$seasonId/transfer'
       path: '/transfer'
       fullPath: '/players/seasons/$seasonId/transfer'
-      preLoaderRoute: typeof PlayersSeasonsSeasonIdTransferRouteImport
-      parentRoute: typeof PlayersSeasonsSeasonIdRoute
+      preLoaderRoute: typeof ProtectedPlayersSeasonsSeasonIdTransferRouteImport
+      parentRoute: typeof ProtectedPlayersSeasonsSeasonIdRoute
     }
-    '/players/seasons/$seasonId/finalize': {
-      id: '/players/seasons/$seasonId/finalize'
+    '/_protected/players/seasons/$seasonId/finalize': {
+      id: '/_protected/players/seasons/$seasonId/finalize'
       path: '/finalize'
       fullPath: '/players/seasons/$seasonId/finalize'
-      preLoaderRoute: typeof PlayersSeasonsSeasonIdFinalizeRouteImport
-      parentRoute: typeof PlayersSeasonsSeasonIdRoute
+      preLoaderRoute: typeof ProtectedPlayersSeasonsSeasonIdFinalizeRouteImport
+      parentRoute: typeof ProtectedPlayersSeasonsSeasonIdRoute
     }
   }
 }
 
-interface PlayersSeasonsSeasonIdRouteChildren {
-  PlayersSeasonsSeasonIdFinalizeRoute: typeof PlayersSeasonsSeasonIdFinalizeRoute
-  PlayersSeasonsSeasonIdTransferRoute: typeof PlayersSeasonsSeasonIdTransferRoute
-  PlayersSeasonsSeasonIdIndexRoute: typeof PlayersSeasonsSeasonIdIndexRoute
+interface AuthRouteChildren {
+  AuthAuthRoute: typeof AuthAuthRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
+  AuthSignUpSuccessRoute: typeof AuthSignUpSuccessRoute
+  AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
 }
 
-const PlayersSeasonsSeasonIdRouteChildren: PlayersSeasonsSeasonIdRouteChildren =
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthAuthRoute: AuthAuthRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
+  AuthSignUpSuccessRoute: AuthSignUpSuccessRoute,
+  AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface ProtectedPlayersSeasonsSeasonIdRouteChildren {
+  ProtectedPlayersSeasonsSeasonIdFinalizeRoute: typeof ProtectedPlayersSeasonsSeasonIdFinalizeRoute
+  ProtectedPlayersSeasonsSeasonIdTransferRoute: typeof ProtectedPlayersSeasonsSeasonIdTransferRoute
+  ProtectedPlayersSeasonsSeasonIdIndexRoute: typeof ProtectedPlayersSeasonsSeasonIdIndexRoute
+}
+
+const ProtectedPlayersSeasonsSeasonIdRouteChildren: ProtectedPlayersSeasonsSeasonIdRouteChildren =
   {
-    PlayersSeasonsSeasonIdFinalizeRoute: PlayersSeasonsSeasonIdFinalizeRoute,
-    PlayersSeasonsSeasonIdTransferRoute: PlayersSeasonsSeasonIdTransferRoute,
-    PlayersSeasonsSeasonIdIndexRoute: PlayersSeasonsSeasonIdIndexRoute,
+    ProtectedPlayersSeasonsSeasonIdFinalizeRoute:
+      ProtectedPlayersSeasonsSeasonIdFinalizeRoute,
+    ProtectedPlayersSeasonsSeasonIdTransferRoute:
+      ProtectedPlayersSeasonsSeasonIdTransferRoute,
+    ProtectedPlayersSeasonsSeasonIdIndexRoute:
+      ProtectedPlayersSeasonsSeasonIdIndexRoute,
   }
 
-const PlayersSeasonsSeasonIdRouteWithChildren =
-  PlayersSeasonsSeasonIdRoute._addFileChildren(
-    PlayersSeasonsSeasonIdRouteChildren,
+const ProtectedPlayersSeasonsSeasonIdRouteWithChildren =
+  ProtectedPlayersSeasonsSeasonIdRoute._addFileChildren(
+    ProtectedPlayersSeasonsSeasonIdRouteChildren,
   )
+
+interface ProtectedRouteChildren {
+  ProtectedProtectedRoute: typeof ProtectedProtectedRoute
+  ProtectedPlayersPlayerIdRoute: typeof ProtectedPlayersPlayerIdRoute
+  ProtectedPlayersCreateRoute: typeof ProtectedPlayersCreateRoute
+  ProtectedPlayersIndexRoute: typeof ProtectedPlayersIndexRoute
+  ProtectedPlayersSeasonsSeasonIdRoute: typeof ProtectedPlayersSeasonsSeasonIdRouteWithChildren
+}
+
+const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedProtectedRoute: ProtectedProtectedRoute,
+  ProtectedPlayersPlayerIdRoute: ProtectedPlayersPlayerIdRoute,
+  ProtectedPlayersCreateRoute: ProtectedPlayersCreateRoute,
+  ProtectedPlayersIndexRoute: ProtectedPlayersIndexRoute,
+  ProtectedPlayersSeasonsSeasonIdRoute:
+    ProtectedPlayersSeasonsSeasonIdRouteWithChildren,
+}
+
+const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
+  ProtectedRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LoginRoute: LoginRoute,
-  SignupRoute: SignupRoute,
-  PlayersPlayerIdRoute: PlayersPlayerIdRoute,
-  PlayersCreateRoute: PlayersCreateRoute,
-  PlayersIndexRoute: PlayersIndexRoute,
-  PlayersSeasonsSeasonIdRoute: PlayersSeasonsSeasonIdRouteWithChildren,
+  AuthRoute: AuthRouteWithChildren,
+  ProtectedRoute: ProtectedRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

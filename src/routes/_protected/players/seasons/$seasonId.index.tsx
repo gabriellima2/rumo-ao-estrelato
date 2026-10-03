@@ -41,7 +41,7 @@ import {
 	PlayerMomentsFormSkeleton,
 } from '@/domains/players/components/player-moments-form'
 
-export const Route = createFileRoute('/players/seasons/$seasonId/')({
+export const Route = createFileRoute('/_protected/players/seasons/$seasonId/')({
 	component: RouteComponent,
 })
 

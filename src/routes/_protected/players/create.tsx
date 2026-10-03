@@ -5,7 +5,6 @@ import { useMutation } from '@tanstack/react-query'
 import { SaveIcon } from 'lucide-react'
 import type { Gender } from '@/shared/catalog/genders'
 import type { PlayerPosition } from '@/domains/players/catalog/positions'
-import { requireAuth } from '@/integrations/supabase/auth-guard'
 import { Button } from '@/shared/components/ui/button'
 import {
 	Field,
@@ -38,8 +37,7 @@ import {
 	PLAYER_VALIDATIONS,
 } from '@/domains/players/validations'
 
-export const Route = createFileRoute('/players/create')({
-	beforeLoad: requireAuth,
+export const Route = createFileRoute('/_protected/players/create')({
 	component: RouteComponent,
 })
 

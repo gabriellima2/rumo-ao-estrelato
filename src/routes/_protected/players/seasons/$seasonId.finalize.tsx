@@ -1,8 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { seasonQueries } from '@/domains/players/queries/seasons'
-import { TransferSeasonForm } from '@/domains/players/components/transfer-season-form'
-import { TransferSeasonFormSkeleton } from '@/domains/players/components/transfer-season-form/skeleton'
+import { FinalizeSeasonForm } from '@/domains/players/components/finalize-season-form'
 import { Shell, ShellContent } from '@/shared/components/dashboard/shell'
 import {
 	Header,
@@ -11,8 +10,11 @@ import {
 	HeaderTitleSkeleton,
 } from '@/shared/components/dashboard/header'
 import { BackButton } from '@/shared/components/buttons/back-button'
+import { FinalizeSeasonFormSkeleton } from '@/domains/players/components/finalize-season-form/skeleton'
 
-export const Route = createFileRoute('/players/seasons/$seasonId/transfer')({
+export const Route = createFileRoute(
+	'/_protected/players/seasons/$seasonId/finalize',
+)({
 	component: RouteComponent,
 })
 
@@ -36,8 +38,8 @@ function RouteComponent() {
 							<HeaderTitle>
 								{seasonDetail
 									? seasonDetail.season.isCurrent
-										? 'Registrar transferência'
-										: 'Esta temporada não pode receber transferência'
+										? 'Finalizar temporada'
+										: 'Esta temporada não pode ser finalizada'
 									: 'Temporada não encontrada'}
 							</HeaderTitle>
 						)}
@@ -45,10 +47,10 @@ function RouteComponent() {
 				</Header>
 
 				{isLoading ? (
-					<TransferSeasonFormSkeleton />
-				) : seasonDetail?.season.isCurrent ? (
-					<TransferSeasonForm
-						currentSeasonId={seasonDetail.season.currentSeasonId}
+					<FinalizeSeasonFormSkeleton />
+				) : seasonDetail ? (
+					<FinalizeSeasonForm
+						seasonId={seasonId}
 						currentClubName={seasonDetail.club.name}
 					/>
 				) : null}

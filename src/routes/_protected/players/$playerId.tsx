@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { requireAuth } from '@/integrations/supabase/auth-guard'
 import {
 	PlayerCareerStatsCard,
 	PlayerCareerStatsCardSkeleton,
@@ -35,8 +34,7 @@ import {
 } from '@/shared/components/dashboard/section'
 import { PlayerCareerSummaryHelp } from '@/domains/players/components/player-career-summary-help'
 
-export const Route = createFileRoute('/players/$playerId')({
-	beforeLoad: requireAuth,
+export const Route = createFileRoute('/_protected/players/$playerId')({
 	component: RouteComponent,
 })
 

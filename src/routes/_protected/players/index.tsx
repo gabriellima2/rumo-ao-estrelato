@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { PlusIcon } from 'lucide-react'
-import { requireAuth } from '@/integrations/supabase/auth-guard'
 import { playerQueries } from '@/domains/players/queries/players'
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -17,9 +16,9 @@ import {
 	CardListSkeleton,
 } from '@/shared/components/dashboard/card-list'
 import { PlayerCard } from '@/domains/players/components/cards/player-card'
+import { SignOutButton } from '@/shared/components/buttons/sign-out-button'
 
-export const Route = createFileRoute('/players/')({
-	beforeLoad: requireAuth,
+export const Route = createFileRoute('/_protected/players/')({
 	component: RouteComponent,
 })
 
@@ -38,6 +37,7 @@ function RouteComponent() {
 								</Link>
 							}
 						/>
+						<SignOutButton />
 					</HeaderActions>
 				</Header>
 
