@@ -1,8 +1,9 @@
 import type { CreatePlayerCareerInput } from './types/players'
 import type { PlayerEnriched } from '../types/database'
-import { supabase } from '@/integrations/supabase/client'
+import { createClient } from '@/integrations/supabase/client'
 
 export async function listPlayers(): Promise<PlayerEnriched[]> {
+	const supabase = createClient()
 	const { data, error } = await supabase
 		.from('players_enriched')
 		.select('*')
@@ -15,6 +16,7 @@ export async function listPlayers(): Promise<PlayerEnriched[]> {
 export async function getPlayerById(
 	id: string,
 ): Promise<PlayerEnriched | undefined> {
+	const supabase = createClient()
 	const { data, error } = await supabase
 		.from('players_enriched')
 		.select('*')
@@ -26,6 +28,7 @@ export async function getPlayerById(
 }
 
 export async function createPlayerCareer(input: CreatePlayerCareerInput) {
+	const supabase = createClient()
 	const { data, error } = await supabase.rpc('create_player_career', {
 		p_first_name: input.firstName,
 		p_last_name: input.lastName,

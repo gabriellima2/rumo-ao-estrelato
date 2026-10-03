@@ -1,10 +1,11 @@
 import type { CreateMomentInput } from './types/moments'
 import type { PlayerMomentEnriched } from '../types/database'
-import { supabase } from '@/integrations/supabase/client'
+import { createClient } from '@/integrations/supabase/client'
 
 export async function listMomentsBySeason(
 	seasonId: string,
 ): Promise<PlayerMomentEnriched[]> {
+	const supabase = createClient()
 	const { data, error } = await supabase
 		.from('player_moments_enriched')
 		.select('*')
@@ -20,6 +21,7 @@ export async function listMomentsBySeasonIds(
 ): Promise<PlayerMomentEnriched[]> {
 	if (seasonIds.length === 0) return []
 
+	const supabase = createClient()
 	const { data, error } = await supabase
 		.from('player_moments_enriched')
 		.select('*')
@@ -31,6 +33,7 @@ export async function listMomentsBySeasonIds(
 }
 
 export async function createMoment(input: CreateMomentInput): Promise<void> {
+	const supabase = createClient()
 	const description = input.description?.trim()
 
 	const { error } = await supabase.from('player_moments').insert({

@@ -17,7 +17,7 @@ import type {
 	SeasonStatsView,
 	TransferSeasonInput,
 } from './types/seasons'
-import { supabase } from '@/integrations/supabase/client'
+import { createClient } from '@/integrations/supabase/client'
 
 function toSeasonCore(row: PlayerSeasonEnriched): SeasonCore {
 	return {
@@ -87,6 +87,7 @@ function toStatsView(stats: PlayerSeasonStats): SeasonStatsView {
 async function getSeasonById(
 	seasonId: string,
 ): Promise<SeasonCore | undefined> {
+	const supabase = createClient()
 	const { data, error } = await supabase
 		.from('player_seasons_enriched')
 		.select('*')
@@ -102,6 +103,7 @@ async function getSeasonById(
 async function getSeasonStatsBySeasonId(
 	seasonId: string,
 ): Promise<PlayerSeasonStats | undefined> {
+	const supabase = createClient()
 	const { data, error } = await supabase
 		.from('player_season_stats')
 		.select('*')
@@ -113,6 +115,7 @@ async function getSeasonStatsBySeasonId(
 }
 
 async function getClubById(clubId: string): Promise<PlayerClub | undefined> {
+	const supabase = createClient()
 	const { data, error } = await supabase
 		.from('player_clubs')
 		.select('*')
@@ -126,6 +129,7 @@ async function getClubById(clubId: string): Promise<PlayerClub | undefined> {
 export async function listSeasonsByPlayer(
 	playerId: string,
 ): Promise<SeasonListItem[]> {
+	const supabase = createClient()
 	const { data, error } = await supabase
 		.from('player_seasons_enriched')
 		.select('*')
@@ -148,6 +152,7 @@ async function getSeasonSegments(seasonId: string): Promise<SeasonCore[]> {
 	const season = await getSeasonById(seasonId)
 	if (!season) return []
 
+	const supabase = createClient()
 	const { data, error } = await supabase
 		.from('player_seasons_enriched')
 		.select('*')
@@ -236,6 +241,7 @@ export async function getSeasonDetail(
 export async function getCareerSummary(
 	playerId: string,
 ): Promise<CareerSummary> {
+	const supabase = createClient()
 	const [statsResult, achievementsResult, clubsResult] = await Promise.all([
 		supabase.from('player_season_stats').select('*').eq('player_id', playerId),
 		supabase.from('player_achievements').select('*').eq('player_id', playerId),
@@ -277,6 +283,7 @@ export async function getCareerSummary(
 }
 
 export async function finalizeSeason(input: FinalizeSeasonInput) {
+	const supabase = createClient()
 	const { data, error } = await supabase.rpc('finalize_season', {
 		p_season_id: input.seasonId,
 		p_stats: input.stats,
@@ -298,6 +305,7 @@ export async function finalizeSeason(input: FinalizeSeasonInput) {
 }
 
 export async function transferSeason(input: TransferSeasonInput) {
+	const supabase = createClient()
 	const { data, error } = await supabase.rpc('transfer_season', {
 		p_season_id: input.seasonId,
 		p_stats: input.stats,
