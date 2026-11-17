@@ -6,6 +6,7 @@ import {
 	PlayerSeasonClubStats,
 	PlayerSeasonClubStatsSkeleton,
 } from '@/domains/players/components/player-season-club-stats'
+import { PlayerSeasonHeaderActions } from '@/domains/players/components/player-season-header-actions'
 import {
 	PlayerSeasonInfo,
 	PlayerSeasonInfoSkeleton,
@@ -104,25 +105,28 @@ function RouteComponent() {
 							)}
 						</HeaderTextGroup>
 					</HeaderStart>
+					{season ? (
+						<PlayerSeasonHeaderActions
+							isCurrentSeason={season.isCurrent}
+							currentSeasonId={season.currentSeasonId}
+						/>
+					) : null}
 				</Header>
 
 				{isLoadingSeasonDetail ? (
 					<>
 						<PlayerSeasonInfoSkeleton />
-						<PlayerSeasonClubStatsSectionSkeleton />
+						<PlayerSeasonClubStatsSkeleton />
 						<PlayerMomentsSectionSkeleton />
 					</>
 				) : seasonDetail && season && player ? (
 					<>
 						<PlayerSeasonInfo seasonDetail={seasonDetail} />
 						<SectionGroup>
-							<Section>
-								<SectionTitle>Estatísticas por clube</SectionTitle>
-								<PlayerSeasonClubStats
-									segments={segments}
-									isCurrentSeason={season.isCurrent}
-								/>
-							</Section>
+							<PlayerSeasonClubStats
+								segments={segments}
+								isCurrentSeason={season.isCurrent}
+							/>
 							<PlayerMomentsSection
 								playerId={player.id}
 								segmentSeasonIds={segmentSeasonIds}
@@ -134,15 +138,6 @@ function RouteComponent() {
 				) : null}
 			</ShellContent>
 		</Shell>
-	)
-}
-
-function PlayerSeasonClubStatsSectionSkeleton() {
-	return (
-		<Section>
-			<SectionTitleSkeleton />
-			<PlayerSeasonClubStatsSkeleton />
-		</Section>
 	)
 }
 
@@ -168,7 +163,7 @@ function PlayerMomentsSection({
 	isCurrentSeason: boolean
 }) {
 	const { data: momentTypes, isLoading: isLoadingMomentTypes } = useQuery({
-		...momentTypeQueries.all(),
+		...momentTypeQueries.selectable(),
 		throwOnError: true,
 	})
 

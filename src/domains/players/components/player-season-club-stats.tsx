@@ -14,6 +14,11 @@ import {
 	CardListItem,
 	CardListSkeleton,
 } from '@/shared/components/dashboard/card-list'
+import {
+	Section,
+	SectionTitle,
+	SectionTitleSkeleton,
+} from '@/shared/components/dashboard/section'
 
 type PlayerSeasonClubStatsProps = {
 	segments: SeasonDetailSegment[]
@@ -24,14 +29,17 @@ export function PlayerSeasonClubStats({
 	segments,
 	isCurrentSeason,
 }: PlayerSeasonClubStatsProps) {
-	const [expandedSeasonId, setExpandedSeasonId] = useState<string | null>(null)
-
 	const hasStats = useMemo(
 		() => segments.some((segment) => segment.stats),
 		[segments],
 	)
 
 	const hasMultipleSegments = segments.length > 1
+	const isSingleClubPastSeason = !isCurrentSeason && !hasMultipleSegments
+
+	const [expandedSeasonId, setExpandedSeasonId] = useState<string | null>(() =>
+		isSingleClubPastSeason && segments[0] ? segments[0].seasonId : null,
+	)
 
 	function toggleSegment(seasonId: string) {
 		setExpandedSeasonId((current) => (current === seasonId ? null : seasonId))
@@ -42,83 +50,93 @@ export function PlayerSeasonClubStats({
 	}
 
 	return (
-		<CardList>
-			{segments.map((segment) => {
-				const isExpanded = expandedSeasonId === segment.seasonId
-				const showCurrentBadge = isCurrentSeason && segment.isCurrent
+		<Section>
+			{isSingleClubPastSeason ? null : (
+				<SectionTitle>Estatísticas por clube</SectionTitle>
+			)}
+			<CardList>
+				{segments.map((segment) => {
+					const isExpanded = expandedSeasonId === segment.seasonId
+					const showCurrentBadge = isCurrentSeason && segment.isCurrent
 
-				return (
-					<CardListItem key={segment.seasonId}>
-						<button
-							type="button"
-							className="w-full text-left"
-							onClick={() => toggleSegment(segment.seasonId)}
-							aria-expanded={isExpanded}
-						>
-							<Card
-								className={cn(
-									'flex flex-row items-center justify-between gap-4',
-									showCurrentBadge &&
-										'border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30',
-									isExpanded && 'border-primary/40',
-								)}
+					return (
+						<CardListItem key={segment.seasonId}>
+							<button
+								type="button"
+								className="w-full text-left"
+								onClick={() => toggleSegment(segment.seasonId)}
+								aria-expanded={isExpanded}
 							>
-								<CardHeader className="flex-1">
-									<CardTitle className="flex items-center gap-2 text-lg">
-										{segment.club.name}
-										{showCurrentBadge ? (
-											<span className="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
-												Atual
-											</span>
-										) : null}
-									</CardTitle>
-									<CardDescription>
-										{hasMultipleSegments
-											? `Passagem ${segment.stintIndex}`
-											: 'Clube'}
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<ChevronDown
-										className={cn(
-											'transition-transform duration-200',
-											isExpanded && 'rotate-180',
-										)}
-									/>
-								</CardContent>
-							</Card>
-						</button>
-						{isExpanded ? (
-							<div className="mt-2">
-								{segment.stats ? (
-									<dl className="bg-card grid grid-cols-2 gap-3 rounded-lg border p-3 sm:grid-cols-3">
-										{STAT_LABELS.map(({ key, label }) => (
-											<div key={key}>
-												<dt className="text-muted-foreground text-xs">
-													{label}
-												</dt>
-												<dd className="text-sm font-medium">
-													{segment.stats![key]}
-												</dd>
-											</div>
-										))}
-									</dl>
-								) : (
-									<p className="bg-card text-muted-foreground rounded-lg border p-3 text-sm">
-										Em andamento
-									</p>
-								)}
-							</div>
-						) : null}
-					</CardListItem>
-				)
-			})}
-		</CardList>
+								<Card
+									className={cn(
+										'flex flex-row items-center justify-between gap-4',
+										showCurrentBadge &&
+											'border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950/30',
+										isExpanded && 'border-primary/40',
+									)}
+								>
+									<CardHeader className="flex-1">
+										<CardTitle className="flex items-center gap-2 text-lg">
+											{segment.club.name}
+											{showCurrentBadge ? (
+												<span className="rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
+													Atual
+												</span>
+											) : null}
+										</CardTitle>
+										<CardDescription>
+											{hasMultipleSegments
+												? `Passagem ${segment.stintIndex}`
+												: 'Clube'}
+										</CardDescription>
+									</CardHeader>
+									<CardContent>
+										<ChevronDown
+											className={cn(
+												'transition-transform duration-200',
+												isExpanded && 'rotate-180',
+											)}
+										/>
+									</CardContent>
+								</Card>
+							</button>
+							{isExpanded ? (
+								<div className="mt-2">
+									{segment.stats ? (
+										<dl className="bg-card grid grid-cols-2 gap-3 rounded-lg border p-3 sm:grid-cols-3">
+											{STAT_LABELS.map(({ key, label }) => (
+												<div key={key}>
+													<dt className="text-muted-foreground text-xs">
+														{label}
+													</dt>
+													<dd className="text-sm font-medium">
+														{segment.stats![key]}
+													</dd>
+												</div>
+											))}
+										</dl>
+									) : (
+										<p className="bg-card text-muted-foreground rounded-lg border p-3 text-sm">
+											Em andamento
+										</p>
+									)}
+								</div>
+							) : null}
+						</CardListItem>
+					)
+				})}
+			</CardList>
+		</Section>
 	)
 }
 
 export function PlayerSeasonClubStatsSkeleton() {
-	return <CardListSkeleton count={1} />
+	return (
+		<Section>
+			<SectionTitleSkeleton />
+			<CardListSkeleton count={1} />
+		</Section>
+	)
 }
 
 const STAT_LABELS = [

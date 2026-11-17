@@ -19,4 +19,5 @@ export type PlayerMomentType = {
 	icon: string
 	color: string
 	is_system: boolean
+	is_selectable: boolean
 }

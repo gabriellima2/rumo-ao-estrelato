@@ -285,6 +285,7 @@ export type Database = {
 					icon: string
 					color: string
 					is_system: boolean
+					is_selectable: boolean
 					created_at: string
 				}
 				Insert: {
@@ -295,6 +296,7 @@ export type Database = {
 					icon: string
 					color: string
 					is_system?: boolean
+					is_selectable?: boolean
 					created_at?: string
 				}
 				Update: {
@@ -305,6 +307,7 @@ export type Database = {
 					icon?: string
 					color?: string
 					is_system?: boolean
+					is_selectable?: boolean
 					created_at?: string
 				}
 				Relationships: []
