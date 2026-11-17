@@ -3,7 +3,10 @@ import { cn } from '@/shared/lib/utils'
 export function Shell({ className, ...props }: React.ComponentProps<'main'>) {
 	return (
 		<main
-			className={cn('flex h-full flex-col items-center px-4 py-6', className)}
+			className={cn(
+				'flex min-h-svh w-full flex-col items-center px-4 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))]',
+				className,
+			)}
 			{...props}
 		/>
 	)
