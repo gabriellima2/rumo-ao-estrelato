@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ProtectedProtectedRouteImport } from './routes/_protected/protected'
 import { Route as AuthUpdatePasswordRouteImport } from './routes/_auth/update-password'
 import { Route as AuthSignUpSuccessRouteImport } from './routes/_auth/sign-up-success'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
@@ -39,11 +38,6 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const ProtectedProtectedRoute = ProtectedProtectedRouteImport.update({
-  id: '/protected',
-  path: '/protected',
-  getParentRoute: () => ProtectedRoute,
 } as any)
 const AuthUpdatePasswordRoute = AuthUpdatePasswordRouteImport.update({
   id: '/update-password',
@@ -124,7 +118,6 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof AuthSignUpRoute
   '/sign-up-success': typeof AuthSignUpSuccessRoute
   '/update-password': typeof AuthUpdatePasswordRoute
-  '/protected': typeof ProtectedProtectedRoute
   '/players/$playerId': typeof ProtectedPlayersPlayerIdRoute
   '/players/create': typeof ProtectedPlayersCreateRoute
   '/players/': typeof ProtectedPlayersIndexRoute
@@ -141,7 +134,6 @@ export interface FileRoutesByTo {
   '/sign-up': typeof AuthSignUpRoute
   '/sign-up-success': typeof AuthSignUpSuccessRoute
   '/update-password': typeof AuthUpdatePasswordRoute
-  '/protected': typeof ProtectedProtectedRoute
   '/players/$playerId': typeof ProtectedPlayersPlayerIdRoute
   '/players/create': typeof ProtectedPlayersCreateRoute
   '/players': typeof ProtectedPlayersIndexRoute
@@ -160,7 +152,6 @@ export interface FileRoutesById {
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_auth/sign-up-success': typeof AuthSignUpSuccessRoute
   '/_auth/update-password': typeof AuthUpdatePasswordRoute
-  '/_protected/protected': typeof ProtectedProtectedRoute
   '/_protected/players/$playerId': typeof ProtectedPlayersPlayerIdRoute
   '/_protected/players/create': typeof ProtectedPlayersCreateRoute
   '/_protected/players/': typeof ProtectedPlayersIndexRoute
@@ -179,7 +170,6 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/sign-up-success'
     | '/update-password'
-    | '/protected'
     | '/players/$playerId'
     | '/players/create'
     | '/players/'
@@ -196,7 +186,6 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/sign-up-success'
     | '/update-password'
-    | '/protected'
     | '/players/$playerId'
     | '/players/create'
     | '/players'
@@ -214,7 +203,6 @@ export interface FileRouteTypes {
     | '/_auth/sign-up'
     | '/_auth/sign-up-success'
     | '/_auth/update-password'
-    | '/_protected/protected'
     | '/_protected/players/$playerId'
     | '/_protected/players/create'
     | '/_protected/players/'
@@ -252,13 +240,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_protected/protected': {
-      id: '/_protected/protected'
-      path: '/protected'
-      fullPath: '/protected'
-      preLoaderRoute: typeof ProtectedProtectedRouteImport
-      parentRoute: typeof ProtectedRoute
     }
     '/_auth/update-password': {
       id: '/_auth/update-password'
@@ -396,7 +377,6 @@ const ProtectedPlayersSeasonsSeasonIdRouteWithChildren =
   )
 
 interface ProtectedRouteChildren {
-  ProtectedProtectedRoute: typeof ProtectedProtectedRoute
   ProtectedPlayersPlayerIdRoute: typeof ProtectedPlayersPlayerIdRoute
   ProtectedPlayersCreateRoute: typeof ProtectedPlayersCreateRoute
   ProtectedPlayersIndexRoute: typeof ProtectedPlayersIndexRoute
@@ -404,7 +384,6 @@ interface ProtectedRouteChildren {
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedProtectedRoute: ProtectedProtectedRoute,
   ProtectedPlayersPlayerIdRoute: ProtectedPlayersPlayerIdRoute,
   ProtectedPlayersCreateRoute: ProtectedPlayersCreateRoute,
   ProtectedPlayersIndexRoute: ProtectedPlayersIndexRoute,

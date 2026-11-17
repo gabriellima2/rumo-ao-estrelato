@@ -39,7 +39,7 @@ export function LoginForm({
 			// the OAuth consent screen sent the user here to sign in first. It may point outside
 			// the typed route tree, so it needs a full navigation.
 			const next = new URLSearchParams(window.location.search).get('next')
-			window.location.assign(safeNextPath(next, '/protected'))
+			window.location.assign(safeNextPath(next, '/players'))
 		} catch (err: unknown) {
 			setError(err instanceof Error ? err.message : 'An error occurred')
 		} finally {
