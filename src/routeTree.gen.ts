@@ -17,7 +17,6 @@ import { Route as AuthSignUpSuccessRouteImport } from './routes/_auth/sign-up-su
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
-import { Route as AuthAuthRouteImport } from './routes/_auth/auth'
 import { Route as ProtectedPlayersIndexRouteImport } from './routes/_protected/players/index'
 import { Route as ProtectedPlayersCreateRouteImport } from './routes/_protected/players/create'
 import { Route as ProtectedPlayersPlayerIdRouteImport } from './routes/_protected/players/$playerId'
@@ -64,11 +63,6 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthAuthRoute = AuthAuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => AuthRoute,
-} as any)
 const ProtectedPlayersIndexRoute = ProtectedPlayersIndexRouteImport.update({
   id: '/players/',
   path: '/players/',
@@ -112,7 +106,6 @@ const ProtectedPlayersSeasonsSeasonIdFinalizeRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthAuthRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/sign-up': typeof AuthSignUpRoute
@@ -128,7 +121,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthAuthRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/sign-up': typeof AuthSignUpRoute
@@ -146,7 +138,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/_protected': typeof ProtectedRouteWithChildren
-  '/_auth/auth': typeof AuthAuthRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
@@ -164,7 +155,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/auth'
     | '/forgot-password'
     | '/login'
     | '/sign-up'
@@ -180,7 +170,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
     | '/forgot-password'
     | '/login'
     | '/sign-up'
@@ -197,7 +186,6 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/_protected'
-    | '/_auth/auth'
     | '/_auth/forgot-password'
     | '/_auth/login'
     | '/_auth/sign-up'
@@ -276,13 +264,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/auth': {
-      id: '/_auth/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthAuthRouteImport
-      parentRoute: typeof AuthRoute
-    }
     '/_protected/players/': {
       id: '/_protected/players/'
       path: '/players'
@@ -336,7 +317,6 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthRouteChildren {
-  AuthAuthRoute: typeof AuthAuthRoute
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
@@ -345,7 +325,6 @@ interface AuthRouteChildren {
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthAuthRoute: AuthAuthRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignUpRoute: AuthSignUpRoute,
