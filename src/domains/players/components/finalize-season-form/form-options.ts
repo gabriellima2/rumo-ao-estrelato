@@ -3,13 +3,13 @@ import type { AchievementItemValues } from './schema'
 
 export const finalizeSeasonFormOpts = formOptions({
 	defaultValues: {
-		appearances: 0,
-		goals: 0,
-		assists: 0,
-		cleanSheets: 0,
-		yellowCards: 0,
-		redCards: 0,
-		averageRating: 0,
+		appearances: '',
+		goals: '',
+		assists: '',
+		cleanSheets: '',
+		yellowCards: '',
+		redCards: '',
+		averageRating: '',
 		wonAchievements: false,
 		achievements: [] as AchievementItemValues[],
 		stayedAtClub: true,

@@ -10,20 +10,22 @@ import type { FinalizeSeasonFormValues } from './schema'
 import type { MultiStepFormStep } from '@/shared/components/multi-step-form/multi-step-form-context'
 import { seasonMutations } from '@/domains/players/queries/seasons'
 import { MultiStepForm } from '@/shared/components/multi-step-form/multi-step-form'
-import { useMultiStepForm } from '@/shared/components/multi-step-form/use-multi-step-form'
+import { Input } from '@/shared/components/ui/input'
 import { NumberInput } from '@/shared/components/inputs/number-input'
 import { TextInput } from '@/shared/components/inputs/text-input'
 import { YesNoToggle } from '@/shared/components/inputs/yes-no-toggle'
-import { Button } from '@/shared/components/ui/button'
 import {
 	Field,
 	FieldError,
 	FieldGroup,
 	FieldLabel,
 } from '@/shared/components/ui/field'
-import { Spinner } from '@/shared/components/ui/spinner'
 import { toast } from '@/shared/components/ui/toast'
-import { SEASON_STATS_FIELDS } from '@/domains/players/catalog/season-stats'
+import {
+	toNonNegativeInteger,
+	toSeasonAverageRating,
+} from '@/shared/utils/converters'
+import { averageRatingMask } from '@/shared/utils/masks'
 
 export function FinalizeSeasonForm({
 	seasonId,
@@ -89,13 +91,13 @@ export function FinalizeSeasonForm({
 			await finalizeSeason({
 				seasonId,
 				stats: {
-					appearances: value.appearances,
-					goals: value.goals,
-					assists: value.assists,
-					cleanSheets: value.cleanSheets,
-					yellowCards: value.yellowCards,
-					redCards: value.redCards,
-					averageRating: value.averageRating,
+					appearances: toNonNegativeInteger(value.appearances),
+					goals: toNonNegativeInteger(value.goals),
+					assists: toNonNegativeInteger(value.assists),
+					cleanSheets: toNonNegativeInteger(value.cleanSheets),
+					yellowCards: toNonNegativeInteger(value.yellowCards),
+					redCards: toNonNegativeInteger(value.redCards),
+					averageRating: toSeasonAverageRating(value.averageRating),
 				},
 				achievements: value.achievements.map(
 					({ name, achievementType, competitionType }) => ({
@@ -121,36 +123,189 @@ export function FinalizeSeasonForm({
 
 				<MultiStepForm.Step id="stats">
 					<FieldGroup className="grid gap-4 sm:grid-cols-2">
-						{SEASON_STATS_FIELDS.map(({ name, label }) => (
-							<form.Field
-								key={name}
-								name={name}
-								children={(field) => {
-									const isInvalid =
-										field.state.meta.isTouched && !field.state.meta.isValid
-									return (
-										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-											<NumberInput
-												id={field.name}
-												name={field.name}
-												isInvalid={isInvalid}
-												value={String(field.state.value)}
-												onBlur={field.handleBlur}
-												onValueChange={(value) =>
-													field.handleChange(Number(value) || 0)
-												}
-												placeholder="0"
-											/>
-											<FieldError
-												isInvalid={isInvalid}
-												errors={field.state.meta.errors}
-											/>
-										</Field>
-									)
-								}}
-							/>
-						))}
+						<form.Field
+							name="appearances"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Jogos</FieldLabel>
+										<NumberInput
+											id={field.name}
+											name={field.name}
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={field.handleChange}
+											placeholder="0"
+										/>
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="goals"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Gols</FieldLabel>
+										<NumberInput
+											id={field.name}
+											name={field.name}
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={field.handleChange}
+											placeholder="0"
+										/>
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="assists"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Assistências</FieldLabel>
+										<NumberInput
+											id={field.name}
+											name={field.name}
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={field.handleChange}
+											placeholder="0"
+										/>
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="cleanSheets"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Clean sheets</FieldLabel>
+										<NumberInput
+											id={field.name}
+											name={field.name}
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={field.handleChange}
+											placeholder="0"
+										/>
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="yellowCards"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>
+											Cartões amarelos
+										</FieldLabel>
+										<NumberInput
+											id={field.name}
+											name={field.name}
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={field.handleChange}
+											placeholder="0"
+										/>
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="redCards"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>
+											Cartões vermelhos
+										</FieldLabel>
+										<NumberInput
+											id={field.name}
+											name={field.name}
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={field.handleChange}
+											placeholder="0"
+										/>
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
+									</Field>
+								)
+							}}
+						/>
+						<form.Field
+							name="averageRating"
+							children={(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor={field.name}>Nota média</FieldLabel>
+										<Input
+											id={field.name}
+											name={field.name}
+											type="text"
+											inputMode="decimal"
+											isInvalid={isInvalid}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onValueChange={(value) =>
+												field.handleChange(averageRatingMask(value))
+											}
+											placeholder="0,0"
+										/>
+										<FieldError
+											isInvalid={isInvalid}
+											errors={field.state.meta.errors}
+										/>
+									</Field>
+								)
+							}}
+						/>
 					</FieldGroup>
 				</MultiStepForm.Step>
 

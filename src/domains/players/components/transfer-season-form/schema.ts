@@ -2,10 +2,10 @@ import z from 'zod'
 
 import { CompetitionTypes } from '../../catalog/competition-types'
 import { AchievementTypes } from '../../catalog/achievement-types'
-
-const nonNegativeNumber = z
-	.number({ error: 'Valor inválido' })
-	.min(0, 'Mínimo 0')
+import {
+	averageRatingStat,
+	nonNegativeStat,
+} from '../../validation/stat-field-zod'
 
 const achievementItemSchema = z.object({
 	name: z.string().trim().min(1, 'Nome obrigatório'),
@@ -14,16 +14,13 @@ const achievementItemSchema = z.object({
 })
 
 const statsStepSchema = z.object({
-	appearances: nonNegativeNumber,
-	goals: nonNegativeNumber,
-	assists: nonNegativeNumber,
-	cleanSheets: nonNegativeNumber,
-	yellowCards: nonNegativeNumber,
-	redCards: nonNegativeNumber,
-	averageRating: z
-		.number({ error: 'Valor inválido' })
-		.min(0, 'Mínimo 0')
-		.max(10, 'Máximo 10'),
+	appearances: nonNegativeStat('Informe os jogos'),
+	goals: nonNegativeStat('Informe os gols'),
+	assists: nonNegativeStat('Informe as assistências'),
+	cleanSheets: nonNegativeStat('Informe os clean sheets'),
+	yellowCards: nonNegativeStat('Informe os cartões amarelos'),
+	redCards: nonNegativeStat('Informe os cartões vermelhos'),
+	averageRating: averageRatingStat('Informe a nota média'),
 })
 
 const achievementsStepSchema = z.object({
