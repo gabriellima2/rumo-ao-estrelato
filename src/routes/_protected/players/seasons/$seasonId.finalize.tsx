@@ -11,10 +11,12 @@ import {
 } from '@/shared/components/dashboard/header'
 import { BackButton } from '@/shared/components/buttons/back-button'
 import { FinalizeSeasonFormSkeleton } from '@/domains/players/components/finalize-season-form/skeleton'
+import { getRouteHead } from '@/shared/lib/page-title'
 
 export const Route = createFileRoute(
 	'/_protected/players/seasons/$seasonId/finalize',
 )({
+	head: getRouteHead('Finalizar temporada'),
 	component: RouteComponent,
 })
 

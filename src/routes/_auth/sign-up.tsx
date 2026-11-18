@@ -1,8 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { SignUpForm } from '@/shared/components/sign-up-form'
+import { getRouteHead } from '@/shared/lib/page-title'
 
 export const Route = createFileRoute('/_auth/sign-up')({
+	head: getRouteHead('Criar conta'),
 	component: SignUp,
 })
 

@@ -11,10 +11,12 @@ import {
 	HeaderTitleSkeleton,
 } from '@/shared/components/dashboard/header'
 import { BackButton } from '@/shared/components/buttons/back-button'
+import { getRouteHead } from '@/shared/lib/page-title'
 
 export const Route = createFileRoute(
 	'/_protected/players/seasons/$seasonId/transfer',
 )({
+	head: getRouteHead('Registrar transferência'),
 	component: RouteComponent,
 })
 

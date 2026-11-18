@@ -36,8 +36,10 @@ import {
 	PLAYER_CLUB_VALIDATIONS,
 	PLAYER_VALIDATIONS,
 } from '@/domains/players/validations'
+import { getRouteHead } from '@/shared/lib/page-title'
 
 export const Route = createFileRoute('/_protected/players/create')({
+	head: getRouteHead('Adicionar jogador'),
 	component: RouteComponent,
 })
 

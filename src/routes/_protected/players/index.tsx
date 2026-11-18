@@ -17,8 +17,10 @@ import {
 } from '@/shared/components/dashboard/card-list'
 import { PlayerCard } from '@/domains/players/components/cards/player-card'
 import { SignOutButton } from '@/shared/components/buttons/sign-out-button'
+import { getRouteHead } from '@/shared/lib/page-title'
 
 export const Route = createFileRoute('/_protected/players/')({
+	head: getRouteHead('Meus jogadores'),
 	component: RouteComponent,
 })
 

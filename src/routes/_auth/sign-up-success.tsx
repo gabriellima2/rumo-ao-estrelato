@@ -7,8 +7,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/shared/components/ui/card'
+import { getRouteHead } from '@/shared/lib/page-title'
 
 export const Route = createFileRoute('/_auth/sign-up-success')({
+	head: getRouteHead('Cadastro realizado'),
 	component: SignUpSuccess,
 })
 

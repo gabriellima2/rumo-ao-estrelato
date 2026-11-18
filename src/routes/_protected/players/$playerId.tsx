@@ -33,8 +33,10 @@ import {
 	SectionTitleSkeleton,
 } from '@/shared/components/dashboard/section'
 import { PlayerCareerSummaryHelp } from '@/domains/players/components/player-career-summary-help'
+import { getRouteHead } from '@/shared/lib/page-title'
 
 export const Route = createFileRoute('/_protected/players/$playerId')({
+	head: getRouteHead('Jogador'),
 	component: RouteComponent,
 })
 

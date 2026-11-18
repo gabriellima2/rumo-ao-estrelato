@@ -1,8 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { UpdatePasswordForm } from '@/shared/components/update-password-form'
+import { getRouteHead } from '@/shared/lib/page-title'
 
 export const Route = createFileRoute('/_auth/update-password')({
+	head: getRouteHead('Atualizar senha'),
 	component: UpdatePassword,
 })
 

@@ -1,8 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { ForgotPasswordForm } from '@/shared/components/forgot-password-form'
+import { getRouteHead } from '@/shared/lib/page-title'
 
 export const Route = createFileRoute('/_auth/forgot-password')({
+	head: getRouteHead('Resetar sua senha'),
 	component: ForgotPassword,
 })
 
