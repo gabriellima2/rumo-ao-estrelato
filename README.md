@@ -1,209 +1,98 @@
-Welcome to your new TanStack Start app!
+<h1 align="center">Rumo ao Estrelato</h1>
 
-# Getting Started
+<p align="center">Registre e acompanhe a carreira dos seus jogadores no modo carreira: temporadas, clubes, números e momentos que marcaram cada ano.</p>
 
-To run this application:
+**Produção:** *(Em breve)*
+
+# Sobre
+
+O Rumo ao Estrelato é uma aplicação web para quem joga modo carreira e quer guardar a trajetória dos jogadores em um lugar só. Planilhas e anotações soltas esquecem transferências no meio da temporada, títulos por competição e aquele gol na final; com o tempo fica difícil montar o panorama da carreira.
+
+Você cria jogadores com nome, posição e nacionalidade, abre temporadas ligadas a clubes e preenche estatísticas (jogos, gols, assistências, cartões, nota média e clean sheets). Dá para registrar transferência no decorrer da temporada e finalizar o ano quando fechar o ciclo. Conquistas entram como título de competição (com tipo de torneio) ou prêmio individual; na visão do jogador aparecem totais de carreira e o histórico agrupado por temporada.
+
+Cada temporada também aceita momentos marcantes (tipos do sistema ou criados por você), com título e descrição, para lembrar viradas, lesões, hat-tricks e o que mais importar. Os dados ficam na sua conta (cadastro, login, recuperação e alteração de senha via e-mail). O acesso aos registros é isolado por usuário no banco.
+
+# Ferramentas
+
+- [TanStack Start](https://tanstack.com/start) e [Vite](https://vite.dev/)
+- [React](https://react.dev/) e [TypeScript](https://www.typescriptlang.org/)
+- [TanStack Router](https://tanstack.com/router)
+- [TanStack Query](https://tanstack.com/query) e [TanStack Form](https://tanstack.com/form)
+- [Zod](https://zod.dev/)
+- [Tailwind CSS](https://tailwindcss.com/) e [shadcn/ui](https://ui.shadcn.com/)
+- [Supabase](https://supabase.com/docs) (Auth, Postgres e RLS)
+
+# Rodando o projeto
+
+Você precisa do [Node.js](https://nodejs.org/), [Git](https://git-scm.com/), [npm](https://docs.npmjs.com/) e, se for usar o Supabase na máquina, [Docker](https://docs.docker.com/get-docker/).
+
+O schema versionado fica em `supabase/migrations/` (tabelas, RLS, funções RPC, países e tipos de momento iniciais). Dá para desenvolver de duas formas:
+
+- **Supabase local:** sobe o stack com Docker e aplica as migrações automaticamente.
+- **Supabase remoto:** aponte o app para o projeto na nuvem (URL e chave publishable no painel **Settings → API**). Para alinhar o schema local ao remoto, use o CLI (`supabase link` no projeto e `supabase db pull` quando quiser trazer o estado do banco remoto).
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/gabriellima2/rumo-ao-estrelato.git
+cd rumo-ao-estrelato
+```
+
+2. Instale as dependências:
 
 ```bash
 npm install
+```
+
+3. **(Opcional: Supabase local)** Suba o banco e o Auth na máquina:
+
+```bash
+npx supabase start
+```
+
+Na primeira execução as migrações em `supabase/migrations/` são aplicadas. Para recriar do zero: `npx supabase db reset`.
+
+4. Configure variáveis de ambiente (veja `.env.example`):
+
+```bash
+cp .env.example .env
+```
+
+| Variável | Uso |
+|----------|-----|
+| `VITE_SUPABASE_URL` | URL da API (`http://127.0.0.1:54321` no local após `supabase start`, ou a URL do projeto remoto) |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Chave **publishable**. Em local: `npx supabase status`; em remoto: painel Supabase |
+
+5. Inicie o app:
+
+```bash
 npm run dev
 ```
 
-# Building For Production
+A aplicação abre em [http://localhost:3000](http://localhost:3000) (porta definida no script `dev`).
 
-To build this application for production:
-
-```bash
-npm run build
-```
-
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+**Scripts adicionais:**
 
 ```bash
-npm run test
+npm run build          # build de produção
+npm run preview        # preview do build
+npm run test           # testes (Vitest)
+npm run generate-routes  # regenera rotas do TanStack Router (tsr)
+npm run lint           # ESLint
+npm run format         # Prettier + ESLint --fix
+npm run check          # checagem Prettier sem escrever
 ```
 
-## Styling
+## Encerrar o desenvolvimento
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+1. Pare o servidor Vite (`npm run dev`) com `Ctrl+C`.
 
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Uninstall the packages: `npm install @tailwindcss/vite tailwindcss -D`
-
-## Linting & Formatting
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+2. Se usou Supabase local:
 
 ```bash
-npm run lint
-npm run format
-npm run check
+npx supabase stop
 ```
 
-## Shadcn
+Para conferir o que ainda está ativo: `npx supabase status`.
 
-Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
-
-```bash
-pnpm dlx shadcn@latest add button
-```
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from '@tanstack/react-router'
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-	head: () => ({
-		meta: [
-			{ charSet: 'utf-8' },
-			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-			{ title: 'My App' },
-		],
-	}),
-	shellComponent: ({ children }) => (
-		<html lang="en">
-			<head>
-				<HeadContent />
-			</head>
-			<body>
-				<header>
-					<nav>
-						<Link to="/">Home</Link>
-						<Link to="/about">About</Link>
-					</nav>
-				</header>
-				{children}
-				<Scripts />
-			</body>
-		</html>
-	),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-	method: 'GET',
-}).handler(async () => {
-	return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-	const [time, setTime] = useState('')
-
-	useEffect(() => {
-		getServerTime().then(setTime)
-	}, [])
-
-	return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-	server: {
-		handlers: {
-			GET: () => json({ message: 'Hello, World!' }),
-		},
-	},
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-	loader: async () => {
-		const response = await fetch('https://swapi.dev/api/people')
-		return response.json()
-	},
-	component: PeopleComponent,
-})
-
-function PeopleComponent() {
-	const data = Route.useLoaderData()
-	return (
-		<ul>
-			{data.results.map((person) => (
-				<li key={person.name}>{person.name}</li>
-			))}
-		</ul>
-	)
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+<h4 align="center">Projeto feito com 💙 por Gabriel Lima</h4>
