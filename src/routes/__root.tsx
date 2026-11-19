@@ -11,8 +11,8 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
-import { Toaster } from '@/shared/components/ui/toast'
 import { APP_NAME } from '@/shared/lib/page-title'
+import { Toaster } from '@/shared/components/ui/toast'
 
 interface MyRouterContext {
 	queryClient: QueryClient

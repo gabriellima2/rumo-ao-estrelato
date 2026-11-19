@@ -3,8 +3,8 @@ import { useForm } from '@tanstack/react-form'
 import z from 'zod'
 import { useMutation } from '@tanstack/react-query'
 import { SaveIcon } from 'lucide-react'
-import type { Gender } from '@/shared/catalog/genders'
 import type { PlayerPosition } from '@/domains/players/catalog/positions'
+import type { Gender } from '@/shared/catalog/genders'
 import { Button } from '@/shared/components/ui/button'
 import {
 	Field,

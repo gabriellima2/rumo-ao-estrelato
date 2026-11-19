@@ -9,48 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ProtectedRouteImport } from './routes/_protected'
-import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthUpdatePasswordRouteImport } from './routes/_auth/update-password'
-import { Route as AuthSignUpSuccessRouteImport } from './routes/_auth/sign-up-success'
-import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
-import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
+import { Route as AuthSignUpSuccessRouteImport } from './routes/_auth/sign-up-success'
+import { Route as AuthUpdatePasswordRouteImport } from './routes/_auth/update-password'
 import { Route as ProtectedPlayersIndexRouteImport } from './routes/_protected/players/index'
-import { Route as ProtectedPlayersCreateRouteImport } from './routes/_protected/players/create'
 import { Route as ProtectedPlayersPlayerIdRouteImport } from './routes/_protected/players/$playerId'
+import { Route as ProtectedPlayersCreateRouteImport } from './routes/_protected/players/create'
 import { Route as ProtectedPlayersSeasonsSeasonIdRouteImport } from './routes/_protected/players/seasons/$seasonId'
 import { Route as ProtectedPlayersSeasonsSeasonIdIndexRouteImport } from './routes/_protected/players/seasons/$seasonId.index'
-import { Route as ProtectedPlayersSeasonsSeasonIdTransferRouteImport } from './routes/_protected/players/seasons/$seasonId.transfer'
 import { Route as ProtectedPlayersSeasonsSeasonIdFinalizeRouteImport } from './routes/_protected/players/seasons/$seasonId.finalize'
+import { Route as ProtectedPlayersSeasonsSeasonIdTransferRouteImport } from './routes/_protected/players/seasons/$seasonId.transfer'
 
-const ProtectedRoute = ProtectedRouteImport.update({
-  id: '/_protected',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ProtectedRoute = ProtectedRouteImport.update({
+  id: '/_protected',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthUpdatePasswordRoute = AuthUpdatePasswordRouteImport.update({
-  id: '/update-password',
-  path: '/update-password',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthSignUpSuccessRoute = AuthSignUpSuccessRouteImport.update({
-  id: '/sign-up-success',
-  path: '/sign-up-success',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthSignUpRoute = AuthSignUpRouteImport.update({
-  id: '/sign-up',
-  path: '/sign-up',
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
@@ -58,19 +48,24 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRoute,
 } as any)
-const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthSignUpSuccessRoute = AuthSignUpSuccessRouteImport.update({
+  id: '/sign-up-success',
+  path: '/sign-up-success',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthUpdatePasswordRoute = AuthUpdatePasswordRouteImport.update({
+  id: '/update-password',
+  path: '/update-password',
   getParentRoute: () => AuthRoute,
 } as any)
 const ProtectedPlayersIndexRoute = ProtectedPlayersIndexRouteImport.update({
   id: '/players/',
   path: '/players/',
-  getParentRoute: () => ProtectedRoute,
-} as any)
-const ProtectedPlayersCreateRoute = ProtectedPlayersCreateRouteImport.update({
-  id: '/players/create',
-  path: '/players/create',
   getParentRoute: () => ProtectedRoute,
 } as any)
 const ProtectedPlayersPlayerIdRoute =
@@ -79,6 +74,11 @@ const ProtectedPlayersPlayerIdRoute =
     path: '/players/$playerId',
     getParentRoute: () => ProtectedRoute,
   } as any)
+const ProtectedPlayersCreateRoute = ProtectedPlayersCreateRouteImport.update({
+  id: '/players/create',
+  path: '/players/create',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 const ProtectedPlayersSeasonsSeasonIdRoute =
   ProtectedPlayersSeasonsSeasonIdRouteImport.update({
     id: '/players/seasons/$seasonId',
@@ -91,16 +91,16 @@ const ProtectedPlayersSeasonsSeasonIdIndexRoute =
     path: '/',
     getParentRoute: () => ProtectedPlayersSeasonsSeasonIdRoute,
   } as any)
-const ProtectedPlayersSeasonsSeasonIdTransferRoute =
-  ProtectedPlayersSeasonsSeasonIdTransferRouteImport.update({
-    id: '/transfer',
-    path: '/transfer',
-    getParentRoute: () => ProtectedPlayersSeasonsSeasonIdRoute,
-  } as any)
 const ProtectedPlayersSeasonsSeasonIdFinalizeRoute =
   ProtectedPlayersSeasonsSeasonIdFinalizeRouteImport.update({
     id: '/finalize',
     path: '/finalize',
+    getParentRoute: () => ProtectedPlayersSeasonsSeasonIdRoute,
+  } as any)
+const ProtectedPlayersSeasonsSeasonIdTransferRoute =
+  ProtectedPlayersSeasonsSeasonIdTransferRouteImport.update({
+    id: '/transfer',
+    path: '/transfer',
     getParentRoute: () => ProtectedPlayersSeasonsSeasonIdRoute,
   } as any)
 
@@ -208,11 +208,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_protected': {
-      id: '/_protected'
-      path: ''
+    '/': {
+      id: '/'
+      path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof ProtectedRouteImport
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -222,32 +222,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/_protected': {
+      id: '/_protected'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof ProtectedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/update-password': {
-      id: '/_auth/update-password'
-      path: '/update-password'
-      fullPath: '/update-password'
-      preLoaderRoute: typeof AuthUpdatePasswordRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/sign-up-success': {
-      id: '/_auth/sign-up-success'
-      path: '/sign-up-success'
-      fullPath: '/sign-up-success'
-      preLoaderRoute: typeof AuthSignUpSuccessRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/sign-up': {
-      id: '/_auth/sign-up'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof AuthSignUpRouteImport
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_auth/login': {
@@ -257,11 +243,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/forgot-password': {
-      id: '/_auth/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/sign-up-success': {
+      id: '/_auth/sign-up-success'
+      path: '/sign-up-success'
+      fullPath: '/sign-up-success'
+      preLoaderRoute: typeof AuthSignUpSuccessRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/update-password': {
+      id: '/_auth/update-password'
+      path: '/update-password'
+      fullPath: '/update-password'
+      preLoaderRoute: typeof AuthUpdatePasswordRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_protected/players/': {
@@ -271,18 +271,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedPlayersIndexRouteImport
       parentRoute: typeof ProtectedRoute
     }
-    '/_protected/players/create': {
-      id: '/_protected/players/create'
-      path: '/players/create'
-      fullPath: '/players/create'
-      preLoaderRoute: typeof ProtectedPlayersCreateRouteImport
-      parentRoute: typeof ProtectedRoute
-    }
     '/_protected/players/$playerId': {
       id: '/_protected/players/$playerId'
       path: '/players/$playerId'
       fullPath: '/players/$playerId'
       preLoaderRoute: typeof ProtectedPlayersPlayerIdRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/players/create': {
+      id: '/_protected/players/create'
+      path: '/players/create'
+      fullPath: '/players/create'
+      preLoaderRoute: typeof ProtectedPlayersCreateRouteImport
       parentRoute: typeof ProtectedRoute
     }
     '/_protected/players/seasons/$seasonId': {
@@ -299,18 +299,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedPlayersSeasonsSeasonIdIndexRouteImport
       parentRoute: typeof ProtectedPlayersSeasonsSeasonIdRoute
     }
-    '/_protected/players/seasons/$seasonId/transfer': {
-      id: '/_protected/players/seasons/$seasonId/transfer'
-      path: '/transfer'
-      fullPath: '/players/seasons/$seasonId/transfer'
-      preLoaderRoute: typeof ProtectedPlayersSeasonsSeasonIdTransferRouteImport
-      parentRoute: typeof ProtectedPlayersSeasonsSeasonIdRoute
-    }
     '/_protected/players/seasons/$seasonId/finalize': {
       id: '/_protected/players/seasons/$seasonId/finalize'
       path: '/finalize'
       fullPath: '/players/seasons/$seasonId/finalize'
       preLoaderRoute: typeof ProtectedPlayersSeasonsSeasonIdFinalizeRouteImport
+      parentRoute: typeof ProtectedPlayersSeasonsSeasonIdRoute
+    }
+    '/_protected/players/seasons/$seasonId/transfer': {
+      id: '/_protected/players/seasons/$seasonId/transfer'
+      path: '/transfer'
+      fullPath: '/players/seasons/$seasonId/transfer'
+      preLoaderRoute: typeof ProtectedPlayersSeasonsSeasonIdTransferRouteImport
       parentRoute: typeof ProtectedPlayersSeasonsSeasonIdRoute
     }
   }
