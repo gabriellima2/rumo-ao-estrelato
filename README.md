@@ -2,7 +2,7 @@
 
 <p align="center">Registre e acompanhe a carreira dos seus jogadores no modo carreira: temporadas, clubes, números e momentos que marcaram cada ano.</p>
 
-**Produção:** *(Em breve)*
+**Produção:** [rumo-ao-estrelato-eight.vercel.app](https://rumo-ao-estrelato-eight.vercel.app/)
 
 # Sobre
 
